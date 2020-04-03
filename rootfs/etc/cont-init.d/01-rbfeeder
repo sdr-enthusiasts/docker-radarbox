@@ -1,0 +1,70 @@
+#!/usr/bin/with-contenv bash
+# shellcheck shell=bash
+
+# Check to make sure the correct command line arguments have been set
+EXITCODE=0
+if [ -z "${LAT}" ]; then
+  echo "ERROR: LAT environment variable not set"
+  EXITCODE=1
+fi
+if [ -z "${LONG}" ]; then
+  echo "ERROR: LONG environment variable not set"
+  EXITCODE=1
+fi
+if [ -z "${BEASTHOST}" ]; then
+  echo "ERROR: BEASTHOST environment variable not set"
+  EXITCODE=1
+fi
+if [ -z "${ALT}" ]; then
+  echo "ERROR: ALT environment variable not set"
+  EXITCODE=1
+fi
+if [ $EXITCODE -ne 0 ]; then
+  exit 1
+fi
+
+# Set up timezone
+if [ -z "${TZ}" ]; then
+  echo "WARNING: TZ environment variable not set"
+else
+  ln -snf "/usr/share/zoneinfo/$TZ" /etc/localtime && echo "$TZ" >/etc/timezone
+fi
+
+# Generate /etc/rbfeeder.ini based on environment variables
+
+echo """
+[client]
+network_mode=true
+log_file=-
+""" > /etc/rbfeeder.ini
+
+if [ -z "${SHARING_KEY}" ]
+then
+  echo ""
+  echo "WARNING: SHARING_KEY environment variable was not set!"
+  echo "Please make sure you note down the key generated."
+  echo "Pass the key as environment var SHARING_KEY on next launch!"
+  echo ""
+else
+  echo "key=$SHARING_KEY" >> /etc/rbfeeder.ini
+fi
+
+echo "lat=$LAT" >> /etc/rbfeeder.ini
+echo "lon=$LONG" >> /etc/rbfeeder.ini
+echo "alt=$ALT" >> /etc/rbfeeder.ini
+
+echo """
+[network]
+mode=beast
+""" >> /etc/rbfeeder.ini
+
+echo "external_port=$BEASTPORT" >> /etc/rbfeeder.ini
+
+# Attempt to resolve BEASTHOST into an IP address
+BEASTIP=$(getent ahosts $BEASTHOST | head -1 | tr -s " " | cut -d " " -f 1)
+echo "external_host=$BEASTIP" >> /etc/rbfeeder.ini
+
+echo """
+[mlat]
+autostart_mlat=true
+""" >> /etc/rbfeeder.ini

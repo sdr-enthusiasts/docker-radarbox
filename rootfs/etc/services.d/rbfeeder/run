@@ -1,0 +1,4 @@
+#!/usr/bin/with-contenv sh
+#shellcheck shell=sh
+
+/usr/bin/rbfeeder 2>&1 | awk -W Interactive '{print "[rbfeeder] " $0}'
