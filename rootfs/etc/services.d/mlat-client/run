@@ -1,0 +1,22 @@
+#!/usr/bin/with-contenv sh
+#shellcheck shell=sh
+
+# try to get station serial number
+SN=$(grep -E "^sn=.*$" /etc/rbfeeder.ini)
+
+if [ $? -ne 0 ]
+then
+    echo "[mlat-client] Delaying mlat-client startup until rbfeeder receives station sn..."
+    sleep 30
+else
+    MLAT_USER=$(echo $SN | cut -d "=" -f 2)
+    /usr/bin/mlat-client \
+        --input-type beast \
+        --input-connect "${BEASTHOST}:${BEASTPORT}" \
+        --lat "${LAT}" \
+        --lon "${LONG}" \
+        --alt "${ALT}m" \
+        --user "${MLAT_USER}" \
+        --server "${MLAT_SERVER}" \
+        2>&1 | awk -W Interactive '{print "[mlat-client] " $0}'
+fi
