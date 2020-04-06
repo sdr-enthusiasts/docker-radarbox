@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -xe
 
+get checkout master
+
 REPO=mikenye
 IMAGE=radarbox
 PLATFORMS="linux/amd64,linux/arm/v7,linux/arm64"
