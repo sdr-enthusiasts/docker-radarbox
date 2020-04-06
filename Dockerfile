@@ -6,7 +6,8 @@ COPY /mlat-builder/output/*.deb /src/mlat-client/
 COPY imagebuildscripts/ /src/buildscripts/
 
 ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
-    BEASTPORT=30005
+    BEASTPORT=30005 \
+    MLAT_SERVER=mlat1.rb24.com:40900
 
 RUN /src/buildscripts/build.sh
 
