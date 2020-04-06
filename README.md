@@ -10,7 +10,7 @@ For more information on what `rbfeeder` is, see here: [sharing-data](https://www
 
 * `latest` (`master` branch, `Dockerfile`)
 * Version and architecture specific tags available
-* `development` (`master` branch, `Dockerfile`, `amd64` architecture only, not recommended for production)
+* `development` (`dev` branch, `Dockerfile`, not recommended for production)
 
 ## Multi Architecture Support
 
