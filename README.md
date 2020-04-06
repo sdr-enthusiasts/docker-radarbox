@@ -10,7 +10,7 @@ For more information on what `rbfeeder` is, see here: [sharing-data](https://www
 
 * `latest` (`master` branch, `Dockerfile`)
 * Version and architecture specific tags available
-* `development` (`master` branch, `Dockerfile`, `amd64` architecture only, not recommended for production)
+* `development` (`dev` branch, `Dockerfile`, not recommended for production)
 
 ## Multi Architecture Support
 
@@ -22,7 +22,8 @@ Currently, this image should pull and run on the following architectures:
 
 As RadarBox only provide `armhf` binaries for Linux, `qemu-user-static` is used to allow the `armhf` binaries to execute on `amd64` (yes, I know 😕) and also `aarch64` where native `armhf` execution is unavailable. Accordingly, there is a size discrepancy between each architecture's image. The qemu overhead is negligible.
 
-Hopefully one day they will open source the `rbfeeder` or make binaries available for other architectures...
+The source code for `rbfeeder` is available (<https://github.com/mutability/rbfeeder>), however I haven't been able to get this to compile yet, so for the time being I'll stick with the qemu method. If you can get `rbfeeder` to compile, please get in touch by [logging an issue](https://github.com/mikenye/docker-radarbox/issues) on the project's github.
+
 
 ## Obtaining a RadarBox Sharing Key
 
@@ -205,3 +206,7 @@ The following ports are used by this container:
 ## Logging
 
 * All processes are logged to the container's stdout, and can be viewed with `docker logs [-f] container`.
+
+## Issues
+
+You can [log an issue](https://github.com/mikenye/docker-radarbox/issues) on the project's GitHub.

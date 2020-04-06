@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -xe
 
+git checkout master
+
 REPO=mikenye
 IMAGE=radarbox
 PLATFORMS="linux/amd64,linux/arm/v7,linux/arm64"
@@ -61,6 +63,3 @@ VERSION=$(docker run --rm --entrypoint cat "${REPO}/${IMAGE}:latest" /VERSIONS |
 # Build & push version-specific
 echo -e "${LIGHTPURPLE}========== Building ${REPO}/${IMAGE}:${VERSION} ==========${NOCOLOR}"
 docker buildx build -t "${REPO}/${IMAGE}:${VERSION}" --compress --push --platform "${PLATFORMS}" .
-
-# Clean-up
-rm -v ./mlat-builder/output/*.deb
