@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -xe
 
-get checkout dev
+git checkout dev
 
 REPO=mikenye
 IMAGE=radarbox
