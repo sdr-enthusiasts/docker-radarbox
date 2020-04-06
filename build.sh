@@ -61,6 +61,3 @@ VERSION=$(docker run --rm --entrypoint cat "${REPO}/${IMAGE}:latest" /VERSIONS |
 # Build & push version-specific
 echo -e "${LIGHTPURPLE}========== Building ${REPO}/${IMAGE}:${VERSION} ==========${NOCOLOR}"
 docker buildx build -t "${REPO}/${IMAGE}:${VERSION}" --compress --push --platform "${PLATFORMS}" .
-
-# Clean-up
-rm -v ./mlat-builder/output/*.deb
