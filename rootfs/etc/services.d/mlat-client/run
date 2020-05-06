@@ -13,6 +13,7 @@ else
     /usr/bin/mlat-client \
         --input-type beast \
         --input-connect "${BEASTHOST}:${BEASTPORT}" \
+        --results beast,listen,30105 \
         --lat "${LAT}" \
         --lon "${LONG}" \
         --alt "${ALT}m" \

@@ -15,3 +15,5 @@ COPY rootfs/ /
 
 # Set s6 init as entrypoint
 ENTRYPOINT [ "/init" ]
+
+EXPOSE 32088/tcp 30105/tcp
