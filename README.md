@@ -199,9 +199,10 @@ There are a series of available environment variables:
 
 ## Ports
 
-The following ports are used by this container:
+The following TCP ports are used by this container:
 
-* `32088` - `rbfeeder` listens on this port, however I can't find the use for this port so I have not exposed it.
+* `32088` - `rbfeeder` listens on this port, however I can't find the use for this port...
+* `30105` - `mlat-client` listens on this port to provide MLAT results.
 
 ## Logging
 
