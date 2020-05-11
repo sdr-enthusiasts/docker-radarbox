@@ -1,4 +1,33 @@
 #!/usr/bin/with-contenv sh
 #shellcheck shell=sh
 
-/usr/bin/rbfeeder 2>&1 | awk -W Interactive '{print "[rbfeeder] " $0}'
+
+if [ "$(uname -m)" = "x86_64" ]
+then
+    exec \
+        /usr/bin/qemu-arm-static /usr/bin/rbfeeder 2>&1 | awk -W Interactive '{print "[rbfeeder] " $0}'
+
+elif [ "$(uname -m)" = "armv7l" ]
+then
+    exec \
+        /usr/bin/rbfeeder 2>&1 | awk -W Interactive '{print "[rbfeeder] " $0}'
+
+elif [ "$(uname -m)" = "armhf" ]
+then
+    exec \
+        /usr/bin/rbfeeder 2>&1 | awk -W Interactive '{print "[rbfeeder] " $0}'
+
+elif [ "$(uname -m)" = "aarch64" ]
+then
+    exec \
+        /usr/bin/rbfeeder 2>&1 | awk -W Interactive '{print "[rbfeeder] " $0}'
+
+else
+    echo ""
+    echo "ERROR!"
+    echo "This build is running on an unsupported architecture ($(uname -m))."
+    echo "Please raise an issue on this container's GitHub reporting this."
+    echo ""
+    sleep 60
+    exit 1
+fi
