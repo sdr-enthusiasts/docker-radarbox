@@ -14,7 +14,12 @@ then
 elif [ "$(uname -m)" = "armv7l" ]
 then
     exec \
-        /src/buildscripts/build.arm32v7.sh
+        /src/buildscripts/build.arm32.sh
+
+elif [ "$(uname -m)" = "armhf" ]
+then
+    exec \
+        /src/buildscripts/build.arm32.sh
 
 elif [ "$(uname -m)" = "aarch64" ]
 then
