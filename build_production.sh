@@ -5,7 +5,7 @@ git checkout master
 
 REPO=mikenye
 IMAGE=radarbox
-PLATFORMS="linux/amd64,linux/arm/v7,linux/arm64"
+PLATFORMS="linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64"
 
 # Colours
 NOCOLOR='\033[0m'
