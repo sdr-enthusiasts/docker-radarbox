@@ -67,3 +67,9 @@ echo "external_host=$BEASTIP" >> /etc/rbfeeder.ini
 echo "[mlat]" >> /etc/rbfeeder.ini
 echo "mlat_cmd=/usr/bin/mlat-client" >> /etc/rbfeeder.ini
 echo "autostart_mlat=false" >> /etc/rbfeeder.ini
+
+# Create log dirs
+mkdir -p /var/log/mlat-client
+chown nobody:nogroup /var/log/mlat-client
+mkdir -p /var/log/rbfeeder
+chown nobody:nogroup /var/log/rbfeeder
