@@ -10,6 +10,7 @@ apt-get install -y --no-install-recommends \
     ca-certificates \
     binutils \
     debhelper \
+    file \
     git \
     gnupg \
     netbase \
@@ -73,6 +74,7 @@ echo "========== Clean-up =========="
 apt-get remove -y \
     binutils \
     debhelper \
+    file \
     git \
     gnupg \
     wget \
