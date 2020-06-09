@@ -9,6 +9,7 @@ apt-get update
 apt-get install -y --no-install-recommends \
     ca-certificates \
     binutils \
+    file \
     debhelper \
     git \
     gnupg \
@@ -73,6 +74,7 @@ echo "========== Clean-up =========="
 apt-get remove -y \
     binutils \
     debhelper \
+    file \
     git \
     gnupg \
     wget \
