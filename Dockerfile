@@ -9,7 +9,10 @@ ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
     BEASTPORT=30005 \
     MLAT_SERVER=mlat1.rb24.com:40900
 
-RUN /src/buildscripts/build.sh
+RUN set -x && \
+    /src/buildscripts/build.sh && \
+    # Make sure we have an init
+    test -f /init
 
 COPY rootfs/ /
 
