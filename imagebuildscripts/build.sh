@@ -2,7 +2,7 @@
 
 # Verbosity (x)
 # Exit on any error (e)
-set -xe
+set -x
 
 apt-get update
 apt-get install -y --no-install-recommends file
