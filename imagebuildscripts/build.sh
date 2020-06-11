@@ -65,7 +65,7 @@ fi
 
 echo "========== Attempting build for $(ARCH) =========="
 
-if [ "$ARCH" = "x86_64" ]
+if [ "$ARCH" = "amd64" ]
 then
     exec \
         /src/buildscripts/build.amd64.sh
