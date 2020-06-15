@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 EXITCODE=0
 
 TIMESTAMP_NOW=$(date +%s.%N)
@@ -16,7 +18,7 @@ else
         echo "No packets sent in past 60 seconds. UNHEALTHY"
         EXITCODE=1
     else
-        echo "$LASTLOG_NUM_PACKETS_SENT packets sent in past 60 seconds. HEALTHY"
+        echo "At least $LASTLOG_NUM_PACKETS_SENT packets sent in past 60 seconds. HEALTHY"
     fi
 fi
 
