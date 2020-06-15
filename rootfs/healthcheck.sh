@@ -25,7 +25,6 @@ fi
 # TODO:
 # Entries in /var/log/rbfeeder/current to search for
 # "Can't connect to external source" <-- mark as unhealthy
-# Need to also check the time - only look for log messages in the last 30s
-# (if this script will be called every 30s)
-# Check death counts for services
+#
+# Check death counts for services <-- probably can't do this due to https://github.com/mikenye/docker-radarbox/issues/9
 
