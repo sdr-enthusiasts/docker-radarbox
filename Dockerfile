@@ -19,4 +19,8 @@ COPY rootfs/ /
 # Set s6 init as entrypoint
 ENTRYPOINT [ "/init" ]
 
+# Expose ports
 EXPOSE 32088/tcp 30105/tcp
+
+# Add healthcheck
+HEALTHCHECK --start-period=120s CMD /healthcheck.sh
