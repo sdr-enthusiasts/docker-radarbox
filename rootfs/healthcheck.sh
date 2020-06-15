@@ -22,6 +22,8 @@ else
     fi
 fi
 
+exit $EXITCODE
+
 # TODO:
 # Entries in /var/log/rbfeeder/current to search for
 # "Can't connect to external source" <-- mark as unhealthy
