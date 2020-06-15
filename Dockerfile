@@ -22,4 +22,4 @@ ENTRYPOINT [ "/init" ]
 EXPOSE 32088/tcp 30105/tcp
 
 # Add healthcheck
-HEALTHCHECK --start-period=30s CMD /healthcheck.sh
+HEALTHCHECK --start-period=120s CMD /healthcheck.sh
