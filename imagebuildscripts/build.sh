@@ -65,7 +65,7 @@ if [ $? -eq 0 ]; then
 
 fi
 
-echo "========== Attempting build for $(ARCH) =========="
+echo "========== Attempting build for ${ARCH} =========="
 
 if [ "$ARCH" = "amd64" ]
 then

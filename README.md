@@ -196,6 +196,7 @@ There are a series of available environment variables:
 | `LONG` | Required. Longitude of the antenna | |
 | `ALT` | Required. Altitude in *metres* | |
 | `TZ`                 | Optional. Your local timezone | GMT     |
+| `MLAT_INPUT_TYPE`    | Optional. Sets the input receiver type. Run `docker run --rm -it --entrypoint mlat-client mikenye/radarbox --help` and see `--input-type` for valid values. | `dump1090` |
 
 ## Ports
 

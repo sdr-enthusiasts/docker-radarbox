@@ -17,7 +17,7 @@ else
     then
         
         exec /usr/bin/qemu-arm-static /usr/bin/python3 /usr/bin/mlat-client \
-            --input-type beast \
+            --input-type "${MLAT_INPUT_TYPE}" \
             --input-connect "${BEASTHOST}:${BEASTPORT}" \
             --results beast,listen,30105 \
             --lat "${LAT}" \
@@ -30,7 +30,7 @@ else
     elif [ "$(uname -m)" = "armv7l" ]
     then
         exec /usr/bin/mlat-client \
-            --input-type beast \
+            --input-type "${MLAT_INPUT_TYPE}" \
             --input-connect "${BEASTHOST}:${BEASTPORT}" \
             --results beast,listen,30105 \
             --lat "${LAT}" \
@@ -43,7 +43,7 @@ else
     elif [ "$(uname -m)" = "armhf" ]
     then
         exec /usr/bin/mlat-client \
-            --input-type beast \
+            --input-type "${MLAT_INPUT_TYPE}" \
             --input-connect "${BEASTHOST}:${BEASTPORT}" \
             --results beast,listen,30105 \
             --lat "${LAT}" \
@@ -56,7 +56,7 @@ else
     elif [ "$(uname -m)" = "aarch64" ]
     then
         exec /usr/bin/mlat-client \
-            --input-type beast \
+            --input-type "${MLAT_INPUT_TYPE}" \
             --input-connect "${BEASTHOST}:${BEASTPORT}" \
             --results beast,listen,30105 \
             --lat "${LAT}" \
