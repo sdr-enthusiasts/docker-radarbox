@@ -190,7 +190,7 @@ There are a series of available environment variables:
 | Environment Variable | Purpose                         | Default |
 | -------------------- | ------------------------------- | ------- |
 | `BEASTHOST`          | Required. IP/Hostname of a Mode-S/BEAST provider (dump1090/readsb) | |
-| `BEASTPORT`          | Optional. TCP port number of Mode-S/BEAST provider (dump1090/readsy) | 30005 |
+| `BEASTPORT`          | Optional. TCP port number of Mode-S/BEAST provider (dump1090/readsb) | 30005 |
 | `SHARING_KEY`            | Required. Radarbox Sharing Key | |
 | `LAT` | Required. Latitude of the antenna | |
 | `LONG` | Required. Longitude of the antenna | |
