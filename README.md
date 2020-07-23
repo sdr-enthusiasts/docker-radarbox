@@ -197,6 +197,8 @@ There are a series of available environment variables:
 | `ALT` | Required. Altitude in *metres* | |
 | `TZ`                 | Optional. Your local timezone | GMT     |
 | `MLAT_INPUT_TYPE`    | Optional. Sets the input receiver type. Run `docker run --rm -it --entrypoint mlat-client mikenye/radarbox --help` and see `--input-type` for valid values. | `dump1090` |
+| `STATS_INTERVAL_MINUTES` | Optional. How often to print statistics, in minutes. | `5` |
+| `VERBOSE_LOGGING` | Optional. Set to `true` for no filtering of `rbfeeder` logs. | `false` |
 
 ## Ports
 
