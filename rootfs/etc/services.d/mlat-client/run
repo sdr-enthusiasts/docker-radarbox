@@ -4,14 +4,13 @@
 # try to get station serial number
 SN=$(grep -E "^sn=.*$" /etc/rbfeeder.ini)
 
-if [ $? -ne 0 ]
-then
+if grep -E "^sn=.*$" /etc/rbfeeder.ini; then
     echo "[mlat-client] Delaying mlat-client startup until rbfeeder receives station sn..."
     sleep 30
     
 else
     
-    MLAT_USER=$(echo $SN | cut -d "=" -f 2)
+    MLAT_USER=$(echo "$SN" | cut -d "=" -f 2)
 
     if [ "$(uname -m)" = "x86_64" ]
     then
