@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 set -xe
 
-git checkout dev
+# Return to original build contexts
+docker context use x86_64
+export DOCKER_CLI_EXPERIMENTAL="enabled"
+docker buildx use homecluster
 
 REPO=mikenye
 IMAGE=radarbox
@@ -28,11 +31,6 @@ docker --context=arm32v7 rm "${MLAT_BUILDER_CONTAINER_ID}" || true
 
 # Return to previous directory
 popd 
-
-# Return to original build contexts
-docker context use x86_64
-export DOCKER_CLI_EXPERIMENTAL="enabled"
-docker buildx use homecluster
 
 # Build & push development
 echo -e "${LIGHTPURPLE}========== Building ${REPO}/${IMAGE}:latest ==========${NOCOLOR}"
