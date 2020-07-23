@@ -22,9 +22,6 @@ else
     fi
 fi
 
-# truncate the log file
-truncate --size=0 /var/log/rbfeeder.log
-
 exit $EXITCODE
 
 # TODO:
