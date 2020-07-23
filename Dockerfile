@@ -10,6 +10,8 @@ ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
     MLAT_SERVER=mlat1.rb24.com:40900 \
     MLAT_INPUT_TYPE="dump1090"
 
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 RUN set -x && \
     /src/buildscripts/build.sh && \
     # Make sure we have an init

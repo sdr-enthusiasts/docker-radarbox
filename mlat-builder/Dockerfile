@@ -1,4 +1,7 @@
 FROM ubuntu:bionic
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 RUN apt-get update && \
     apt-get install --no-install-recommends -y \
         ca-certificates \
@@ -11,4 +14,5 @@ RUN apt-get update && \
     pushd /src/mlat-client && \
     sed -i '/dh $@ --with python3/ s/$/ --buildsystem=pybuild/' ./debian/rules && \
     dpkg-buildpackage -b -uc && \
-    popd 
+    popd && \
+    apt-get clean -y
