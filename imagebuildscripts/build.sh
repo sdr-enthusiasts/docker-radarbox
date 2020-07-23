@@ -13,7 +13,7 @@ apt-get install -y --no-install-recommends \
 # Do we have libmagic/file installed
 
 # Make sure `file` (libmagic) is available
-if which file; then
+if ! which file; then
   echo "ERROR: 'file' (libmagic) not available, cannot detect architecture!"
   exit 1
 fi
