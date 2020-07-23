@@ -10,11 +10,11 @@ LASTLOG_TIMESTAMP=$(date --date="$(echo $LASTLOG_PACKETS_SENT | cut -d '[' -f 1)
 LASTLOG_NUM_PACKETS_SENT=$(echo $LASTLOG_PACKETS_SENT | cut -d ']' -f 3 | cut -d ':' -f 2 | cut -d ',' -f 1 | tr -d " ")
 
 # check to make sure we've sent packets in the past 60 seconds
-if [ $(echo "($TIMESTAMP_NOW - $LASTLOG_TIMESTAMP) < 60" | bc) -ne 1 ]; then
+if [ "$(echo "($TIMESTAMP_NOW - $LASTLOG_TIMESTAMP) < 60" | bc)" -ne 1 ]; then
     echo "No packets sent in past 60 seconds. UNHEALTHY"
     EXITCODE=1
 else
-    if [ $LASTLOG_NUM_PACKETS_SENT -lt 1 ]; then
+    if [ "$LASTLOG_NUM_PACKETS_SENT" -lt 1 ]; then
         echo "No packets sent in past 60 seconds. UNHEALTHY"
         EXITCODE=1
     else
