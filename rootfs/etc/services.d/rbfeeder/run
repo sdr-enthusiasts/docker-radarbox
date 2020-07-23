@@ -1,35 +1,53 @@
 #!/usr/bin/with-contenv sh
 #shellcheck shell=sh
 
-
 if [ "$(uname -m)" = "x86_64" ]
 then
-    /usr/bin/qemu-arm-static /usr/bin/rbfeeder 2>&1 | \
-        awk -W Interactive '! / Statistics updated every 30 seconds /' | \
-        awk -W Interactive '! /Packets sent in the last 30 seconds: /' | \
-        awk -W Interactive '{print "[rbfeeder] " $0}'
+    if [ "$VERBOSE_LOGGING" = "true" ]; then
+        /usr/bin/qemu-arm-static /usr/bin/rbfeeder 2>&1 | \
+            awk -W Interactive '{print "[rbfeeder] " $0}'
+    else
+        /usr/bin/qemu-arm-static /usr/bin/rbfeeder 2>&1 | \
+            awk -W Interactive '! / Statistics updated every 30 seconds /' | \
+            awk -W Interactive '! /Packets sent in the last 30 seconds: /' | \
+            awk -W Interactive '{print "[rbfeeder] " $0}'
+    fi
 
 elif [ "$(uname -m)" = "armv7l" ]
 then
-    /usr/bin/rbfeeder 2>&1 | \
-        awk -W Interactive '! / Statistics updated every 30 seconds /' | \
-        awk -W Interactive '! /Packets sent in the last 30 seconds: /' | \
-        awk -W Interactive '{print "[rbfeeder] " $0}'
+    if [ "$VERBOSE_LOGGING" = "true" ]; then
+        /usr/bin/rbfeeder 2>&1 | \
+            awk -W Interactive '{print "[rbfeeder] " $0}'
+    else
+        /usr/bin/rbfeeder 2>&1 | \
+            awk -W Interactive '! / Statistics updated every 30 seconds /' | \
+            awk -W Interactive '! /Packets sent in the last 30 seconds: /' | \
+            awk -W Interactive '{print "[rbfeeder] " $0}'
+    fi
 
 elif [ "$(uname -m)" = "armhf" ]
 then
-    /usr/bin/rbfeeder 2>&1 | \
-        awk -W Interactive '! / Statistics updated every 30 seconds /' | \
-        awk -W Interactive '! /Packets sent in the last 30 seconds: /' | \
-        awk -W Interactive '{print "[rbfeeder] " $0}'
+    if [ "$VERBOSE_LOGGING" = "true" ]; then
+        /usr/bin/rbfeeder 2>&1 | \
+            awk -W Interactive '{print "[rbfeeder] " $0}'
+    else
+        /usr/bin/rbfeeder 2>&1 | \
+            awk -W Interactive '! / Statistics updated every 30 seconds /' | \
+            awk -W Interactive '! /Packets sent in the last 30 seconds: /' | \
+            awk -W Interactive '{print "[rbfeeder] " $0}'
+    fi
 
 elif [ "$(uname -m)" = "aarch64" ]
 then
-    /usr/bin/rbfeeder 2>&1 | \
-        awk -W Interactive '! / Statistics updated every 30 seconds /' | \
-        awk -W Interactive '! /Packets sent in the last 30 seconds: /' | \
-        awk -W Interactive '{print "[rbfeeder] " $0}'
-
+    if [ "$VERBOSE_LOGGING" = "true" ]; then
+        /usr/bin/rbfeeder 2>&1 | \
+            awk -W Interactive '{print "[rbfeeder] " $0}'
+    else
+        /usr/bin/rbfeeder 2>&1 | \
+            awk -W Interactive '! / Statistics updated every 30 seconds /' | \
+            awk -W Interactive '! /Packets sent in the last 30 seconds: /' | \
+            awk -W Interactive '{print "[rbfeeder] " $0}'
+    fi
 else
     echo ""
     echo "ERROR!"
