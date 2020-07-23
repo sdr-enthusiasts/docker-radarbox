@@ -9,9 +9,6 @@ PLATFORMS="linux/amd64,linux/arm/v7,linux/arm64"
 
 # Colours
 NOCOLOR='\033[0m'
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-ORANGE='\033[0;33m'
 LIGHTPURPLE='\033[1;35m'
 
 # Save current dir
