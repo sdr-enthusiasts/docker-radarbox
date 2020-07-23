@@ -37,11 +37,12 @@ dpkg --add-architecture armhf
 apt-get update
 
 echo "========== Install armhf mlat-client =========="
-cd /src/mlat-client
+pushd /src/mlat-client
 apt-get install python3:armhf -y
-dpkg --install *.deb
+dpkg --install ./*.deb
 VERSION_MLATCLIENT=$(dpkg --list | grep mlat | tr -s " " | cut -d " " -f 3)
 echo "mlat-client ${VERSION_MLATCLIENT}" >> /VERSIONS
+popd
 
 echo "========== Install armhf rbfeeder24 =========="
 apt-get install -y --no-install-recommends \
@@ -52,7 +53,7 @@ apt-get install -y --no-install-recommends \
     libudev1:armhf \
     libusb-1.0-0:armhf
 mkdir -p /tmp/rbfeederinstall
-cd /tmp/rbfeederinstall
+pushd /tmp/rbfeederinstall
 wget http://apt.rb24.com/dists/stable/main/binary-armhf/Packages
 DEBFILE=$(\
     grep -E "^\s*Filename:\s+(\w|\d|\/|\.|\-)+rbfeeder(\w|\d|\.|\-)+.deb\s*$" Packages | \
@@ -67,6 +68,7 @@ xz -dv data.tar.xz
 tar xvf data.tar -C /
 RBFEEDER_VERSION=$(/usr/bin/rbfeeder --version | cut -d " " -f2- | tr -d "(" | tr -d ")" | tr -s " " "_")
 echo "rbfeeder $RBFEEDER_VERSION" >> /VERSIONS
+popd
 
 ###############################################################################
 
