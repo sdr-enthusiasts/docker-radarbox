@@ -39,10 +39,10 @@ echo -e "${LIGHTPURPLE}========== Copy mlat-client:armhf out of image ==========
 mkdir -p output
 rm -v ./output/*.deb || true
 MLAT_BUILDER_CONTAINER_ID=$(timeout 300s docker run -d --rm mlat-builder sleep 300)
-FILE_TO_COPY=$(docker exec ${MLAT_BUILDER_CONTAINER_ID} bash -c "ls /src/mlat-client*.deb")
-docker cp ${MLAT_BUILDER_CONTAINER_ID}:${FILE_TO_COPY} ./output/
-docker kill ${MLAT_BUILDER_CONTAINER_ID}
-docker rm ${MLAT_BUILDER_CONTAINER_ID} || true
+FILE_TO_COPY=$(docker exec "${MLAT_BUILDER_CONTAINER_ID}" bash -c "ls /src/mlat-client*.deb")
+docker cp "${MLAT_BUILDER_CONTAINER_ID}:${FILE_TO_COPY}" ./output/
+docker kill "${MLAT_BUILDER_CONTAINER_ID}"
+docker rm "${MLAT_BUILDER_CONTAINER_ID}" || true
 
 # Return to previous directory
 popd 
