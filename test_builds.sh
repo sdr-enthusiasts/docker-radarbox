@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 set -xe
 
+REPO=mikenye
+IMAGE=radarbox
+PLATFORMS="linux/amd64,linux/arm/v7,linux/arm64"
+
 # Return to original build contexts
 docker context use x86_64
 export DOCKER_CLI_EXPERIMENTAL="enabled"
 docker buildx use homecluster
-
-REPO=mikenye
-IMAGE=radarbox
-PLATFORMS="linux/amd64,linux/arm/v7,linux/arm64"
 
 # Colours
 NOCOLOR='\033[0m'
@@ -30,8 +30,8 @@ docker --context=arm32v7 kill "${MLAT_BUILDER_CONTAINER_ID}"
 docker --context=arm32v7 rm "${MLAT_BUILDER_CONTAINER_ID}" || true
 
 # Return to previous directory
-popd 
+popd
 
-# Build & push development
-echo -e "${LIGHTPURPLE}========== Building ${REPO}/${IMAGE}:latest ==========${NOCOLOR}"
-docker buildx build -t "${REPO}/${IMAGE}:development" --compress --push --platform "${PLATFORMS}" .
+# Build latest
+echo -e "${LIGHTPURPLE}========== Building ${REPO}/${IMAGE}:testing ==========${NOCOLOR}"
+docker buildx build -t "${REPO}/${IMAGE}:testing" --platform "${PLATFORMS}" .
