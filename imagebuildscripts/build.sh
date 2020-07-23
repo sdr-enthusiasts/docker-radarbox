@@ -24,8 +24,7 @@ FILEOUTPUT=$("${FILEBINARY}" -L "${FILEBINARY}")
 # Example output:
 # /usr/bin/file: ELF 32-bit LSB shared object, Intel 80386, version 1 (SYSV), dynamically linked, interpreter /lib/ld-musl-i386.so.1, stripped
 # /usr/bin/file: ELF 32-bit LSB shared object, Intel 80386, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux.so.2, for GNU/Linux 3.2.0, BuildID[sha1]=d48e1d621e9b833b5d33ede3b4673535df181fe0, stripped  
-echo ${FILEOUTPUT} | grep "Intel 80386" > /dev/null
-if [ $? -eq 0 ]; then
+if echo "${FILEOUTPUT}" | grep "Intel 80386" > /dev/null; then
   ARCH="x86"
 fi
 
