@@ -168,8 +168,6 @@ services:
       - SHARING_KEY=g45643ab345af3c5d5g923a99ffc0de9
     networks:
       - adsbnet
-
-  
 ```
 
 For an explanation of the `mikenye/readsb` image's configuration, see that image's readme.
