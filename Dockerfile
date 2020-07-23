@@ -13,6 +13,8 @@ ENV BEASTPORT=30005 \
     STATS_INTERVAL_MINUTES=5 \
     VERBOSE_LOGGING=false
 
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 RUN set -x && \
     /src/buildscripts/build.sh && \
     # Make sure we have an init
