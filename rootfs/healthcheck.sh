@@ -6,7 +6,7 @@ EXITCODE=0
 
 TIMESTAMP_NOW=$(date +%s.%N)
 LASTLOG_PACKETS_SENT=$(cat $RBFEEDER_LOG_FILE | grep "Packets sent in the last 30 seconds" | tail -1 | sed -r "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g")
-LASTLOG_TIMESTAMP=$(date --date="$(echo $LASTLOG_PACKETS_SENT | cut -d '[' -f 1)" +%s.%N)
+LASTLOG_TIMESTAMP=$(date --date="$(echo $LASTLOG_PACKETS_SENT | cut -d '[' -f 2 | cut -d ']' -f 1)" +%s.%N)
 LASTLOG_NUM_PACKETS_SENT=$(echo $LASTLOG_PACKETS_SENT | cut -d ']' -f 2 | cut -d ':' -f 2 | cut -d ',' -f 1 | tr -d ' ')
 
 # check to make sure we've sent packets in the past 60 seconds
@@ -19,10 +19,11 @@ else
         EXITCODE=1
     else
         echo "At least $LASTLOG_NUM_PACKETS_SENT packets sent in past 60 seconds. HEALTHY"
-        # truncate the log file
-        truncate --size=0 /var/log/rbfeeder.log
     fi
 fi
+
+# truncate the log file
+truncate --size=0 /var/log/rbfeeder.log
 
 exit $EXITCODE
 
