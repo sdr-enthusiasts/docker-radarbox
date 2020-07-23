@@ -35,7 +35,7 @@ fi
 echo """
 [client]
 network_mode=true
-log_file=-
+log_file=$RBFEEDER_LOG_FILE
 """ > /etc/rbfeeder.ini
 
 if [ -z "${SHARING_KEY}" ]
@@ -74,3 +74,5 @@ mkdir -p /var/log/mlat-client
 chown nobody:nogroup /var/log/mlat-client
 mkdir -p /var/log/rbfeeder
 chown nobody:nogroup /var/log/rbfeeder
+touch /var/log/rbfeeder.log
+truncate --size=0 /var/log/rbfeeder.log
