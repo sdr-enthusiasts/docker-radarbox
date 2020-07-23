@@ -24,7 +24,6 @@ As RadarBox only provide `armhf` binaries for Linux, `qemu-user-static` is used 
 
 The source code for `rbfeeder` is available (<https://github.com/mutability/rbfeeder>), however I haven't been able to get this to compile yet, so for the time being I'll stick with the qemu method. If you can get `rbfeeder` to compile, please get in touch by [logging an issue](https://github.com/mikenye/docker-radarbox/issues) on the project's github.
 
-
 ## Obtaining a RadarBox Sharing Key
 
 First-time users should obtain a RadarBox sharing key.
@@ -177,9 +176,8 @@ For an explanation of the `mikenye/readsb` image's configuration, see that image
 Once your container is up and running, you should claim your receiver.
 
 1. Go to <https://www.radarbox.com/>
-2. Create an account or sign in
-3. Claim your receiver by visiting <https://www.radarbox.com/raspberry-pi/claim> and following the instructions
-
+1. Create an account or sign in
+1. Claim your receiver by visiting <https://www.radarbox.com/raspberry-pi/claim> and following the instructions
 
 ## Runtime Environment Variables
 
