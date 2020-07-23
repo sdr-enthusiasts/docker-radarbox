@@ -11,7 +11,7 @@ pushd .
 # Test build the mlat-client deb
 echo -e "${LIGHTPURPLE}========== Test building mlat-client ==========${NOCOLOR}"
 pushd ./mlat-builder
-docker build . -t mlat-builder:latest
+docker build --no-cache -t mlat-builder:latest .
 
 # Copy deb out of mlat-builder
 echo -e "${LIGHTPURPLE}========== Copy mlat-client out of image ==========${NOCOLOR}"
@@ -27,5 +27,5 @@ docker rm "${MLAT_BUILDER_CONTAINER_ID}" || true
 popd 
 
 # Build & push latest
-echo -e "${LIGHTPURPLE}========== Building ${REPO}/${IMAGE}:latest ==========${NOCOLOR}"
-docker build -t "mikenye/radarbox:testing" .
+echo -e "${LIGHTPURPLE}========== Building mikenye/radarbox:testing ==========${NOCOLOR}"
+docker build --no-cache -t "mikenye/radarbox:testing" .
