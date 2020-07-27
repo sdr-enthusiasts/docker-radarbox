@@ -7,10 +7,17 @@ SN=$(grep -E "^sn=.*$" /etc/rbfeeder.ini)
 if grep -E "^sn=.*$" /etc/rbfeeder.ini; then
     echo "[mlat-client] Delaying mlat-client startup until rbfeeder receives station sn..."
     sleep 30
+    exit 1
     
 else
     
     MLAT_USER=$(echo "$SN" | cut -d "=" -f 2)
+
+    if [[ -z "$MLAT_USER" ]]; then
+      echo "[mlat-client] Could not determine station sn..."
+      sleep 30
+      exit 1
+    fi
 
     if [ "$(uname -m)" = "x86_64" ]
     then
