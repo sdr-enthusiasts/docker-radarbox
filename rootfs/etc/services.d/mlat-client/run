@@ -1,80 +1,71 @@
-#!/usr/bin/with-contenv sh
-#shellcheck shell=sh
+#!/usr/bin/with-contenv bash
+#shellcheck shell=bash
 
 # try to get station serial number
 SN=$(grep -E "^sn=.*$" /etc/rbfeeder.ini)
+MLAT_USER=$(echo "$SN" | cut -d "=" -f 2 | tr -d " ")
 
-if grep -E "^sn=.*$" /etc/rbfeeder.ini; then
-    echo "[mlat-client] Delaying mlat-client startup until rbfeeder receives station sn..."
-    sleep 30
-    exit 1
-    
-else
-    
-    MLAT_USER=$(echo "$SN" | cut -d "=" -f 2)
+if [[ -z "$MLAT_USER" ]]; then
+  echo "[mlat-client] Delaying mlat-client startup until rbfeeder receives station sn..."
+  sleep 30
+  exit 1
+fi
 
-    if [[ -z "$MLAT_USER" ]]; then
-      echo "[mlat-client] Could not determine station sn..."
-      sleep 30
-      exit 1
-    fi
-
-    if [ "$(uname -m)" = "x86_64" ]
+if [ "$(uname -m)" = "x86_64" ]
     then
         
-        exec /usr/bin/qemu-arm-static /usr/bin/python3 /usr/bin/mlat-client \
-            --input-type "${MLAT_INPUT_TYPE}" \
-            --input-connect "${BEASTHOST}:${BEASTPORT}" \
-            --results beast,listen,30105 \
-            --lat "${LAT}" \
-            --lon "${LONG}" \
-            --alt "${ALT}m" \
-            --user "${MLAT_USER}" \
-            --server "${MLAT_SERVER}" \
-            2>&1 | awk -W Interactive '{print "[mlat-client] " $0}'
+    exec /usr/bin/qemu-arm-static /usr/bin/python3 /usr/bin/mlat-client \
+        --input-type "${MLAT_INPUT_TYPE}" \
+        --input-connect "${BEASTHOST}:${BEASTPORT}" \
+        --results beast,listen,30105 \
+        --lat "${LAT}" \
+        --lon "${LONG}" \
+        --alt "${ALT}m" \
+        --user "${MLAT_USER}" \
+        --server "${MLAT_SERVER}" \
+        2>&1 | awk -W Interactive '{print "[mlat-client] " $0}'
 
-    elif [ "$(uname -m)" = "armv7l" ]
-    then
-        exec /usr/bin/mlat-client \
-            --input-type "${MLAT_INPUT_TYPE}" \
-            --input-connect "${BEASTHOST}:${BEASTPORT}" \
-            --results beast,listen,30105 \
-            --lat "${LAT}" \
-            --lon "${LONG}" \
-            --alt "${ALT}m" \
-            --user "${MLAT_USER}" \
-            --server "${MLAT_SERVER}" \
-            2>&1 | awk -W Interactive '{print "[mlat-client] " $0}'
+elif [ "$(uname -m)" = "armv7l" ]
+then
+    exec /usr/bin/mlat-client \
+        --input-type "${MLAT_INPUT_TYPE}" \
+        --input-connect "${BEASTHOST}:${BEASTPORT}" \
+        --results beast,listen,30105 \
+        --lat "${LAT}" \
+        --lon "${LONG}" \
+        --alt "${ALT}m" \
+        --user "${MLAT_USER}" \
+        --server "${MLAT_SERVER}" \
+        2>&1 | awk -W Interactive '{print "[mlat-client] " $0}'
 
-    elif [ "$(uname -m)" = "armhf" ]
-    then
-        exec /usr/bin/mlat-client \
-            --input-type "${MLAT_INPUT_TYPE}" \
-            --input-connect "${BEASTHOST}:${BEASTPORT}" \
-            --results beast,listen,30105 \
-            --lat "${LAT}" \
-            --lon "${LONG}" \
-            --alt "${ALT}m" \
-            --user "${MLAT_USER}" \
-            --server "${MLAT_SERVER}" \
-            2>&1 | awk -W Interactive '{print "[mlat-client] " $0}'
+elif [ "$(uname -m)" = "armhf" ]
+then
+    exec /usr/bin/mlat-client \
+        --input-type "${MLAT_INPUT_TYPE}" \
+        --input-connect "${BEASTHOST}:${BEASTPORT}" \
+        --results beast,listen,30105 \
+        --lat "${LAT}" \
+        --lon "${LONG}" \
+        --alt "${ALT}m" \
+        --user "${MLAT_USER}" \
+        --server "${MLAT_SERVER}" \
+        2>&1 | awk -W Interactive '{print "[mlat-client] " $0}'
 
-    elif [ "$(uname -m)" = "aarch64" ]
-    then
-        exec /usr/bin/mlat-client \
-            --input-type "${MLAT_INPUT_TYPE}" \
-            --input-connect "${BEASTHOST}:${BEASTPORT}" \
-            --results beast,listen,30105 \
-            --lat "${LAT}" \
-            --lon "${LONG}" \
-            --alt "${ALT}m" \
-            --user "${MLAT_USER}" \
-            --server "${MLAT_SERVER}" \
-            2>&1 | awk -W Interactive '{print "[mlat-client] " $0}'
+elif [ "$(uname -m)" = "aarch64" ]
+then
+    exec /usr/bin/mlat-client \
+        --input-type "${MLAT_INPUT_TYPE}" \
+        --input-connect "${BEASTHOST}:${BEASTPORT}" \
+        --results beast,listen,30105 \
+        --lat "${LAT}" \
+        --lon "${LONG}" \
+        --alt "${ALT}m" \
+        --user "${MLAT_USER}" \
+        --server "${MLAT_SERVER}" \
+        2>&1 | awk -W Interactive '{print "[mlat-client] " $0}'
 
-    else
-        sleep 60
-        exit 1
-    fi
-
+else
+    sleep 60
+    exit 1
 fi
+
