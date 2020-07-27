@@ -60,13 +60,19 @@ fi
 
   echo "external_port=$BEASTPORT"
 
-  # Attempt to resolve BEASTHOST into an IP address
-  BEASTIP=$(s6-dnsip4 "$BEASTHOST")
-  echo "external_host=$BEASTIP"
+} >> /etc/rbfeeder.ini
+
+# Attempt to resolve BEASTHOST into an IP address
+if BEASTIP=$(s6-dnsip4 "$BEASTHOST"); then
+  echo "external_host=$BEASTIP" >> /etc/rbfeeder.ini
+else
+  echo "external_host=$BEASTHOST" >> /etc/rbfeeder.ini
+fi
+
+{
   echo "[mlat]"
   echo "mlat_cmd=/usr/bin/mlat-client"
   echo "autostart_mlat=false"
-
 } >> /etc/rbfeeder.ini
 
 # Create log dirs
