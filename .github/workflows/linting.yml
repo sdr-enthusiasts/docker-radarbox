@@ -32,7 +32,6 @@ jobs:
     - name: Run hadolint against Dockerfiles
       run: |
         docker run --rm -i -v "$PWD":/workdir --workdir /workdir --entrypoint hadolint hadolint/hadolint --ignore DL3008 --ignore DL3022 ./Dockerfile
-        docker run --rm -i -v "$PWD":/workdir --workdir /workdir --entrypoint hadolint hadolint/hadolint --ignore DL3008 --ignore DL3009 ./mlat-builder/Dockerfile
 
   markdownlint:
 

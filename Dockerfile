@@ -1,7 +1,4 @@
-FROM ubuntu:bionic
-
-COPY --from=arm32v7/ubuntu:bionic /etc/apt/sources.list /tmp/sources.list.arm32v7
-COPY /mlat-builder/output/*.deb /src/mlat-client/
+FROM debian:stable-slim
 
 COPY imagebuildscripts/ /src/buildscripts/
 

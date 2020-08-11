@@ -20,9 +20,9 @@ Currently, this image should pull and run on the following architectures:
 * `arm32v7`, `armv7l`: ARMv7 32-bit (Odroid HC1/HC2/XU4, RPi 2/3)
 * `arm64`, `aarch64`: ARMv8 64-bit (RPi 4 64-bit OSes)
 
-As RadarBox only provide `armhf` binaries for Linux, `qemu-user-static` is used to allow the `armhf` binaries to execute on `amd64` (yes, I know 😕) and also `aarch64` where native `armhf` execution is unavailable. Accordingly, there is a size discrepancy between each architecture's image. The qemu overhead is negligible.
+As RadarBox only provide `armhf` & `aarch64` binaries for Linux, `qemu-user-static` is used to allow the `armhf` binaries to execute on `amd64` (yes, I know 😕). Accordingly, there is a size discrepancy between each architecture's image. The qemu CPU/memory overhead is negligible.
 
-The source code for `rbfeeder` is available (<https://github.com/mutability/rbfeeder>), however I haven't been able to get this to compile yet, so for the time being I'll stick with the qemu method. If you can get `rbfeeder` to compile, please get in touch by [logging an issue](https://github.com/mikenye/docker-radarbox/issues) on the project's github.
+The source code for `rbfeeder` is available (<https://github.com/mutability/rbfeeder>), however I haven't been able to get this to compile yet, so for the time being I'll stick with the qemu method. If you can get `rbfeeder` to compile and function correctly, please get in touch by [logging an issue](https://github.com/mikenye/docker-radarbox/issues) on the project's github.
 
 ## Obtaining a RadarBox Sharing Key
 
