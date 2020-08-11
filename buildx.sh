@@ -16,7 +16,7 @@ docker buildx build -t "${REPO}/${IMAGE}:latest" --compress --push --platform "$
 
 # Get version
 docker pull "${REPO}/${IMAGE}:latest"
-VERSION=$(docker run --rm --entrypoint cat ${REPO}/${IMAGE}:latest /VERSIONS | grep "RBFeeder " | cut -d " " -f 2)
+VERSION=$(docker run --rm --entrypoint cat "${REPO}"/"${IMAGE}":latest /VERSIONS | grep -i RBFeeder | tr -s ' ' | cut -d ' ' -f 2- | tr -d '(' | tr -d ')' | tr ' ' '_')
 
 # Build version specific
 docker buildx build -t "${REPO}/${IMAGE}:${VERSION}" --compress --push --platform "${PLATFORMS}" .
