@@ -31,7 +31,7 @@ apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 1D04368
 
 echo "========== Add apt repos =========="
 echo "deb https://apt.rb24.com/ $VERS main" > /etc/apt/sources.list.d/rb24.list
-echo "deb http://flightaware.com/adsb/piaware/files/packages $VERS piaware" > /etc/apt/sources.list.d/flightaware.list
+apt-get update
 
 echo "========== Install rbfeeder24 =========="
 apt-get install --no-install-recommends -y rbfeeder
@@ -39,6 +39,7 @@ rbfeeder --version >> /VERSIONS
 
 echo "========== Install mlat-client =========="
 apt-get install -y --no-install-recommends build-essential debhelper python3-dev
+rm -rf /src/mlat-client || true
 git clone https://github.com/mutability/mlat-client.git /src/mlat-client
 pushd /src/mlat-client
 BRANCH_MLAT_CLIENT=$(git tag --sort="-creatordate" | head -1)
