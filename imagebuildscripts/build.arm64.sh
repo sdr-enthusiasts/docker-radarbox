@@ -39,7 +39,6 @@ rbfeeder --version >> /VERSIONS
 
 echo "========== Install mlat-client =========="
 apt-get install -y --no-install-recommends build-essential debhelper python3-dev
-rm -rf /src/mlat-client || true
 git clone https://github.com/mutability/mlat-client.git /src/mlat-client
 pushd /src/mlat-client
 BRANCH_MLAT_CLIENT=$(git tag --sort="-creatordate" | head -1)

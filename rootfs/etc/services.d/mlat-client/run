@@ -27,7 +27,7 @@ if [ "$(uname -m)" = "x86_64" ]
 
 elif [ "$(uname -m)" = "armv7l" ]
 then
-    exec /usr/bin/mlat-client \
+    exec /usr/local/bin/mlat-client \
         --input-type "${MLAT_INPUT_TYPE}" \
         --input-connect "${BEASTHOST}:${BEASTPORT}" \
         --results beast,listen,30105 \
@@ -40,7 +40,7 @@ then
 
 elif [ "$(uname -m)" = "armhf" ]
 then
-    exec /usr/bin/mlat-client \
+    exec /usr/local/bin/mlat-client \
         --input-type "${MLAT_INPUT_TYPE}" \
         --input-connect "${BEASTHOST}:${BEASTPORT}" \
         --results beast,listen,30105 \
@@ -53,7 +53,7 @@ then
 
 elif [ "$(uname -m)" = "aarch64" ]
 then
-    exec /usr/bin/mlat-client \
+    exec /usr/local/bin/mlat-client \
         --input-type "${MLAT_INPUT_TYPE}" \
         --input-connect "${BEASTHOST}:${BEASTPORT}" \
         --results beast,listen,30105 \
