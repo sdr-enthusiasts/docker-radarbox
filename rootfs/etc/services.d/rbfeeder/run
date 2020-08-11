@@ -10,6 +10,8 @@ then
         /usr/bin/qemu-arm-static /usr/bin/rbfeeder 2>&1 | \
             awk -W Interactive '! / Statistics updated every 30 seconds /' | \
             awk -W Interactive '! /Packets sent in the last 30 seconds: /' | \
+            awk -W Interactive '! / Data sent: /' | \
+            awk -W Interactive '! / Data received: /' | \
             awk -W Interactive '{print "[rbfeeder] " $0}'
     fi
 
@@ -22,6 +24,8 @@ then
         /usr/bin/rbfeeder 2>&1 | \
             awk -W Interactive '! / Statistics updated every 30 seconds /' | \
             awk -W Interactive '! /Packets sent in the last 30 seconds: /' | \
+            awk -W Interactive '! / Data sent: /' | \
+            awk -W Interactive '! / Data received: /' | \
             awk -W Interactive '{print "[rbfeeder] " $0}'
     fi
 
@@ -34,6 +38,8 @@ then
         /usr/bin/rbfeeder 2>&1 | \
             awk -W Interactive '! / Statistics updated every 30 seconds /' | \
             awk -W Interactive '! /Packets sent in the last 30 seconds: /' | \
+            awk -W Interactive '! / Data sent: /' | \
+            awk -W Interactive '! / Data received: /' | \
             awk -W Interactive '{print "[rbfeeder] " $0}'
     fi
 
@@ -46,6 +52,8 @@ then
         /usr/bin/rbfeeder 2>&1 | \
             awk -W Interactive '! / Statistics updated every 30 seconds /' | \
             awk -W Interactive '! /Packets sent in the last 30 seconds: /' | \
+            awk -W Interactive '! / Data sent: /' | \
+            awk -W Interactive '! / Data received: /' | \
             awk -W Interactive '{print "[rbfeeder] " $0}'
     fi
 else
