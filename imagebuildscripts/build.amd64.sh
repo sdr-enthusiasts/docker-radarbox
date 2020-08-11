@@ -41,7 +41,11 @@ echo "========== Install rbfeeder24 =========="
 apt-get install --no-install-recommends -y rbfeeder:armhf
 
 echo "========== Install mlat-client =========="
-apt-get install -y --no-install-recommends build-essential debhelper python3-dev
+apt-get install -y --no-install-recommends \
+    build-essential \
+    debhelper \
+    python3 \
+    python3-dev
 git clone https://github.com/mutability/mlat-client.git /src/mlat-client
 pushd /src/mlat-client
 BRANCH_MLAT_CLIENT=$(git tag --sort="-creatordate" | head -1)
@@ -52,10 +56,12 @@ popd
 echo "========== Clean-up =========="
 apt-get remove -y \
     binutils \
+    build-essential \
     debhelper \
     file \
     git \
     gnupg \
+    python3-dev \
     wget \
     xz-utils
 apt-get autoremove -y
