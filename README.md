@@ -9,8 +9,8 @@ For more information on what `rbfeeder` is, see here: [sharing-data](https://www
 ## Supported tags and respective Dockerfiles
 
 * `latest` (`master` branch, `Dockerfile`)
+* * `latest_nohealthcheck` is the same as the `latest` version above. However, this version has the docker healthcheck removed. This is done for people running platforms (such as [Nomad](https://www.nomadproject.io)) that don't support manually disabling healthchecks, where healthchecks are not wanted.
 * Version and architecture specific tags available
-* `development` (`dev` branch, `Dockerfile`, not recommended for production)
 
 ## Multi Architecture Support
 
