@@ -9,8 +9,8 @@ LASTLOG_PACKETS_SENT=$(grep "Packets sent in the last 30 seconds" "$RBFEEDER_LOG
 LASTLOG_TIMESTAMP=$(date --date="$(echo "$LASTLOG_PACKETS_SENT" | cut -d '[' -f 2 | cut -d ']' -f 1)" +%s.%N)
 LASTLOG_NUM_PACKETS_SENT=$(echo "$LASTLOG_PACKETS_SENT" | cut -d ']' -f 2 | cut -d ':' -f 2 | cut -d ',' -f 1 | tr -d ' ')
 
-# check to make sure we've sent packets in the past 60 seconds
-if [ "$(echo "($TIMESTAMP_NOW - $LASTLOG_TIMESTAMP) < 300" | bc)" -ne 1 ]; then
+# check to make sure we've sent packets in the past 10 minutes
+if [ "$(echo "($TIMESTAMP_NOW - $LASTLOG_TIMESTAMP) < 600" | bc)" -ne 1 ]; then
     echo "No packets sent in past 300 seconds. UNHEALTHY"
     EXITCODE=1
 else
@@ -18,7 +18,7 @@ else
         echo "No packets sent in past 300 seconds. UNHEALTHY"
         EXITCODE=1
     else
-        echo "At least $LASTLOG_NUM_PACKETS_SENT packets sent in past 300 seconds. HEALTHY"
+        echo "At least $LASTLOG_NUM_PACKETS_SENT packets sent in past 600 seconds. HEALTHY"
     fi
 fi
 
