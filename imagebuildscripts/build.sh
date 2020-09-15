@@ -8,6 +8,7 @@ apt-get update
 apt-get install -y --no-install-recommends \
   bc \
   file \
+  procps \
   tzdata
 
 # If cross-building, we have no way to determine this without looking at the installed binaries using libmagic/file
