@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 set -e
-set -x
 
 EXITCODE=0
 
@@ -11,10 +10,10 @@ LASTLOG_NUM_PACKETS_SENT=$(echo "$LASTLOG_PACKETS_SENT" | cut -d ']' -f 2 | cut 
 
 # check to make sure we've sent packets since the last healthcheck
 if [[ "$LASTLOG_NUM_PACKETS_SENT" -lt 1 ]]; then
-    echo "No packets sent in past 600 seconds. UNHEALTHY"
+    echo "No packets sent since last healthcheck. UNHEALTHY"
     EXITCODE=1
 else
-    echo "At least $LASTLOG_NUM_PACKETS_SENT packets sent in past 600 seconds. HEALTHY"
+    echo "At least $LASTLOG_NUM_PACKETS_SENT packets sent since last healthcheck. HEALTHY"
 fi
 
 # wipe the log file
