@@ -213,4 +213,4 @@ You can [log an issue](https://github.com/mikenye/docker-radarbox/issues) on the
 
 I also have a [Discord channel](https://discord.gg/sTf9uYF), feel free to [join](https://discord.gg/sTf9uYF) and converse.
 
-If you're getting continual segmentation faults inside this container, see: https://github.com/mikenye/docker-radarbox/issues/16#issuecomment-699627387
+If you're getting continual segmentation faults inside this container, see: <https://github.com/mikenye/docker-radarbox/issues/16#issuecomment-699627387>
