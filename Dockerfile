@@ -1,7 +1,5 @@
 FROM debian:stable-slim
 
-COPY imagebuildscripts/ /src/buildscripts/
-
 ENV BEASTPORT=30005 \
     MLAT_INPUT_TYPE="dump1090" \
     MLAT_SERVER=mlat1.rb24.com:40900 \
@@ -10,14 +8,15 @@ ENV BEASTPORT=30005 \
     STATS_INTERVAL_MINUTES=5 \
     VERBOSE_LOGGING=false
 
+COPY rootfs/ /
+
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN set -x && \
-    /src/buildscripts/build.sh && \
+    /buildscripts/build.sh && \
     # Make sure we have an init
-    test -f /init
-
-COPY rootfs/ /
+    test -f /init && \
+    grep -i RBFeeder /VERSIONS | tr -s ' ' | cut -d ' ' -f 2- | tr -d '(' | tr -d ')' | tr ' ' '_' > /CONTAINER_VERSION
 
 # Set s6 init as entrypoint
 ENTRYPOINT [ "/init" ]
