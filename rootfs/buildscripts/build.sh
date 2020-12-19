@@ -2,7 +2,7 @@
 
 # Verbosity (x)
 # Exit on any error (e)
-set -x
+set -ex
 
 apt-get update
 apt-get install -y --no-install-recommends \
@@ -67,17 +67,17 @@ echo "========== Attempting build for ${ARCH} =========="
 if [ "$ARCH" = "amd64" ]
 then
     exec \
-        /src/buildscripts/build.amd64.sh
+        /buildscripts/build.amd64.sh
 
 elif [ "$ARCH" = "armhf" ]
 then
     exec \
-        /src/buildscripts/build.arm32.sh
+        /buildscripts/build.arm32.sh
 
 elif [ "$ARCH" = "aarch64" ]
 then
     exec \
-        /src/buildscripts/build.arm64.sh
+        /buildscripts/build.arm64.sh
 
 else
     echo ""
