@@ -79,7 +79,7 @@ then
     exec \
         /buildscripts/build.arm64.sh
 
-elif [ "$ARCH" = "i386"]
+elif [ "$ARCH" = "i386" ]
 then
     exec \
         /buildscripts/build.i386.sh

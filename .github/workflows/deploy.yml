@@ -73,7 +73,7 @@ jobs:
           context: .
           file: ./Dockerfile
           no-cache: true
-          platforms: linux/amd64,linux/arm/v7,linux/arm64
+          platforms: linux/amd64,linux/arm/v7,linux/arm64,linux/i386
           push: ${{ env.PUSH }}
           tags: ${{ env.REPO }}/${{ env.IMAGE }}:latest
 
@@ -98,7 +98,7 @@ jobs:
           context: .
           file: ./Dockerfile
           no-cache: true
-          platforms: linux/amd64,linux/arm/v7,linux/arm64
+          platforms: linux/amd64,linux/arm/v7,linux/arm64,linux/i386
           push: ${{ env.PUSH }}
           tags: ${{ env.REPO }}/${{ env.IMAGE }}:${{ env.VERSION_TAG }}
 
@@ -115,7 +115,7 @@ jobs:
           context: .
           file: ./Dockerfile.nohealthcheck
           no-cache: true
-          platforms: linux/amd64,linux/arm/v7,linux/arm64
+          platforms: linux/amd64,linux/arm/v7,linux/arm64,linux/i386
           push: ${{ env.PUSH }}
           tags: ${{ env.REPO }}/${{ env.IMAGE }}:latest_nohealthcheck
 
@@ -127,7 +127,7 @@ jobs:
           context: .
           file: ./Dockerfile.nohealthcheck
           no-cache: true
-          platforms: linux/amd64,linux/arm/v7,linux/arm64
+          platforms: linux/amd64,linux/arm/v7,linux/arm64,linux/i386
           push: ${{ env.PUSH }}
           tags: ${{ env.REPO }}/${{ env.IMAGE }}:${{ env.VERSION_TAG }}_nohealthcheck
 
@@ -141,6 +141,7 @@ jobs:
           - linux/amd64
           - linux/arm64
           - linux/arm/v7
+          - linux/i386
 
     # Set job-wide environment variables
     #  - REPO: repo name on dockerhub
