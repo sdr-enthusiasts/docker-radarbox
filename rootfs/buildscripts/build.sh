@@ -27,7 +27,7 @@ FILEOUTPUT=$("${FILEBINARY}" -L "${FILEBINARY}")
 # /usr/bin/file: ELF 32-bit LSB shared object, Intel 80386, version 1 (SYSV), dynamically linked, interpreter /lib/ld-musl-i386.so.1, stripped
 # /usr/bin/file: ELF 32-bit LSB shared object, Intel 80386, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux.so.2, for GNU/Linux 3.2.0, BuildID[sha1]=d48e1d621e9b833b5d33ede3b4673535df181fe0, stripped  
 if echo "${FILEOUTPUT}" | grep "Intel 80386" > /dev/null; then
-  ARCH="x86"
+  ARCH="i386"
 fi
 
 # x86-64
@@ -78,6 +78,11 @@ elif [ "$ARCH" = "aarch64" ]
 then
     exec \
         /buildscripts/build.arm64.sh
+
+elif [ "$ARCH" = "i386"]
+then
+    exec \
+        /buildscripts/build.i386.sh
 
 else
     echo ""
