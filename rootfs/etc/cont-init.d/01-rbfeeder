@@ -75,6 +75,15 @@ fi
   echo "autostart_mlat=false"
 } >> /etc/rbfeeder.ini
 
+# If UAT_RECEIVER_HOST is set, then add UAT configuration
+if [[ -n "$UAT_RECEIVER_HOST" ]]; then
+  {
+    echo "[dump978]"
+    echo "dump978_enabled=true"
+    echo "dump978_port=30979"
+  } >> /etc/rbfeeder.ini
+fi
+
 # Create log dirs
 mkdir -p /var/log/mlat-client
 chown nobody:nogroup /var/log/mlat-client
