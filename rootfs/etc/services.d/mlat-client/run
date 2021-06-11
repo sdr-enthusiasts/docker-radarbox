@@ -15,6 +15,7 @@ exec /usr/local/bin/mlat-client \
     --input-type "${MLAT_INPUT_TYPE}" \
     --input-connect "${BEASTHOST}:${BEASTPORT}" \
     --results beast,listen,30105 \
+    --results beast,connect,127.0.0.1:30104 \
     --lat "${LAT}" \
     --lon "${LONG}" \
     --alt "${ALT}m" \
