@@ -31,7 +31,6 @@ else
 fi
 
 # Generate /etc/rbfeeder.ini based on environment variables
-
 echo """
 [client]
 network_mode=true
@@ -57,9 +56,8 @@ fi
   [network]
   mode=beast
   """
-
+  # shellcheck disable=SC2153
   echo "external_port=$BEASTPORT"
-
 } >> /etc/rbfeeder.ini
 
 # Attempt to resolve BEASTHOST into an IP address
