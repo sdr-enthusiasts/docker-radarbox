@@ -69,8 +69,8 @@ fi
 
 {
   echo "[mlat]"
-  echo "mlat_cmd=/usr/bin/mlat-client"
-  echo "autostart_mlat=false"
+  echo "#mlat_cmd=/usr/bin/python3 /usr/local/bin/mlat-client"
+  echo "autostart_mlat=true"
 } >> /etc/rbfeeder.ini
 
 # If UAT_RECEIVER_HOST is set, then add UAT configuration
