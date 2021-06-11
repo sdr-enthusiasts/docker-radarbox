@@ -10,6 +10,6 @@ fi
 
 # shellcheck disable=SC2016
 socat -d -d TCP-LISTEN:30979,fork TCP:"$UAT_RECEIVER_HOST":"${UAT_RECEIVER_PORT:-30978}" \
- 2>&1 | stdbuf -o0 awk '{print "[978raw-splitter] " strftime("%Y/%m/%d %H:%M:%S", systime()) " " $0}'
+ 2>&1 | awk -W Interactive '{print "[978json-splitter] " $0}'
 
 sleep 5
