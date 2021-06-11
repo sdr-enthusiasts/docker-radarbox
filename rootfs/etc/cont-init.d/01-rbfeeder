@@ -31,7 +31,6 @@ else
 fi
 
 # Generate /etc/rbfeeder.ini based on environment variables
-
 echo """
 [client]
 network_mode=true
@@ -57,9 +56,8 @@ fi
   [network]
   mode=beast
   """
-
+  # shellcheck disable=SC2153
   echo "external_port=$BEASTPORT"
-
 } >> /etc/rbfeeder.ini
 
 # Attempt to resolve BEASTHOST into an IP address
@@ -74,6 +72,15 @@ fi
   echo "mlat_cmd=/usr/bin/mlat-client"
   echo "autostart_mlat=false"
 } >> /etc/rbfeeder.ini
+
+# If UAT_RECEIVER_HOST is set, then add UAT configuration
+if [[ -n "$UAT_RECEIVER_HOST" ]]; then
+  {
+    echo "[dump978]"
+    echo "dump978_enabled=true"
+    echo "dump978_port=30979"
+  } >> /etc/rbfeeder.ini
+fi
 
 # Create log dirs
 mkdir -p /var/log/mlat-client
