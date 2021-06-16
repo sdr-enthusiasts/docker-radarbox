@@ -14,8 +14,11 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN set -x && \
     /buildscripts/build.sh && \
+    ldconfig && \
     # Make sure we have an init
     test -f /init && \
+    # Make sure rbfeeder binary works
+    rbfeeder --no-start && \
     cat /CONTAINER_VERSION
 
 # Set s6 init as entrypoint

@@ -31,10 +31,11 @@ apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 1D04368
 
 echo "========== Add apt repos =========="
 echo "deb https://apt.rb24.com/ $VERS main" > /etc/apt/sources.list.d/rb24.list
+dpkg --add-architecture armhf
 apt-get update
 
 echo "========== Install rbfeeder24 =========="
-apt-get install --no-install-recommends -y rbfeeder
+apt-get install --no-install-recommends -y rbfeeder:armhf
 rbfeeder --version >> /VERSIONS
 apt-cache show rbfeeder | grep Version | cut -d: -f2 | tr -d " " > /CONTAINER_VERSION
 
