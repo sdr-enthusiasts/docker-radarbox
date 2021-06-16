@@ -72,3 +72,4 @@ rm -rf /src /tmp/* /var/lib/apt/lists/*
 qemu-arm-static "$(which rbfeeder)" --version >> /VERSIONS
 echo "mlat-client ${BRANCH_MLAT_CLIENT}" >> /VERSIONS
 cat /VERSIONS
+apt-cache show rbfeeder | grep Version | cut -d: -f2 | tr -d " " > /CONTAINER_VERSION
