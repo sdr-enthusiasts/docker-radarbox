@@ -53,6 +53,12 @@ git checkout "$BRANCH_MLAT_CLIENT"
 ./setup.py install
 popd
 
+# Get versions
+qemu-arm-static "$(which rbfeeder)" --version >> /VERSIONS
+echo "mlat-client ${BRANCH_MLAT_CLIENT}" >> /VERSIONS
+cat /VERSIONS
+apt-cache show rbfeeder | grep Version | cut -d: -f2 | tr -d " " > /CONTAINER_VERSION
+
 echo "========== Clean-up =========="
 apt-get remove -y \
     binutils \
@@ -67,8 +73,3 @@ apt-get remove -y \
 apt-get autoremove -y
 apt-get clean -y
 rm -rf /src /tmp/* /var/lib/apt/lists/*
-
-# Get versions
-qemu-arm-static "$(which rbfeeder)" --version >> /VERSIONS
-echo "mlat-client ${BRANCH_MLAT_CLIENT}" >> /VERSIONS
-cat /VERSIONS

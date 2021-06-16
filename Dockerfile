@@ -16,7 +16,7 @@ RUN set -x && \
     /buildscripts/build.sh && \
     # Make sure we have an init
     test -f /init && \
-    grep -i RBFeeder /VERSIONS | tr -s ' ' | cut -d ' ' -f 2- | tr -d '(' | tr -d ')' | tr ' ' '_' > /CONTAINER_VERSION
+    cat /CONTAINER_VERSION
 
 # Set s6 init as entrypoint
 ENTRYPOINT [ "/init" ]
