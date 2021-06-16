@@ -37,7 +37,7 @@ apt-get update
 echo "========== Install rbfeeder24 =========="
 apt-get install --no-install-recommends -y rbfeeder:armhf
 rbfeeder --version >> /VERSIONS
-apt-cache show rbfeeder | grep Version | cut -d: -f2 | tr -d " " > /CONTAINER_VERSION
+apt-cache show rbfeeder:armhf | grep Version | cut -d: -f2 | tr -d " " > /CONTAINER_VERSION
 
 echo "========== Install mlat-client =========="
 apt-get install -y --no-install-recommends \
