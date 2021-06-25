@@ -30,7 +30,7 @@ wget -q -O - https://raw.githubusercontent.com/mikenye/deploy-s6-overlay/master/
 
 echo "========== Import apt keys =========="
 # AirNavSystems (for rbfeeder)
-apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 1D043681
+apt-key adv --keyserver hkp://pgp.mit.edu:80 --recv-keys 1D043681
 
 echo "========== Add apt repos =========="
 echo "deb https://apt.rb24.com/ $VERS main" > /etc/apt/sources.list.d/rb24.list
