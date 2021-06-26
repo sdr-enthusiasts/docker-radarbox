@@ -202,6 +202,7 @@ There are a series of available environment variables:
 | `MLAT_INPUT_TYPE`    | Optional. Sets the input receiver type. Run `docker run --rm -it --entrypoint mlat-client mikenye/radarbox --help` and see `--input-type` for valid values. | `dump1090` |
 | `STATS_INTERVAL_MINUTES` | Optional. How often to print statistics, in minutes. | `5` |
 | `VERBOSE_LOGGING` | Optional. Set to `true` for no filtering of `rbfeeder` logs. | `false` |
+| `ENABLE_MLAT` | Option. Set to `true` to enable MLAT inside of the container. See [MLAT note](#mlat) below | `true` |
 
 ## Ports
 
@@ -209,6 +210,19 @@ The following TCP ports are used by this container:
 
 * `32088` - `rbfeeder` listens on this port, however I can't find the use for this port...
 * `30105` - `mlat-client` listens on this port to provide MLAT results.
+
+## MLAT
+
+You may find that MLAT in your container will often times spit out errors in your logs, such as
+
+```shell
+[rbfeeder] Disconnecting from mlat1.rb24.com:40900: No data (not even keepalives) received for 60 seconds
+[rbfeeder] Connected to multilateration server at mlat1.rb24.com:40900, handshaking
+```
+
+This is likely, but not always, not caused by anything you are doing, but is instead caused by the Radarbox server itself and as such there isn't anything you can do to fix it. You will see in your Radarbox stats very little, if any, MLAT targets from your feeder while it is doing this.
+
+To stop the feeder from spamming your logs you can set `ENABLE_MLAT=false` in your environment configuration for Radarbox and it will stop the MLAT service, and the log messages. Please note that if you do this, and you use [MLAT Hub](https://github.com/mikenye/docker-readsb-protobuf#advanced-usage-creating-an-mlat-hub) please remove Radarbox from your `READSB_NET_CONNECTOR` under `MLAT Hub`.
 
 ## Logging
 
