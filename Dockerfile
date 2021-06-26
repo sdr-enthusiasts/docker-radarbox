@@ -6,7 +6,8 @@ ENV BEASTPORT=30005 \
     RBFEEDER_LOG_FILE="/var/log/rbfeeder.log" \
     S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
     STATS_INTERVAL_MINUTES=5 \
-    VERBOSE_LOGGING=false
+    VERBOSE_LOGGING=false \
+    ENABLE_MLAT=true
 
 COPY rootfs/ /
 

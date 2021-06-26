@@ -8,58 +8,62 @@ ulimit -c 0
 
 if [ "$(uname -m)" = "x86_64" ]
 then
-    if [ "$VERBOSE_LOGGING" = "true" ]; then
+    if [ "$VERBOSE_LOGGING" == "true" ]; then
         /usr/bin/qemu-arm-static /usr/bin/rbfeeder 2>&1 | \
-            awk -W Interactive '{print "[rbfeeder] " $0}'
+            stdbuf -oL awk '{print "[rbfeeder] " strftime("%Y/%m/%d %H:%M:%S", systime()) " " $0}'
     else
-        /usr/bin/qemu-arm-static /usr/bin/rbfeeder 2>&1 | \
-            awk -W Interactive '! / Statistics updated every 30 seconds /' | \
-            awk -W Interactive '! /Packets sent in the last 30 seconds: /' | \
-            awk -W Interactive '! / Data sent: /' | \
-            awk -W Interactive '! / Data received: /' | \
-            awk -W Interactive '{print "[rbfeeder] " $0}'
+        /usr/bin/rbfeeder 2>&1 | \
+            stdbuf -oL awk '! / Statistics updated every 30 seconds /' | \
+            stdbuf -oL awk '! /Packets sent in the last 30 seconds: /' | \
+            stdbuf -oL awk '! / Data sent: /' | \
+            stdbuf -oL awk '! / Data received: /' | \
+            # shellcheck disable=SC2016
+            stdbuf -oL awk '{print "[rbfeeder] " strftime("%Y/%m/%d %H:%M:%S", systime()) " " $0}'
     fi
 
 elif [ "$(uname -m)" = "armv7l" ]
 then
-    if [ "$VERBOSE_LOGGING" = "true" ]; then
+    if [ "$VERBOSE_LOGGING" == "true" ]; then
         /usr/bin/rbfeeder 2>&1 | \
-            awk -W Interactive '{print "[rbfeeder] " $0}'
+            stdbuf -oL awk '{print "[rbfeeder] " strftime("%Y/%m/%d %H:%M:%S", systime()) " " $0}'
     else
         /usr/bin/rbfeeder 2>&1 | \
-            awk -W Interactive '! / Statistics updated every 30 seconds /' | \
-            awk -W Interactive '! /Packets sent in the last 30 seconds: /' | \
-            awk -W Interactive '! / Data sent: /' | \
-            awk -W Interactive '! / Data received: /' | \
-            awk -W Interactive '{print "[rbfeeder] " $0}'
+            stdbuf -oL awk '! / Statistics updated every 30 seconds /' | \
+            stdbuf -oL awk '! /Packets sent in the last 30 seconds: /' | \
+            stdbuf -oL awk '! / Data sent: /' | \
+            stdbuf -oL awk '! / Data received: /' | \
+            # shellcheck disable=SC2016
+            stdbuf -oL awk '{print "[rbfeeder] " strftime("%Y/%m/%d %H:%M:%S", systime()) " " $0}'
     fi
 
 elif [ "$(uname -m)" = "armhf" ]
 then
-    if [ "$VERBOSE_LOGGING" = "true" ]; then
+    if [ "$VERBOSE_LOGGING" == "true" ]; then
         /usr/bin/rbfeeder 2>&1 | \
-            awk -W Interactive '{print "[rbfeeder] " $0}'
+            stdbuf -oL awk '{print "[rbfeeder] " strftime("%Y/%m/%d %H:%M:%S", systime()) " " $0}'
     else
         /usr/bin/rbfeeder 2>&1 | \
-            awk -W Interactive '! / Statistics updated every 30 seconds /' | \
-            awk -W Interactive '! /Packets sent in the last 30 seconds: /' | \
-            awk -W Interactive '! / Data sent: /' | \
-            awk -W Interactive '! / Data received: /' | \
-            awk -W Interactive '{print "[rbfeeder] " $0}'
+            stdbuf -oL awk '! / Statistics updated every 30 seconds /' | \
+            stdbuf -oL awk '! /Packets sent in the last 30 seconds: /' | \
+            stdbuf -oL awk '! / Data sent: /' | \
+            stdbuf -oL awk '! / Data received: /' | \
+            # shellcheck disable=SC2016
+            stdbuf -oL awk '{print "[rbfeeder] " strftime("%Y/%m/%d %H:%M:%S", systime()) " " $0}'
     fi
 
 elif [ "$(uname -m)" = "aarch64" ]
 then
-    if [ "$VERBOSE_LOGGING" = "true" ]; then
+    if [ "$VERBOSE_LOGGING" == "true" ]; then
         /usr/bin/rbfeeder 2>&1 | \
-            awk -W Interactive '{print "[rbfeeder] " $0}'
+            stdbuf -oL awk '{print "[rbfeeder] " strftime("%Y/%m/%d %H:%M:%S", systime()) " " $0}'
     else
         /usr/bin/rbfeeder 2>&1 | \
-            awk -W Interactive '! / Statistics updated every 30 seconds /' | \
-            awk -W Interactive '! /Packets sent in the last 30 seconds: /' | \
-            awk -W Interactive '! / Data sent: /' | \
-            awk -W Interactive '! / Data received: /' | \
-            awk -W Interactive '{print "[rbfeeder] " $0}'
+            stdbuf -oL awk '! / Statistics updated every 30 seconds /' | \
+            stdbuf -oL awk '! /Packets sent in the last 30 seconds: /' | \
+            stdbuf -oL awk '! / Data sent: /' | \
+            stdbuf -oL awk '! / Data received: /' | \
+            # shellcheck disable=SC2016
+            stdbuf -oL awk '{print "[rbfeeder] " strftime("%Y/%m/%d %H:%M:%S", systime()) " " $0}'
     fi
 else
     echo ""
@@ -67,6 +71,7 @@ else
     echo "This build is running on an unsupported architecture ($(uname -m))."
     echo "Please raise an issue on this container's GitHub reporting this."
     echo ""
-    sleep 60
+    # Container failed to start up, sleep forever
+    sleep 86400
     exit 1
 fi
