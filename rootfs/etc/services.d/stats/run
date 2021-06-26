@@ -12,7 +12,8 @@ while read -r L; do
     fi
 done < "$RBFEEDER_LOG_FILE"
 
-echo "[stats] Packets sent in past $STATS_INTERVAL_MINUTES minutes: $PACKETS_SINCE_LAST_UPDATE, total packets since container start: $TOTAL_PACKETS"
+echo "Packets sent in past $STATS_INTERVAL_MINUTES minutes: $PACKETS_SINCE_LAST_UPDATE, total packets since container start: $TOTAL_PACKETS" \
+| stdbuf -o0 awk '{print "[rbfeeder-stats] " strftime("%Y/%m/%d %H:%M:%S", systime()) " " $0}'
 
 # truncate the log file to 150 lines
 #shellcheck disable=SC2005
