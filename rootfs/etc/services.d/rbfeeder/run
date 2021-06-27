@@ -12,7 +12,7 @@ then
         /usr/bin/qemu-arm-static /usr/bin/rbfeeder 2>&1 | \
             stdbuf -oL awk '{print "[rbfeeder] " strftime("%Y/%m/%d %H:%M:%S", systime()) " " $0}'
     else
-        /usr/bin/rbfeeder 2>&1 | \
+        /usr/bin/qemu-arm-static /usr/bin/rbfeeder 2>&1 | \
             stdbuf -oL awk '! / Statistics updated every 30 seconds /' | \
             stdbuf -oL awk '! /Packets sent in the last 30 seconds: /' | \
             stdbuf -oL awk '! / Data sent: /' | \
