@@ -42,12 +42,12 @@ then
         /usr/bin/rbfeeder 2>&1 | \
             stdbuf -oL awk '{print "[rbfeeder] " strftime("%Y/%m/%d %H:%M:%S", systime()) " " $0}'
     else
+        # shellcheck disable=SC2016
         /usr/bin/rbfeeder 2>&1 | \
             stdbuf -oL awk '! / Statistics updated every 30 seconds /' | \
             stdbuf -oL awk '! /Packets sent in the last 30 seconds: /' | \
             stdbuf -oL awk '! / Data sent: /' | \
             stdbuf -oL awk '! / Data received: /' | \
-            # shellcheck disable=SC2016
             stdbuf -oL awk '{print "[rbfeeder] " strftime("%Y/%m/%d %H:%M:%S", systime()) " " $0}'
     fi
 
@@ -57,12 +57,12 @@ then
         /usr/bin/rbfeeder 2>&1 | \
             stdbuf -oL awk '{print "[rbfeeder] " strftime("%Y/%m/%d %H:%M:%S", systime()) " " $0}'
     else
+        # shellcheck disable=SC2016
         /usr/bin/rbfeeder 2>&1 | \
             stdbuf -oL awk '! / Statistics updated every 30 seconds /' | \
             stdbuf -oL awk '! /Packets sent in the last 30 seconds: /' | \
             stdbuf -oL awk '! / Data sent: /' | \
             stdbuf -oL awk '! / Data received: /' | \
-            # shellcheck disable=SC2016
             stdbuf -oL awk '{print "[rbfeeder] " strftime("%Y/%m/%d %H:%M:%S", systime()) " " $0}'
     fi
 else
