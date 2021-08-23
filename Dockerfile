@@ -1,4 +1,4 @@
-FROM debian:stable-slim
+FROM debian:buster-20210816-slim
 
 ENV BEASTPORT=30005 \
     MLAT_SERVER=mlat1.rb24.com:40900 \

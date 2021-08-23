@@ -12,6 +12,7 @@ while read -r L; do
     fi
 done < "$RBFEEDER_LOG_FILE"
 
+#shellcheck disable=SC2016
 echo "Packets sent in past $STATS_INTERVAL_MINUTES minutes: $PACKETS_SINCE_LAST_UPDATE, total packets since container start: $TOTAL_PACKETS" \
 | stdbuf -oL awk '{print "[rbfeeder-stats] " strftime("%Y/%m/%d %H:%M:%S", systime()) " " $0}'
 
