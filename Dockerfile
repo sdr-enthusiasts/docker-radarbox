@@ -53,7 +53,7 @@ RUN set -x && \
     pushd /tmp && \
     apt-get download rbfeeder:armhf && \
     # extract .deb file
-    ar -x *.deb && \
+    ar -x -- *.deb && \
     # extract .tar.xz files
     tar xvf ./data.tar.xz -C / && \
     popd && \
