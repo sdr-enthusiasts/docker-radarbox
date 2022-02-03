@@ -30,6 +30,7 @@ RUN set -x && \
     KEPT_PACKAGES+=(libjansson4:armhf) && \
     KEPT_PACKAGES+=(libprotobuf-c1:armhf) && \
     KEPT_PACKAGES+=(librtlsdr0:armhf) && \
+    KEPT_PACKAGES+=(netbase) && \
     # install packages
     apt-get update && \
     apt-get install -y --no-install-recommends \
