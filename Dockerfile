@@ -56,17 +56,17 @@ RUN set -x && \
     # extract .tar.xz files
     tar xvf ./data.tar.xz -C / && \
     popd && \
+    # clean up
+    apt-get remove -y "${TEMP_PACKAGES[@]}" && \
+    apt-get autoremove -y && \
+    rm -rf /src/* /tmp/* /var/lib/apt/lists/* && \
     # get version & test
     if /usr/bin/rbfeeder --version > /dev/null 2>&1; \
         then RBFEEDER_VERSION=$(/usr/bin/rbfeeder --no-start --version | cut -d " " -f 2,4 | tr -d ")" | tr " " "-"); \
         else RBFEEDER_VERSION=$(qemu-arm-static /usr/bin/rbfeeder --no-start --version | cut -d " " -f 2,4 | tr -d ")" | tr " " "-"); \
         fi \
         && \
-    echo "$RBFEEDER_VERSION" > /CONTAINER_VERSION && \
-    # clean up
-    apt-get remove -y "${TEMP_PACKAGES[@]}" && \
-    apt-get autoremove -y && \
-    rm -rf /src/* /tmp/* /var/lib/apt/lists/* && \
+    echo "$RBFEEDER_VERSION" > /CONTAINER_VERSION
 
 # Expose ports
 EXPOSE 32088/tcp 30105/tcp
