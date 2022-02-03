@@ -53,6 +53,8 @@ cp /proc/cpuinfo /opt/adsb/data/fake_cpuinfo
 echo -e "serial\t\t: $(hexdump -n 8 -e '4/4 "%08X" 1 "\n"' /dev/urandom | tr '[:upper:]' '[:lower:]')" >> /opt/adsb/data/fake_cpuinfo
 ```
 
+The `hexdump...` in the command above will generate a random hexadecimal number in the format of a Raspberry Pi serial number.
+
 You can now map this file into your container.
 
 If using `docker run`, simply add `-v /opt/adsb/data/fake_cpuinfo:/proc/cpuinfo` to your command.
