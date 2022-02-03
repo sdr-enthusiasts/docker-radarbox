@@ -31,4 +31,3 @@ exit $EXITCODE
 # "Can't connect to external source" <-- mark as unhealthy
 #
 # Check death counts for services <-- probably can't do this due to https://github.com/mikenye/docker-radarbox/issues/9
-
