@@ -54,7 +54,7 @@ fi
   echo "alt=$ALT"
   echo """
 [network]
-mode=raw
+mode=beast
   """
   # shellcheck disable=SC2153
   echo "external_port=$BEASTPORT"
