@@ -18,8 +18,14 @@ RUN set -x && \
     # define required packages
     TEMP_PACKAGES=() && \
     KEPT_PACKAGES=() && \
-    # required for apt-key
+    # required for adding rb24 repo
     TEMP_PACKAGES+=(gnupg) && \
+    # mlat-client dependencies
+    TEMP_PACKAGES+=(build-essential) && \
+    TEMP_PACKAGES+=(git) && \
+    KEPT_PACKAGES+=(python3-minimal) && \
+    KEPT_PACKAGES+=(python3-distutils) && \
+    TEMP_PACKAGES+=(libpython3-dev) && \
     # required to extract .deb file
     TEMP_PACKAGES+=(binutils) && \
     TEMP_PACKAGES+=(xz-utils) && \
@@ -49,19 +55,39 @@ RUN set -x && \
     # add airnav repo
     echo 'deb [arch=armhf signed-by=/usr/share/keyrings/airnav.gpg] https://apt.rb24.com/ bullseye main' > /etc/apt/sources.list.d/airnav.list && \
     apt-get update && \
-    # get rbfeeder
-    pushd /tmp && \
+    # get rbfeeder:
+    # instead of apt-get install, we use apt-get download.
+    # this is done because the package has systemd a dependency,
+    # which we don't want in a container.
+    # instead, we download, extract and manually install rbfeeder,
+    # and install the dependencies manually.
+    mkdir -p /tmp/rbfeeder && \
+    pushd /tmp/rbfeeder && \
     apt-get download rbfeeder:armhf && \
+    popd && \
     # extract .deb file
-    ar -x -- *.deb && \
+    ar x --output=/tmp/rbfeeder -- /tmp/rbfeeder/*.deb && \
     # extract .tar.xz files
-    tar xvf ./data.tar.xz -C / && \
+    tar xvf /tmp/rbfeeder/data.tar.xz -C / && \
+    # get mlat-client:
+    BRANCH_MLAT_CLIENT=$(git -c 'versionsort.suffix=-' ls-remote --tags --sort='v:refname' 'https://github.com/mutability/mlat-client.git' | cut -d '/' -f 3 | grep '^v.*' | tail -1) && \
+    git clone \
+        --branch "$BRANCH_MLAT_CLIENT" \
+        --depth 1 --single-branch \
+        'https://github.com/mutability/mlat-client.git' \
+        /src/mlat-client \
+        && \
+    pushd /src/mlat-client && \
+    python3 /src/mlat-client/setup.py build && \
+    python3 /src/mlat-client/setup.py install && \
     popd && \
     # clean up
     apt-get remove -y "${TEMP_PACKAGES[@]}" && \
     apt-get autoremove -y && \
     rm -rf /src/* /tmp/* /var/lib/apt/lists/* && \
-    # get version & test
+    # test mlat-client
+    mlat-client --help > /dev/null && \
+    # test rbfeeder & get version
     if /usr/bin/rbfeeder --version > /dev/null 2>&1; \
         then RBFEEDER_VERSION=$(/usr/bin/rbfeeder --no-start --version | cut -d " " -f 2,4 | tr -d ")" | tr " " "-"); \
         else RBFEEDER_VERSION=$(qemu-arm-static /usr/bin/rbfeeder --no-start --version | cut -d " " -f 2,4 | tr -d ")" | tr " " "-"); \
