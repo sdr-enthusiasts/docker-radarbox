@@ -88,7 +88,7 @@ RUN set -x && \
     # test mlat-client
     mlat-client --help > /dev/null && \
     # test rbfeeder & get version
-    if /usr/bin/rbfeeder --version > /dev/null 2>&1; \
+    if [[ "$(uname -m)" == "armv7l" ]]; \
         then RBFEEDER_VERSION=$(/usr/bin/rbfeeder --no-start --version | cut -d " " -f 2,4 | tr -d ")" | tr " " "-"); \
         else RBFEEDER_VERSION=$(qemu-arm-static /usr/bin/rbfeeder --no-start --version | cut -d " " -f 2,4 | tr -d ")" | tr " " "-"); \
         fi \
