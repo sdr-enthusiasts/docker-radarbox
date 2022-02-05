@@ -73,7 +73,7 @@ jobs:
           context: .
           file: ./Dockerfile
           no-cache: true
-          platforms: linux/amd64,linux/arm/v7,linux/arm64,linux/i386
+          platforms: linux/amd64,linux/arm/v7,linux/arm64
           push: ${{ env.PUSH }}
           tags: ${{ env.REPO }}/${{ env.IMAGE }}:latest
 
@@ -141,7 +141,6 @@ jobs:
           - linux/amd64
           - linux/arm64
           - linux/arm/v7
-          - linux/i386
 
     # Set job-wide environment variables
     #  - REPO: repo name on dockerhub
