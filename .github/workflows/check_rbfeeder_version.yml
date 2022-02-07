@@ -41,6 +41,17 @@ jobs:
           set -x
           echo "::set-output name=latestver::$(docker run --rm --entrypoint cat local-docker-radarbox:latest /CONTAINER_VERSION)"
 
+  display_versions:
+    name: Display versions
+    needs: [version_in_container, latest_version]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Display versions
+        run: |
+          echo "rbfeeder version in ghcr.io/sdr-enthusiasts/docker-radarbox:latest = ${{ needs.version_in_container.outputs.currver }}"
+          echo "rbfeeder version in apt repository = ${{ needs.latest_version.outputs.latestver }}"
+          echo "will a deployment be triggered = ${{ needs.version_in_container.outputs.currver != needs.latest_version.outputs.latestver }}"
+
   trigger_deploy:
     name: Trigger deployment on new version of 'rbfeeder'
     needs: [version_in_container, latest_version]
