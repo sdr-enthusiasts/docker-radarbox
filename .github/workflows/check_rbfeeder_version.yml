@@ -1,0 +1,24 @@
+---
+
+name: Check rbfeeder version
+
+on:
+  workflow_dispatch:
+  pull_request:
+    # Only publish on push to main branch
+    branches:
+      - main
+
+jobs:
+
+  version_in_container:
+    name: Check version in 'latest'
+    runs-on: ubuntu-latest
+    outputs:
+      currver: ${{ steps.current-version.outputs.currver }}
+    steps:
+      - name: Get version from ghcr.io/sdr-enthusiasts/docker-radarbox:latest
+        id: current-version
+        run: |
+          set -x
+          echo "::set-output name=currver::$(docker run --rm --entrypoint cat ghcr.io/sdr-enthusiasts/docker-radarbox:latest /CONTAINER_VERSION)"
