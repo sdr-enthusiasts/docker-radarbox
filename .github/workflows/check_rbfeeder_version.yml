@@ -43,8 +43,8 @@ jobs:
 
   trigger_deploy:
     name: Trigger deployment on new version of 'rbfeeder'
-    if: ${{ needs.version_in_container.outputs.currver }} != ${{ needs.latest_version.outputs.latestver }}
     needs: [version_in_container, latest_version]
+    if: ${{ needs.version_in_container.outputs.currver != needs.latest_version.outputs.latestver }}
     runs-on: ubuntu-latest
     env:
       WORKFLOW_AUTH_TOKEN: ${{ secrets.GH_PAT_MIKENYE }}
