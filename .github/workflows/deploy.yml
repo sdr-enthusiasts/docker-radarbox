@@ -8,7 +8,7 @@ on:
         required: true
         description: 'Reason for running this workflow'
   push:
-    branches: 
+    branches:
       - main
     # Don't trigger if it's just a documentation update
     paths-ignore:
