@@ -1,11 +1,9 @@
 # mikenye/radarbox
 
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/mikenye/docker-radarbox/Deploy%20to%20Docker%20Hub)](https://github.com/mikenye/docker-radarbox/actions?query=workflow%3A%22Deploy+to+Docker+Hub%22)
-[![Docker Pulls](https://img.shields.io/docker/pulls/mikenye/radarbox.svg)](https://hub.docker.com/r/mikenye/radarbox)
 [![Docker Image Size (tag)](https://img.shields.io/docker/image-size/mikenye/radarbox/latest)](https://hub.docker.com/r/mikenye/radarbox)
 [![Discord](https://img.shields.io/discord/734090820684349521)](https://discord.gg/sTf9uYF)
 
-Docker container running [AirNav RadarBox](https://www.radarbox.com)'s `rbfeeder`. Designed to work in tandem with [mikenye/readsb-protobuf](https://hub.docker.com/repository/docker/mikenye/readsb-protobuf). Builds and runs on `x86_64`, `arm64` and `arm32v7`.
+Docker container running [AirNav RadarBox](https://www.radarbox.com)'s `rbfeeder`. Designed to work in tandem with [sdr-enthusiasts/readsb-protobuf](https://github.com/sdr-enthusiasts/docker-readsb-protobuf). Builds and runs on `x86_64`, `arm64` and `arm32v7`.
 
 `rbfeeder` pulls ModeS/BEAST information from a host or container providing ModeS/BEAST data, and sends data to RadarBox.
 
@@ -13,7 +11,7 @@ For more information on what `rbfeeder` is, see here: [sharing-data](https://www
 
 ## Supported tags and respective Dockerfiles
 
-* `latest` (`master` branch, `Dockerfile`)
+* `latest` (`main` branch, `Dockerfile`)
 * `latest_nohealthcheck` is the same as the `latest` version above. However, this version has the docker healthcheck removed. This is done for people running platforms (such as [Nomad](https://www.nomadproject.io)) that don't support manually disabling healthchecks, where healthchecks are not wanted.
 * Version and architecture specific tags available
 
@@ -291,7 +289,7 @@ You may find that MLAT in your container will often times spit out errors in you
 
 This is likely, but not always, not caused by anything you are doing, but is instead caused by the Radarbox server itself and as such there isn't anything you can do to fix it. You will see in your Radarbox stats very little, if any, MLAT targets from your feeder while it is doing this.
 
-To stop the feeder from spamming your logs you can set `ENABLE_MLAT=false` in your environment configuration for Radarbox and it will stop the MLAT service, and the log messages. Please note that if you do this, and you use [MLAT Hub](https://github.com/mikenye/docker-readsb-protobuf#advanced-usage-creating-an-mlat-hub) please remove Radarbox from your `READSB_NET_CONNECTOR` under `MLAT Hub`.
+To stop the feeder from spamming your logs you can set `ENABLE_MLAT=false` in your environment configuration for Radarbox and it will stop the MLAT service, and the log messages. Please note that if you do this, and you use [MLAT Hub](https://github.com/sdr-enthusiasts/docker-readsb-protobuf#advanced-usage-creating-an-mlat-hub) please remove Radarbox from your `READSB_NET_CONNECTOR` under `MLAT Hub`.
 
 ## Logging
 
@@ -299,8 +297,8 @@ To stop the feeder from spamming your logs you can set `ENABLE_MLAT=false` in yo
 
 ## Getting Help
 
-You can [log an issue](https://github.com/mikenye/docker-radarbox/issues) on the project's GitHub.
+You can [log an issue](https://github.com/sdr-enthusiasts/docker-radarbox/issues) on the project's GitHub.
 
 I also have a [Discord channel](https://discord.gg/sTf9uYF), feel free to [join](https://discord.gg/sTf9uYF) and converse.
 
-If you're getting continual segmentation faults inside this container, see: <https://github.com/mikenye/docker-radarbox/issues/16#issuecomment-699627387>
+If you're getting continual segmentation faults inside this container, see: <https://github.com/sdr-enthusiasts/docker-radarbox/issues/16#issuecomment-699627387>
