@@ -1,4 +1,4 @@
-# mikenye/radarbox
+# sdr-enthusiasts/docker-radarbox
 
 [![Docker Image Size (tag)](https://img.shields.io/docker/image-size/mikenye/radarbox/latest)](https://hub.docker.com/r/mikenye/radarbox)
 [![Discord](https://img.shields.io/discord/734090820684349521)](https://discord.gg/sTf9uYF)
