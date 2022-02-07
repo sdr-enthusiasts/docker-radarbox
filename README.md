@@ -111,7 +111,7 @@ timeout 300s docker run \
     -e LAT=YOURLATITUDE \
     -e LONG=YOURLONGITUDE \
     -e ALT=YOURALTITUDE \
-    mikenye/radarbox
+    ghcr.io/sdr-enthusiasts/docker-radarbox:latest
 ```
 
 This will run the container for five minutes, allowing a sharing key to be generated.
@@ -145,7 +145,7 @@ docker run \
  -e LONG=YOURLONGITUDE \
  -e ALT=YOURALTITUDE \
  -e SHARING_KEY=YOURSHARINGKEY \
- mikenye/radarbox
+ ghcr.io/sdr-enthusiasts/docker-radarbox:latest
 ```
 
 You should obviously replace `YOURBEASTHOST`, `YOURLATITUDE`, `YOURLONGITUDE`, `YOURALTITUDE` and `YOURSHARINGKEY` with appropriate values.
@@ -163,7 +163,7 @@ docker run \
  -e LONG=111.11111 \
  -e ALT=90 \
  -e SHARING_KEY=g45643ab345af3c5d5g923a99ffc0de9 \
- mikenye/radarbox
+ ghcr.io/sdr-enthusiasts/docker-radarbox:latest
 ```
 
 Please note, the altitude figure is given in metres and no units should be specified.
@@ -175,7 +175,7 @@ version: '2.0'
 
 services:
   rbfeeder:
-    image: mikenye/radarbox:latest
+    image: ghcr.io/sdr-enthusiasts/docker-radarbox:latest
     tty: true
     container_name: rbfeeder
     restart: always
@@ -186,29 +186,22 @@ services:
       - LONG=111.11111
       - ALT=90
       - SHARING_KEY=g45643ab345af3c5d5g923a99ffc0de9
-    networks:
-      - adsbnet
 ```
 
-## Up-and-Running with Docker Compose, including `mikenye/readsb`
+## Up-and-Running with Docker Compose, including readsb
 
 ```shell
 version: '2.0'
 
-networks:
-  adsbnet:
-
 services:
 
   readsb:
-    image: mikenye/readsb:latest
+    image: ghcr.io/sdr-enthusiasts/docker-readsb-protobuf:latest
     tty: true
     container_name: readsb
     restart: always
     devices:
       - /dev/bus/usb/001/007:/dev/bus/usb/001/007
-    networks:
-      - adsbnet
     command:
       - --dcfilter
       - --device-type=rtlsdr
@@ -227,7 +220,7 @@ services:
       - --write-json=/var/run/readsb
 
   rbfeeder:
-    image: mikenye/radarbox:latest
+    image: ghcr.io/sdr-enthusiasts/docker-radarbox:latest
     tty: true
     container_name: rbfeeder
     restart: always
@@ -238,11 +231,7 @@ services:
       - LONG=111.11111
       - ALT=90
       - SHARING_KEY=g45643ab345af3c5d5g923a99ffc0de9
-    networks:
-      - adsbnet
 ```
-
-For an explanation of the `mikenye/readsb` image's configuration, see that image's readme.
 
 ## Claiming Your Receiver
 
