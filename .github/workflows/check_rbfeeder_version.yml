@@ -4,10 +4,9 @@ name: Check rbfeeder version
 
 on:
   workflow_dispatch:
-  pull_request:
-    # Only publish on push to main branch
-    branches:
-      - main
+  # Check for new versions of rbfeeder
+  schedule:
+    - cron: "0 12 * * *"
 
 jobs:
 
