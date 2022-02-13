@@ -1,6 +1,6 @@
 FROM ghcr.io/fredclausen/docker-baseimage:qemu
 
-ENV BEASTHOST=readbs \
+ENV BEASTHOST=readsb \
     BEASTPORT=30005 \
     UAT_RECEIVER_HOST=dump978 \
     UAT_RECEIVER_PORT=30979 \
