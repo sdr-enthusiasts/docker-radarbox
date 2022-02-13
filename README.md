@@ -249,7 +249,7 @@ There are a series of available environment variables:
 | -------------------- | ------------------------------- | ------- |
 | `BEASTHOST`          | Required. IP/Hostname of a Mode-S/BEAST provider (dump1090/readsb) | `readsb` |
 | `BEASTPORT`          | Optional. TCP port number of Mode-S/BEAST provider (dump1090/readsb) | `30005` |
-| `UAT_RECEIVER_HOST`  | Optional. IP/Hostname of an external UAT decoded JSON provider (eg: dump978-fa). | `dump978` |
+| `UAT_RECEIVER_HOST`  | Optional. IP/Hostname of an external UAT decoded JSON provider (eg: dump978-fa). | |
 | `UAT_RECEIVER_PORT`  | Optional. TCP port number of the external UAT decoded JSON provider. | `30979` |
 | `SHARING_KEY`        | Required. Radarbox Sharing Key | |
 | `LAT` | Required. Latitude of the antenna | |
