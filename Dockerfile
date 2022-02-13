@@ -1,6 +1,9 @@
 FROM ghcr.io/fredclausen/docker-baseimage:qemu
 
-ENV BEASTPORT=30005 \
+ENV BEASTHOST=readbs \
+    BEASTPORT=30005 \
+    UAT_RECEIVER_HOST=dump978 \
+    UAT_RECEIVER_PORT=30979 \
     MLAT_SERVER=mlat1.rb24.com:40900 \
     RBFEEDER_LOG_FILE="/var/log/rbfeeder.log" \
     S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
