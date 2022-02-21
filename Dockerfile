@@ -50,7 +50,7 @@ RUN set -x && \
     pushd /src/rbfeeder && \
     make proto && \
     make -j "$(nproc)" && \
-    cp -v ./rbfeeder /usr/local/bin/ && \
+    cp -v ./rbfeeder /usr/bin/ && \
     # get mlat-client:
     BRANCH_MLAT_CLIENT=$(git -c 'versionsort.suffix=-' ls-remote --tags --sort='v:refname' 'https://github.com/mutability/mlat-client.git' | cut -d '/' -f 3 | grep '^v.*' | tail -1) && \
     git clone \
