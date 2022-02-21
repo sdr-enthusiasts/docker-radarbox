@@ -71,7 +71,7 @@ RUN set -x && \
     # test rbfeeder & get version
     /usr/bin/rbfeeder --version && \
     RBFEEDER_VERSION=$(/usr/bin/rbfeeder --no-start --version | cut -d " " -f 2,4 | tr -d ")" | tr " " "-") && \
-    echo "$RBFEEDER_VERSION" > /CONTAINER_VERSION && \
+    echo "$RBFEEDER_VERSION" > /CONTAINER_VERSION
 
 # Expose ports
 EXPOSE 32088/tcp 30105/tcp
