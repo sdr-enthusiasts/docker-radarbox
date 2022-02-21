@@ -1,4 +1,4 @@
-FROM ghcr.io/fredclausen/docker-baseimage:qemu
+FROM ghcr.io/sdr-enthusiasts/docker-baseimage:base
 
 ENV BEASTHOST=readsb \
     BEASTPORT=30005 \
@@ -26,9 +26,6 @@ RUN set -x && \
     KEPT_PACKAGES+=(python3-minimal) && \
     KEPT_PACKAGES+=(python3-distutils) && \
     TEMP_PACKAGES+=(libpython3-dev) && \
-    # # required to extract .deb file
-    # TEMP_PACKAGES+=(binutils) && \
-    # TEMP_PACKAGES+=(xz-utils) && \
     # required to run rbfeeder
     TEMP_PACKAGES+=(libjansson-dev) && \
     KEPT_PACKAGES+=(libjansson4) && \
