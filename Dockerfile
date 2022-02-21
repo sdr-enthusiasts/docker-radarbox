@@ -48,7 +48,6 @@ RUN set -x && \
     # build & install rbfeeder
     git clone --branch master --depth 1 --single-branch https://github.com/AirNav-Systems/rbfeeder.git /src/rbfeeder && \
     pushd /src/rbfeeder && \
-    ./debian/rules && \
     make proto && \
     make -j "$(nproc)" && \
     cp -v ./rbfeeder /usr/local/bin/ && \
