@@ -34,6 +34,7 @@ RUN set -x && \
     TEMP_PACKAGES+=(protobuf-c-compiler) && \
     TEMP_PACKAGES+=(libncurses5-dev) && \
     TEMP_PACKAGES+=(libprotobuf-c-dev) && \
+    KEPT_PACKAGES+=(libprotobuf-c1) && \
     TEMP_PACKAGES+=(libcurl4-openssl-dev) && \
     # TEMP_PACKAGES+=(debhelper) && \
     KEPT_PACKAGES+=(netbase) && \
