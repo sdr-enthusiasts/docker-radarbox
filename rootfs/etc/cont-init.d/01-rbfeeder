@@ -19,7 +19,7 @@ if [ -z "${ALT}" ]; then
   echo "ERROR: ALT environment variable not set"
   EXITCODE=1
 else
-  ALT=${ALT%%.*}
+  ALT="${ALT%%.*}"
 fi
 if [ $EXITCODE -ne 0 ]; then
   exit 1
