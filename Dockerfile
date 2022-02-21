@@ -15,8 +15,6 @@ COPY rootfs/ /
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN set -x && \
-    # add armhf sources
-    dpkg --add-architecture armhf && \
     # define required packages
     TEMP_PACKAGES=() && \
     KEPT_PACKAGES=() && \
@@ -32,12 +30,19 @@ RUN set -x && \
     TEMP_PACKAGES+=(binutils) && \
     TEMP_PACKAGES+=(xz-utils) && \
     # required to run rbfeeder
-    KEPT_PACKAGES+=(libc6:armhf) && \
-    KEPT_PACKAGES+=(libcurl4:armhf) && \
-    KEPT_PACKAGES+=(libglib2.0-0:armhf) && \
-    KEPT_PACKAGES+=(libjansson4:armhf) && \
-    KEPT_PACKAGES+=(libprotobuf-c1:armhf) && \
-    KEPT_PACKAGES+=(librtlsdr0:armhf) && \
+    TEMP_PACKAGES+=(libjansson-dev) && \
+    KEPT_PACKAGES+=(libjansson4) && \
+    TEMP_PACKAGES+=(libglib2.0-dev) && \
+    TEMP_PACKAGES+=(protobuf-c-compiler) && \
+    TEMP_PACKAGES+=(libncurses5-dev) && \
+    TEMP_PACKAGES+=(libprotobuf-c-dev) && \
+    TEMP_PACKAGES+=(libcurl4-openssl-dev) && \
+    # KEPT_PACKAGES+=(libc6:armhf) && \
+    # KEPT_PACKAGES+=(libcurl4:armhf) && \
+    # KEPT_PACKAGES+=(libglib2.0-0:armhf) && \
+    # KEPT_PACKAGES+=(libjansson4:armhf) && \
+    # KEPT_PACKAGES+=(libprotobuf-c1:armhf) && \
+    # KEPT_PACKAGES+=(librtlsdr0:armhf) && \
     KEPT_PACKAGES+=(netbase) && \
     # install packages
     apt-get update && \
@@ -45,32 +50,40 @@ RUN set -x && \
         "${KEPT_PACKAGES[@]}" \
         "${TEMP_PACKAGES[@]}" \
         && \
-    # import airnav gpg key
-    gpg --list-keys && \
-    gpg \
-        --no-default-keyring \
-        --keyring /usr/share/keyrings/airnav.gpg \
-        --keyserver hkp://keyserver.ubuntu.com:80 \
-        --recv-keys 1D043681 \
-        && \
-    gpg --list-keys && \
-    # add airnav repo
-    echo 'deb [arch=armhf signed-by=/usr/share/keyrings/airnav.gpg] https://apt.rb24.com/ bullseye main' > /etc/apt/sources.list.d/airnav.list && \
-    apt-get update && \
+
+    # build & install rbfeeder
+    git clone --branch master --depth 1 --single-branch https://github.com/AirNav-Systems/rbfeeder.git /src/rbfeeder && \
+    pushd /src/rbfeeder && \
+    ./debian/rules && \
+    make -j "$(nproc)" && \
+    cp -v ./rbfeeder /usr/local/bin/ && \
+    
+    # # # import airnav gpg key
+    # # gpg --list-keys && \
+    # # gpg \
+    # #     --no-default-keyring \
+    # #     --keyring /usr/share/keyrings/airnav.gpg \
+    # #     --keyserver hkp://keyserver.ubuntu.com:80 \
+    # #     --recv-keys 1D043681 \
+    # #     && \
+    # # gpg --list-keys && \
+    # # add airnav repo
+    # echo 'deb [arch=armhf signed-by=/usr/share/keyrings/airnav.gpg] https://apt.rb24.com/ bullseye main' > /etc/apt/sources.list.d/airnav.list && \
+    # apt-get update && \
     # get rbfeeder:
     # instead of apt-get install, we use apt-get download.
     # this is done because the package has systemd a dependency,
     # which we don't want in a container.
     # instead, we download, extract and manually install rbfeeder,
     # and install the dependencies manually.
-    mkdir -p /tmp/rbfeeder && \
-    pushd /tmp/rbfeeder && \
-    apt-get download rbfeeder:armhf && \
-    popd && \
-    # extract .deb file
-    ar x --output=/tmp/rbfeeder -- /tmp/rbfeeder/*.deb && \
-    # extract .tar.xz files
-    tar xvf /tmp/rbfeeder/data.tar.xz -C / && \
+    # mkdir -p /tmp/rbfeeder && \
+    # pushd /tmp/rbfeeder && \
+    # apt-get download rbfeeder:armhf && \
+    # popd && \
+    # # extract .deb file
+    # ar x --output=/tmp/rbfeeder -- /tmp/rbfeeder/*.deb && \
+    # # extract .tar.xz files
+    # tar xvf /tmp/rbfeeder/data.tar.xz -C / && \
     # get mlat-client:
     BRANCH_MLAT_CLIENT=$(git -c 'versionsort.suffix=-' ls-remote --tags --sort='v:refname' 'https://github.com/mutability/mlat-client.git' | cut -d '/' -f 3 | grep '^v.*' | tail -1) && \
     git clone \
@@ -90,12 +103,9 @@ RUN set -x && \
     # test mlat-client
     mlat-client --help > /dev/null && \
     # test rbfeeder & get version
-    if /usr/bin/rbfeeder --version > /dev/null 2>&1; \
-        then RBFEEDER_VERSION=$(/usr/bin/rbfeeder --no-start --version | cut -d " " -f 2,4 | tr -d ")" | tr " " "-"); \
-        else RBFEEDER_VERSION=$(qemu-arm-static /usr/bin/rbfeeder --no-start --version | cut -d " " -f 2,4 | tr -d ")" | tr " " "-"); \
-        fi \
-        && \
-    echo "$RBFEEDER_VERSION" > /CONTAINER_VERSION
+    /usr/bin/rbfeeder --version && \
+    RBFEEDER_VERSION=$(/usr/bin/rbfeeder --no-start --version | cut -d " " -f 2,4 | tr -d ")" | tr " " "-") && \
+    echo "$RBFEEDER_VERSION" > /CONTAINER_VERSION && \
 
 # Expose ports
 EXPOSE 32088/tcp 30105/tcp
