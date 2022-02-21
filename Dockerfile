@@ -30,6 +30,7 @@ RUN set -x && \
     TEMP_PACKAGES+=(libjansson-dev) && \
     KEPT_PACKAGES+=(libjansson4) && \
     TEMP_PACKAGES+=(libglib2.0-dev) && \
+    KEPT_PACKAGES+=(libglib2.0-0) && \
     TEMP_PACKAGES+=(protobuf-c-compiler) && \
     TEMP_PACKAGES+=(libncurses5-dev) && \
     TEMP_PACKAGES+=(libprotobuf-c-dev) && \
