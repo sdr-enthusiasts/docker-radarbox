@@ -26,9 +26,9 @@ RUN set -x && \
     KEPT_PACKAGES+=(python3-minimal) && \
     KEPT_PACKAGES+=(python3-distutils) && \
     TEMP_PACKAGES+=(libpython3-dev) && \
-    # required to extract .deb file
-    TEMP_PACKAGES+=(binutils) && \
-    TEMP_PACKAGES+=(xz-utils) && \
+    # # required to extract .deb file
+    # TEMP_PACKAGES+=(binutils) && \
+    # TEMP_PACKAGES+=(xz-utils) && \
     # required to run rbfeeder
     TEMP_PACKAGES+=(libjansson-dev) && \
     KEPT_PACKAGES+=(libjansson4) && \
@@ -37,7 +37,7 @@ RUN set -x && \
     TEMP_PACKAGES+=(libncurses5-dev) && \
     TEMP_PACKAGES+=(libprotobuf-c-dev) && \
     TEMP_PACKAGES+=(libcurl4-openssl-dev) && \
-    TEMP_PACKAGES+=(debhelper) && \
+    # TEMP_PACKAGES+=(debhelper) && \
     KEPT_PACKAGES+=(netbase) && \
     # install packages
     apt-get update && \
