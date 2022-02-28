@@ -47,6 +47,7 @@ RUN set -x && \
     # build & install rbfeeder
     git clone --branch master --depth 1 --single-branch https://github.com/AirNav-Systems/rbfeeder.git /src/rbfeeder && \
     pushd /src/rbfeeder && \
+    echo "rbfeeder $(git log | head -1)" >> /VERSIONS && \
     make proto && \
     make -j "$(nproc)" && \
     cp -v ./rbfeeder /usr/bin/ && \
@@ -59,6 +60,7 @@ RUN set -x && \
         /src/mlat-client \
         && \
     pushd /src/mlat-client && \
+    echo "mlat-client $(git log | head -1)" >> /VERSIONS && \
     python3 /src/mlat-client/setup.py build && \
     python3 /src/mlat-client/setup.py install && \
     popd && \
