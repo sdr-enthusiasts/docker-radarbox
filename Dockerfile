@@ -45,7 +45,7 @@ RUN set -x && \
         "${TEMP_PACKAGES[@]}" \
         && \
     # build & install rbfeeder
-    git clone --branch master --depth 1 --single-branch https://github.com/AirNav-Systems/rbfeeder.git /src/rbfeeder && \
+    git clone --branch master --depth 1 --single-branch https://github.com/airnavsystems/rbfeeder.git /src/rbfeeder && \
     pushd /src/rbfeeder && \
     echo "rbfeeder $(git log | head -1)" >> /VERSIONS && \
     make proto && \
