@@ -47,6 +47,8 @@ RUN set -x && \
     # build & install rbfeeder
     git clone --branch master --single-branch https://github.com/airnavsystems/rbfeeder.git /src/rbfeeder && \
     pushd /src/rbfeeder && \
+    # use specific commit to prevent connection issues
+    git reset --hard de4f76055d2bff37e329ea4d0989cbc993cf9a6f &&\
     echo "rbfeeder $(git log | head -1)" >> /VERSIONS && \
     make proto && \
     make -j "$(nproc)" && \
