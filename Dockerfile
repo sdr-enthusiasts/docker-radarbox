@@ -51,6 +51,7 @@ RUN set -x && \
         libgssapi-krb5-2=1.18.3-6+deb11u2 \
         libkrb5-3=1.18.3-6+deb11u2 \
         libkrb5support0=1.18.3-6+deb11u2 \
+        libk5crypto3=1.18.3-6+deb11u2 \
         "${KEPT_PACKAGES[@]}" \
         "${TEMP_PACKAGES[@]}" \
         && \
