@@ -1,3 +1,40 @@
+FROM debian:bullseye-20221024-slim as builder
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+RUN set -x && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+        build-essential \
+        git \
+        fakeroot \
+        debhelper \
+        pkg-config \
+        libncurses5-dev \
+        protobuf-c-compiler \
+        libjansson-dev \
+        libglib2.0-dev \
+        libprotobuf-c-dev \
+        libcurl4-openssl-dev \
+        dh-sysuser \
+        devscripts \
+        && \
+    ldconfig && \
+    git clone --branch master --single-branch --depth=1 https://github.com/airnavsystems/rbfeeder.git /src/rbfeeder && \
+    pushd /src/rbfeeder && \
+    echo "rbfeeder $(git log | head -1)" >> /VERSIONS && \
+    # first build fails
+    bash -c "dpkg-buildpackage -b --no-sign; exit 0" && \
+    dpkg-buildpackage -b --no-sign && \
+    popd && \
+    pushd /src && \
+    # remove debug symbols .deb file
+    rm -v ./rbfeeder*dbgsym*.deb && \
+    # extract .deb
+    ar vx ./rbfeeder*.deb && \
+    tar xvf data.tar.xz -C / && \
+    popd    
+
 FROM ghcr.io/sdr-enthusiasts/docker-baseimage:base
 
 ENV BEASTHOST=readsb \
@@ -11,6 +48,9 @@ ENV BEASTHOST=readsb \
     ENABLE_MLAT=true
 
 COPY rootfs/ /
+COPY --from=builder /VERSIONS /VERSIONS
+COPY --from=builder /usr/bin/rbfeeder /usr/bin/rbfeeder
+COPY --from=builder /usr/bin/dump1090-rb /usr/bin/dump1090-rb
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -41,28 +81,10 @@ RUN set -x && \
     # install specific versions of some packages
     apt-get update && \
     apt-get install -y --no-install-recommends --allow-downgrades \
-        libc-bin=2.31-13+deb11u4 \
-        libc6=2.31-13+deb11u4 \
-        libc6-dev=2.31-13+deb11u4 \
-        libc-dev-bin=2.31-13+deb11u4 \
-        libdbus-1-3=1.12.20-2 \
-        libexpat1=2.2.10-2+deb11u3 \
-        libexpat1-dev=2.2.10-2+deb11u3 \
-        libgssapi-krb5-2=1.18.3-6+deb11u2 \
-        libkrb5-3=1.18.3-6+deb11u2 \
-        libkrb5support0=1.18.3-6+deb11u2 \
-        libk5crypto3=1.18.3-6+deb11u2 \
         "${KEPT_PACKAGES[@]}" \
         "${TEMP_PACKAGES[@]}" \
         && \
-    # build & install rbfeeder
-    git clone --branch master --single-branch --depth=1 https://github.com/airnavsystems/rbfeeder.git /src/rbfeeder && \
-    pushd /src/rbfeeder && \
-    echo "rbfeeder $(git log | head -1)" >> /VERSIONS && \
-    make proto && \
-    make -j "$(nproc)" && \
-    cp -v ./rbfeeder /usr/bin/ && \
-    # get mlat-client:
+    # get mlat-client
     BRANCH_MLAT_CLIENT=$(git -c 'versionsort.suffix=-' ls-remote --tags --sort='v:refname' 'https://github.com/mutability/mlat-client.git' | cut -d '/' -f 3 | grep '^v.*' | tail -1) && \
     git clone \
         --branch "$BRANCH_MLAT_CLIENT" \
