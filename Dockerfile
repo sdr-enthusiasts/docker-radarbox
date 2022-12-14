@@ -40,14 +40,14 @@ RUN set -x && \
     KEPT_PACKAGES+=(netbase) && \
     # install packages
     apt-get update && \
-    # install specific versions of some packages
-    apt-get install -y --no-install-recommends \
-        libc-bin=2.31-13+deb11u4 \
-        libc6=2.31-13+deb11u4 \
-        && \
     apt-get install -y --no-install-recommends \
         "${KEPT_PACKAGES[@]}" \
         "${TEMP_PACKAGES[@]}" \
+        && \
+    # install specific versions of some packages
+    apt-get install -y --no-install-recommends --allow-downgrades \
+        libc-bin=2.31-13+deb11u4 \
+        libc6=2.31-13+deb11u4 \
         && \
     # build & install rbfeeder
     git clone --branch master --single-branch --depth=1 https://github.com/airnavsystems/rbfeeder.git /src/rbfeeder && \
