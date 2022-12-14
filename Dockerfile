@@ -47,6 +47,7 @@ RUN set -x && \
         libc-dev-bin=2.31-13+deb11u4 \
         libdbus-1-3=1.12.20-2 \
         libexpat1=2.2.10-2+deb11u3 \
+        libexpat1-dev=2.2.10-2+deb11u3 \
         "${KEPT_PACKAGES[@]}" \
         "${TEMP_PACKAGES[@]}" \
         && \
