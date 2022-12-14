@@ -52,7 +52,6 @@ RUN set -x && \
         libkrb5-3=1.18.3-6+deb11u2 \
         libkrb5support0=1.18.3-6+deb11u2 \
         libk5crypto3=1.18.3-6+deb11u2 \
-        tzdata=2021a-1+deb11u6 \
         "${KEPT_PACKAGES[@]}" \
         "${TEMP_PACKAGES[@]}" \
         && \
