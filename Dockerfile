@@ -38,13 +38,8 @@ RUN set -x && \
     TEMP_PACKAGES+=(libcurl4-openssl-dev) && \
     # TEMP_PACKAGES+=(debhelper) && \
     KEPT_PACKAGES+=(netbase) && \
-    # install packages
-    apt-get update && \
-    apt-get install -y --no-install-recommends \
-        "${KEPT_PACKAGES[@]}" \
-        "${TEMP_PACKAGES[@]}" \
-        && \
     # install specific versions of some packages
+    apt-get update && \
     apt-get install -y --no-install-recommends --allow-downgrades \
         libc-bin=2.31-13+deb11u4 \
         libc6=2.31-13+deb11u4 \
@@ -52,6 +47,8 @@ RUN set -x && \
         libc-dev-bin=2.31-13+deb11u4 \
         libdbus-1-3=1.12.20-2 \
         libexpat1=2.2.10-2+deb11u3 \
+        "${KEPT_PACKAGES[@]}" \
+        "${TEMP_PACKAGES[@]}" \
         && \
     # build & install rbfeeder
     git clone --branch master --single-branch --depth=1 https://github.com/airnavsystems/rbfeeder.git /src/rbfeeder && \
