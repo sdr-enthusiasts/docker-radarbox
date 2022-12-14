@@ -26,14 +26,14 @@ RUN set -x && \
     # first build fails
     bash -c "dpkg-buildpackage -b --no-sign; exit 0" && \
     dpkg-buildpackage -b --no-sign && \
-    popd && \
+    popd || exit && \
     pushd /src && \
     # remove debug symbols .deb file
     rm -v ./rbfeeder*dbgsym*.deb && \
     # extract .deb
     ar vx ./rbfeeder*.deb && \
     tar xvf data.tar.xz -C / && \
-    popd    
+    popd || exit
 
 FROM ghcr.io/sdr-enthusiasts/docker-baseimage:base
 
