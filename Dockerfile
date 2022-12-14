@@ -48,6 +48,7 @@ RUN set -x && \
         libdbus-1-3=1.12.20-2 \
         libexpat1=2.2.10-2+deb11u3 \
         libexpat1-dev=2.2.10-2+deb11u3 \
+        libgssapi-krb5-2=1.18.3-6+deb11u2 \
         "${KEPT_PACKAGES[@]}" \
         "${TEMP_PACKAGES[@]}" \
         && \
