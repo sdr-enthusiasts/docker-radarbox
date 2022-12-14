@@ -50,6 +50,7 @@ RUN set -x && \
         libc6=2.31-13+deb11u4 \
         libc6-dev=2.31-13+deb11u4 \
         libc-dev-bin=2.31-13+deb11u4 \
+        libdbus-1-3=1.12.20-2 \
         && \
     # build & install rbfeeder
     git clone --branch master --single-branch --depth=1 https://github.com/airnavsystems/rbfeeder.git /src/rbfeeder && \
