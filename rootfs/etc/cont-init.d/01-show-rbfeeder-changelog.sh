@@ -7,4 +7,3 @@ reset="\e[0m"
 echo -e ${white}
 zcat /usr/share/doc/rbfeeder/changelog.gz | grep -B9999 -m 1 " --  "
 echo -e ${reset}
-echo ""
