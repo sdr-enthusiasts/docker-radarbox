@@ -200,6 +200,10 @@ Here is some example output with RBFeeder Version 1.0.8 (build 20220708190411) s
 [rbfeeder] [2022-12-15 11:33:58]  Error authenticating Sharing-Key: Invalid sharing-key
 [rbfeeder] [2022-12-15 11:34:08]  Could not start connection. Timeout.
 [rbfeeder] [2022-12-15 11:35:09]  Connection established.
+[rbfeeder] [2022-12-15 11:35:09]  CPU Serial empty. Use MAC address instead.
+[rbfeeder] [2022-12-15 11:35:10]  Client type: Raspberry Pi
+[rbfeeder] [2022-12-15 11:35:10]  Connection with RadarBox24 server OK! Key accepted by server.
+[rbfeeder] [2022-12-15 11:35:10]  This is your station serial number: <REDACTED>
 ```
 
 In the above instance, it took approximately 6 minutes from container start to connection established.
