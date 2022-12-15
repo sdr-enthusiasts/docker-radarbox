@@ -171,6 +171,39 @@ Once your container is up and running, you should claim your receiver.
 
 Before raising an issue regarding connection errors, please wait at least 10 minutes. The `rbfeeder` binary is configured to attempt to connect to a collection of servers in a round-robin method. It appears normal for some servers to reject the connection, so it may take several minutes to find an available server and connect.
 
+You may also receive a spurious error `Error authenticating Sharing-Key: Invalid sharing-key`. Provided you have entered your sharing key correctly, just ignore this for several minutes.
+
+Here is some example output with RBFeeder Version 1.0.8 (build 20220708190411) showing the aformentioned behaviour:
+
+```
+[rbfeeder] [2022-12-15 11:29:22]  Starting RBFeeder Version 1.0.8 (build 20220708190411)
+[rbfeeder] [2022-12-15 11:29:22]  Using configuration file: /etc/rbfeeder.ini
+[rbfeeder] [2022-12-15 11:29:22]  Network-mode enabled.
+[rbfeeder] [2022-12-15 11:29:22]                Remote host to fetch data: readsb
+[rbfeeder] [2022-12-15 11:29:22]                Remote port: 30005
+[rbfeeder] [2022-12-15 11:29:22]                Remote protocol: BEAST
+[rbfeeder] [2022-12-15 11:29:22]  Using GNSS (when available)
+[rbfeeder] [2022-12-15 11:29:22]  Start date/time: 2022-12-15 11:29:22
+[rbfeeder] [2022-12-15 11:29:22]  Socket for ANRB created. Waiting for connections on port 32088
+[rbfeeder] [2022-12-15 11:29:28]  Can't connect to AirNav Server. Retry in 60 seconds.
+[rbfeeder] [2022-12-15 11:30:33]  Can't connect to AirNav Server. Retry in 60 seconds.
+[rbfeeder] [2022-12-15 11:31:34]  Connection established.
+[rbfeeder] [2022-12-15 11:31:34]  CPU Serial empty. Use MAC address instead.
+[rbfeeder] [2022-12-15 11:31:35]  Error authenticating Sharing-Key: Invalid sharing-key
+[rbfeeder] [2022-12-15 11:31:45]  Could not start connection. Timeout.
+[rbfeeder] [2022-12-15 11:32:46]  Connection established.
+[rbfeeder] [2022-12-15 11:32:46]  CPU Serial empty. Use MAC address instead.
+[rbfeeder] [2022-12-15 11:32:47]  Error authenticating Sharing-Key: Invalid sharing-key
+[rbfeeder] [2022-12-15 11:32:56]  Could not start connection. Timeout.
+[rbfeeder] [2022-12-15 11:33:57]  Connection established.
+[rbfeeder] [2022-12-15 11:33:57]  CPU Serial empty. Use MAC address instead.
+[rbfeeder] [2022-12-15 11:33:58]  Error authenticating Sharing-Key: Invalid sharing-key
+[rbfeeder] [2022-12-15 11:34:08]  Could not start connection. Timeout.
+[rbfeeder] [2022-12-15 11:35:09]  Connection established.
+```
+
+In the above instance, it took approximately 6 minutes from container start to connection established.
+
 ## Runtime Environment Variables
 
 There are a series of available environment variables:
