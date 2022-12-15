@@ -13,8 +13,8 @@ if [ "$VERBOSE_LOGGING" == "true" ]; then
         stdbuf -oL awk '{print "[rbfeeder] " $0}'
 else
     /usr/bin/rbfeeder 2>&1 | \
-        stdbuf -oL awk '! / Statistics updated every 30 seconds /' | \
-        stdbuf -oL awk '! /Packets sent in the last 30 seconds: /' | \
+        stdbuf -oL awk '! / Statistics updated every 60 seconds /' | \
+        stdbuf -oL awk '! /Packets sent in the last 60 seconds: /' | \
         stdbuf -oL awk '! / Data sent: /' | \
         stdbuf -oL awk '! / Data received: /' | \
         stdbuf -oL awk '{print "[rbfeeder] " $0}'
