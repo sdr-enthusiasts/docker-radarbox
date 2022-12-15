@@ -37,6 +37,7 @@ echo """
 [client]
 network_mode=true
 log_file=$RBFEEDER_LOG_FILE
+debug_level=${DEBUG_LEVEL:-0}
 """ > /etc/rbfeeder.ini
 
 if [ -z "${SHARING_KEY}" ]

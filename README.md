@@ -184,6 +184,7 @@ There are a series of available environment variables:
 | `TZ`                 | Optional. Your local timezone | GMT     |
 | `STATS_INTERVAL_MINUTES` | Optional. How often to print statistics, in minutes. | `5` |
 | `VERBOSE_LOGGING` | Optional. Set to `true` for no filtering of `rbfeeder` logs. | `false` |
+| `DEBUG_LEVEL` | Optional. Set to any number between `0` and `8` to increase verbosity of `rbfeeder` logs. | `0` |
 | `ENABLE_MLAT` | Option. Set to `true` to enable MLAT inside of the container. See [MLAT note](#mlat) below | `true` |
 
 ## Ports
