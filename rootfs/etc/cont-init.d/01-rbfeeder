@@ -1,6 +1,9 @@
 #!/usr/bin/with-contenv bash
 # shellcheck shell=bash
 
+# Show latest changelog
+zcat /usr/share/doc/rbfeeder/changelog.gz | grep -B9999 " --  "
+
 # Check to make sure the correct command line arguments have been set
 EXITCODE=0
 if [ -z "${LAT}" ]; then
