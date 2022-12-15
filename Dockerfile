@@ -1,4 +1,4 @@
-FROM ghcr.io/sdr-enthusiasts/docker-baseimage:base
+FROM ghcr.io/sdr-enthusiasts/docker-baseimage:qemu
 
 ENV BEASTHOST=readsb \
     BEASTPORT=30005 \
