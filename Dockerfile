@@ -1,4 +1,35 @@
-FROM ghcr.io/sdr-enthusiasts/docker-baseimage:base
+FROM ghcr.io/sdr-enthusiasts/docker-baseimage:base as downloader
+
+# This downloader image has the rb24 apt repo added, and allows for downloading and extracting of rbfeeder binary deb package.
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+RUN set -x && \
+    # install prereqs
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+        binutils \
+        gnupg \
+        xz-utils \
+        && \
+    # add rb24 repo
+    dpkg --add-architecture armhf && \
+    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 1D043681 && \
+    bash -c "echo 'deb https://apt.rb24.com/ bullseye main' > /etc/apt/sources.list.d/rb24.list" && \
+    apt-get update && \
+    # download rbfeeder deb
+    pushd /tmp && \
+    apt-get download \
+        rbfeeder:armhf \
+        && \
+    # extract rbfeeder deb
+    ls -lah && \
+    ar xv ./rbfeeder_*armhf.deb && \
+    tar xvf ./data.tar.xz -C /
+
+FROM ghcr.io/sdr-enthusiasts/docker-baseimage:qemu
+
+# This is the final image
 
 ENV BEASTHOST=readsb \
     BEASTPORT=30005 \
@@ -11,10 +42,14 @@ ENV BEASTHOST=readsb \
     ENABLE_MLAT=true
 
 COPY rootfs/ /
+COPY --from=downloader /usr/bin/rbfeeder /usr/bin/rbfeeder_armhf
+COPY --from=downloader /usr/bin/dump1090-rb /usr/bin/dump1090-rb
+COPY --from=downloader /usr/share/doc/rbfeeder/changelog.gz /usr/share/doc/rbfeeder/changelog.gz
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN set -x && \
+    dpkg --add-architecture armhf && \
     # define required packages
     TEMP_PACKAGES=() && \
     KEPT_PACKAGES=() && \
@@ -27,16 +62,12 @@ RUN set -x && \
     KEPT_PACKAGES+=(python3-distutils) && \
     TEMP_PACKAGES+=(libpython3-dev) && \
     # required to run rbfeeder
-    TEMP_PACKAGES+=(libjansson-dev) && \
-    KEPT_PACKAGES+=(libjansson4) && \
-    TEMP_PACKAGES+=(libglib2.0-dev) && \
-    KEPT_PACKAGES+=(libglib2.0-0) && \
-    TEMP_PACKAGES+=(protobuf-c-compiler) && \
-    TEMP_PACKAGES+=(libncurses5-dev) && \
-    TEMP_PACKAGES+=(libprotobuf-c-dev) && \
-    KEPT_PACKAGES+=(libprotobuf-c1) && \
-    TEMP_PACKAGES+=(libcurl4-openssl-dev) && \
-    # TEMP_PACKAGES+=(debhelper) && \
+    KEPT_PACKAGES+=(libc6:armhf) && \
+    KEPT_PACKAGES+=(libcurl4:armhf) && \
+    KEPT_PACKAGES+=(libglib2.0-0:armhf) && \
+    KEPT_PACKAGES+=(libjansson4:armhf) && \
+    KEPT_PACKAGES+=(libprotobuf-c1:armhf) && \
+    KEPT_PACKAGES+=(librtlsdr0:armhf) && \
     KEPT_PACKAGES+=(netbase) && \
     # install packages
     apt-get update && \
@@ -44,14 +75,7 @@ RUN set -x && \
         "${KEPT_PACKAGES[@]}" \
         "${TEMP_PACKAGES[@]}" \
         && \
-    # build & install rbfeeder
-    git clone --branch master --depth 1 --single-branch https://github.com/airnavsystems/rbfeeder.git /src/rbfeeder && \
-    pushd /src/rbfeeder && \
-    echo "rbfeeder $(git log | head -1)" >> /VERSIONS && \
-    make proto && \
-    make -j "$(nproc)" && \
-    cp -v ./rbfeeder /usr/bin/ && \
-    # get mlat-client:
+    # get mlat-client
     BRANCH_MLAT_CLIENT=$(git -c 'versionsort.suffix=-' ls-remote --tags --sort='v:refname' 'https://github.com/mutability/mlat-client.git' | cut -d '/' -f 3 | grep '^v.*' | tail -1) && \
     git clone \
         --branch "$BRANCH_MLAT_CLIENT" \
@@ -64,6 +88,8 @@ RUN set -x && \
     python3 /src/mlat-client/setup.py build && \
     python3 /src/mlat-client/setup.py install && \
     popd && \
+    # create symlink for rbfeeder wrapper
+    ln -s /usr/bin/rbfeeder_wrapper.sh /usr/bin/rbfeeder && \
     # clean up
     apt-get remove -y "${TEMP_PACKAGES[@]}" && \
     apt-get autoremove -y && \
