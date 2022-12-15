@@ -49,7 +49,8 @@ ENV BEASTHOST=readsb \
 
 COPY rootfs/ /
 COPY --from=builder /VERSIONS /VERSIONS
-COPY --from=builder /usr/bin/rbfeeder /usr/bin/rbfeeder
+#COPY --from=builder /usr/bin/rbfeeder /usr/bin/rbfeeder
+COPY --from=ghcr.io/sdr-enthusiasts/docker-radarbox:v1.0.7-20221027145200 /usr/bin/rbfeeder /usr/bin/rbfeeder
 COPY --from=builder /usr/bin/dump1090-rb /usr/bin/dump1090-rb
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
