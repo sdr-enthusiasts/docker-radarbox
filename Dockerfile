@@ -23,7 +23,7 @@ RUN set -x && \
         rbfeeder \
         && \
     # extract rbfeeder deb
-    ar xv ./rbfeeder_1%3a1.0.8+deb11_armhf.deb && \
+    ar xv ./rbfeeder_*armhf.deb && \
     tar xvf ./data.tar.xz -C /
 
 FROM ghcr.io/sdr-enthusiasts/docker-baseimage:qemu
