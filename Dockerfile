@@ -20,9 +20,10 @@ RUN set -x && \
     # download rbfeeder deb
     pushd /tmp && \
     apt-get download \
-        rbfeeder \
+        rbfeeder:armhf \
         && \
     # extract rbfeeder deb
+    ls -lah && \
     ar xv ./rbfeeder_*armhf.deb && \
     tar xvf ./data.tar.xz -C /
 
