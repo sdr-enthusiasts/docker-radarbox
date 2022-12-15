@@ -167,6 +167,10 @@ Once your container is up and running, you should claim your receiver.
 1. Create an account or sign in
 1. Claim your receiver by visiting <https://www.radarbox.com/raspberry-pi/claim> and following the instructions
 
+## Connection Errors
+
+Before raising an issue regarding connection errors, please wait at least 10 minutes. The `rbfeeder` binary is configured to attempt to connect to a collection of servers in a round-robin method. It appears normal for some servers to reject the connection, so it may take several minutes to find an available server and connect.
+
 ## Runtime Environment Variables
 
 There are a series of available environment variables:
