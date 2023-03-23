@@ -64,7 +64,7 @@ mode=beast
 } >> /etc/rbfeeder.ini
 
 # Attempt to resolve BEASTHOST into an IP address
-if BEASTIP=$(s6-dnsip4 "$BEASTHOST" 2> /dev/null); then
+if BEASTIP=$(s6-dnsip4 "$BEASTHOST" | head -1 2> /dev/null); then
   echo "external_host=$BEASTIP" >> /etc/rbfeeder.ini
 else
   echo "external_host=$BEASTHOST" >> /etc/rbfeeder.ini
