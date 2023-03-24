@@ -53,8 +53,6 @@ jobs:
       platform_linux_i386_enabled: true
       get_version_method: file_in_container:file=/CONTAINER_VERSION
 
-
-
   # test_build:
   #   name: Test Build
   #   runs-on: ubuntu-latest
