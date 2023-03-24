@@ -23,11 +23,6 @@ on:
 # Set workflow-wide environment variables
 #  - REPO: repo name on dockerhub
 #  - IMAGE: image name on dockerhub
-env:
-  DOCKERHUB_REPO: mikenye
-  DOCKERHUB_IMAGE: radarbox
-  GHCR_IMAGE: ${{ github.repository }}
-  GHCR_REGISTRY: ghcr.io
 
 jobs:
 
@@ -62,8 +57,8 @@ jobs:
     needs: [hadolint]
     with:
       push_enabled: true
-      dockerhub_profile: ${{ env.DOCKERHUB_REPO }}
-      dockerhub_repo: ${{ env.DOCKERHUB_IMAGE }}
+      dockerhub_profile: mikenye  #legacy
+      dockerhub_repo: radarbox    #legacy
       ghcr_repo_owner: ${{ github.repository_owner }}
       ghcr_repo: ${{ github.repository }}
       platform_linux_arm32v6_enabled: false
