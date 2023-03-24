@@ -62,7 +62,7 @@ jobs:
     needs: [hadolint]
     with:
       push_enabled: true
-      dockerhub_profile: ${{ env.DOCKERHUB_REPO }} 
+      dockerhub_profile: ${{ env.DOCKERHUB_REPO }}
       dockerhub_repo: ${{ env.DOCKERHUB_IMAGE }}
       ghcr_repo_owner: ${{ github.repository_owner }}
       ghcr_repo: ${{ github.repository }}

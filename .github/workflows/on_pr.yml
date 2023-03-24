@@ -49,16 +49,9 @@ jobs:
     needs: [hadolint]
     with:
       push_enabled: false
-      dockerhub_profile: ${{ env.DOCKERHUB_REPO }} 
-      dockerhub_repo: ${{ env.DOCKERHUB_IMAGE }}
-      ghcr_repo_owner: ${{ github.repository_owner }}
-      ghcr_repo: ${{ github.repository }}
       platform_linux_arm32v6_enabled: false
       platform_linux_i386_enabled: true
       get_version_method: file_in_container:file=/CONTAINER_VERSION
-    secrets:
-      ghcr_token: ${{ secrets.GITHUB_TOKEN }}
-      dockerhub_token: ${{ secrets.DOCKERHUB_TOKEN }}
       
 
 
