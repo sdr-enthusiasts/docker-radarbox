@@ -61,6 +61,9 @@ jobs:
     name: Image Build & Push
     uses: sdr-enthusiasts/common-github-workflows/.github/workflows/build_and_push_image.yml@main
     needs: [hadolint]
+    env:
+      BUILD_LATEST: ${{ !github.event.inputs.use_test_image }}
+      BUILD_BASEIMAGE_TEST: ${{ github.event.inputs.use_test_image }}
     with:
       push_enabled: true
       push_destinations: ghcr.io;dockerhub
@@ -72,8 +75,8 @@ jobs:
       platform_linux_i386_enabled: true
       get_version_method: file_in_container:file=/CONTAINER_VERSION
       # set build_latest to true if github.event.inputs.use_test_image is false
-      build_latest: ${{ github.event.inputs.use_test_image }} == false
-      build_baseimage_test: ${{ github.event.inputs.use_test_image  }} == true
+      build_latest: env.BUILD_LATEST
+      build_baseimage_test: env.BUILD_BASEIMAGE_TEST
     secrets:
       ghcr_token: ${{ secrets.GITHUB_TOKEN }}
       dockerhub_token: ${{ secrets.DOCKERHUB_TOKEN }}
