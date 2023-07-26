@@ -8,10 +8,10 @@ RUN set -x && \
     # install prereqs
     apt-get update && \
     apt-get install -y --no-install-recommends \
-        binutils \
-        gnupg \
-        xz-utils \
-        && \
+    binutils \
+    gnupg \
+    xz-utils \
+    && \
     # add rb24 repo
     dpkg --add-architecture armhf && \
     apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 1D043681 && \
@@ -20,8 +20,8 @@ RUN set -x && \
     # download rbfeeder deb
     pushd /tmp && \
     apt-get download \
-        rbfeeder:armhf \
-        && \
+    rbfeeder:armhf \
+    && \
     # extract rbfeeder deb
     ls -lah && \
     ar xv ./rbfeeder_*armhf.deb && \
@@ -72,17 +72,17 @@ RUN set -x && \
     # install packages
     apt-get update && \
     apt-get install -y --no-install-recommends \
-        "${KEPT_PACKAGES[@]}" \
-        "${TEMP_PACKAGES[@]}" \
-        && \
+    "${KEPT_PACKAGES[@]}" \
+    "${TEMP_PACKAGES[@]}" \
+    && \
     # get mlat-client
     BRANCH_MLAT_CLIENT=$(git -c 'versionsort.suffix=-' ls-remote --tags --sort='v:refname' 'https://github.com/mutability/mlat-client.git' | cut -d '/' -f 3 | grep '^v.*' | tail -1) && \
     git clone \
-        --branch "$BRANCH_MLAT_CLIENT" \
-        --depth 1 --single-branch \
-        'https://github.com/mutability/mlat-client.git' \
-        /src/mlat-client \
-        && \
+    --branch "$BRANCH_MLAT_CLIENT" \
+    --depth 1 --single-branch \
+    'https://github.com/mutability/mlat-client.git' \
+    /src/mlat-client \
+    && \
     pushd /src/mlat-client && \
     echo "mlat-client $(git log | head -1)" >> /VERSIONS && \
     python3 /src/mlat-client/setup.py build && \
