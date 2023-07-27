@@ -77,9 +77,9 @@ RUN set -x && \
     "${TEMP_PACKAGES[@]}" \
     && \
     # get mlat-client
-    BRANCH_MLAT_CLIENT=$(git -c 'versionsort.suffix=-' ls-remote --tags --sort='v:refname' 'https://github.com/wiedehopf/mlat-client.git' | cut -d '/' -f 3 | grep '^v.*' | tail -1) && \
+    # BRANCH_MLAT_CLIENT=$(git -c 'versionsort.suffix=-' ls-remote --tags --sort='v:refname' 'https://github.com/wiedehopf/mlat-client.git' | cut -d '/' -f 3 | grep '^v.*' | tail -1) && \
     git clone \
-    --branch "$BRANCH_MLAT_CLIENT" \
+    # --branch "$BRANCH_MLAT_CLIENT" \
     --depth 1 --single-branch \
     'https://github.com/wiedehopf/mlat-client.git' \
     /src/mlat-client \
