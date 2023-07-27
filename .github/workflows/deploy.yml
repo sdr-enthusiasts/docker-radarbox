@@ -74,7 +74,7 @@ jobs:
       # set build_latest to true if github.event.inputs.use_test_image is false
       build_latest: ${{ github.event.inputs.use_test_image == 'false' }}
       build_baseimage_test: ${{ github.event.inputs.use_test_image == 'true' }}
-      build_image_url: s/docker-baseimage:base/docker-baseimage:base-test-pr/g
+      build_image_url: docker-baseimage:base/docker-baseimage:base-test-pr
     secrets:
       ghcr_token: ${{ secrets.GITHUB_TOKEN }}
       dockerhub_token: ${{ secrets.DOCKERHUB_TOKEN }}
