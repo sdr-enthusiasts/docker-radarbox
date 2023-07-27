@@ -80,7 +80,7 @@ RUN set -x && \
     git clone \
     --branch "$BRANCH_MLAT_CLIENT" \
     --depth 1 --single-branch \
-    'https://github.com/mutability/mlat-client.git' \
+    'https://github.com/wiedehopf/mlat-client.git' \
     /src/mlat-client \
     && \
     pushd /src/mlat-client && \
