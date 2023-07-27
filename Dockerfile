@@ -61,6 +61,7 @@ RUN set -x && \
     KEPT_PACKAGES+=(python3-minimal) && \
     KEPT_PACKAGES+=(python3-distutils) && \
     TEMP_PACKAGES+=(libpython3-dev) && \
+    KEPT_PACKAGES+=(python3-setuptools) && \
     # required to run rbfeeder
     KEPT_PACKAGES+=(libc6:armhf) && \
     KEPT_PACKAGES+=(libcurl4:armhf) && \
