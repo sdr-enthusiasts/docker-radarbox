@@ -33,7 +33,7 @@ If using `docker run`, simply add `-v /opt/adsb/data/fake_cpuinfo:/proc/cpuinfo`
 If using `docker-compose`, add the following to the `volumes:` section of your radarbox container definition:
 
 ```yaml
-  - /opt/adsb/data/fake_cpuinfo:/proc/cpuinfo
+- /opt/adsb/data/fake_cpuinfo:/proc/cpuinfo
 ```
 
 ### Workaround for Temperature Sensor
@@ -71,5 +71,5 @@ volumes:
 1. Add the following to the `volumes:` section of your radarbox container definition:
 
 ```yaml
-  - "radarbox_segfault_fix:/sys/class/thermal:ro"
+- "radarbox_segfault_fix:/sys/class/thermal:ro"
 ```

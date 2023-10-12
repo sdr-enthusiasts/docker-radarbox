@@ -11,17 +11,17 @@ For more information on what `rbfeeder` is, see here: [sharing-data](https://www
 
 ## Supported tags and respective Dockerfiles
 
-* `latest` (`main` branch, `Dockerfile`)
-* `latest_nohealthcheck` is the same as the `latest` version above. However, this version has the docker healthcheck removed. This is done for people running platforms (such as [Nomad](https://www.nomadproject.io)) that don't support manually disabling healthchecks, where healthchecks are not wanted.
-* Version and architecture specific tags available
+- `latest` (`main` branch, `Dockerfile`)
+- `latest_nohealthcheck` is the same as the `latest` version above. However, this version has the docker healthcheck removed. This is done for people running platforms (such as [Nomad](https://www.nomadproject.io)) that don't support manually disabling healthchecks, where healthchecks are not wanted.
+- Version and architecture specific tags available
 
 ## Multi Architecture Support
 
 Currently, this image should pull and run on the following architectures:
 
-* `amd64`: Linux x86-64
-* `arm32v7`, `armv7l`: ARMv7 32-bit (Odroid HC1/HC2/XU4, RPi 2/3)
-* `arm64`, `aarch64`: ARMv8 64-bit (RPi 4 64-bit OSes)
+- `amd64`: Linux x86-64
+- `arm32v7`, `armv7l`: ARMv7 32-bit (Odroid HC1/HC2/XU4, RPi 2/3)
+- `arm64`, `aarch64`: ARMv8 64-bit (RPi 4 64-bit OSes)
 
 ## Obtaining a RadarBox Sharing Key
 
@@ -55,8 +55,8 @@ Take a note of the sharing key, as you'll need it when launching the container.
 
 If you're not a first time user and are migrating from another installation, you can retrieve your sharing key using either of the following methods:
 
-* SSH onto your existing receiver and run the command `rbfeeder --showkey --no-start`
-* SSH onto your existing receiver and run the command `grep key= /etc/rbfeeder.ini`
+- SSH onto your existing receiver and run the command `rbfeeder --showkey --no-start`
+- SSH onto your existing receiver and run the command `grep key= /etc/rbfeeder.ini`
 
 ## Up-and-Running with `docker run`
 
@@ -173,7 +173,7 @@ Before raising an issue regarding connection errors, please wait at least 10 min
 
 You may also receive a spurious error `Error authenticating Sharing-Key: Invalid sharing-key`. Provided you have entered your sharing key correctly, just ignore this for several minutes.
 
-Here is some example output with RBFeeder Version 1.0.8 (build 20220708190411) showing the aformentioned behaviour:
+Here is some example output with RBFeeder Version 1.0.8 (build 20220708190411) showing the aforementioned behaviour:
 
 ```
 [rbfeeder] [2022-12-15 11:29:22]  Starting RBFeeder Version 1.0.8 (build 20220708190411)
@@ -212,28 +212,28 @@ In the above instance, it took approximately 6 minutes from container start to c
 
 There are a series of available environment variables:
 
-| Environment Variable | Purpose                         | Default |
-| -------------------- | ------------------------------- | ------- |
-| `BEASTHOST`          | Required. IP/Hostname of a Mode-S/BEAST provider (dump1090/readsb) | `readsb` |
-| `BEASTPORT`          | Optional. TCP port number of Mode-S/BEAST provider (dump1090/readsb) | `30005` |
-| `UAT_RECEIVER_HOST`  | Optional. IP/Hostname of an external UAT decoded JSON provider (eg: dump978-fa). | |
-| `UAT_RECEIVER_PORT`  | Optional. TCP port number of the external UAT decoded JSON provider. | `30979` |
-| `SHARING_KEY`        | Required. Radarbox Sharing Key | |
-| `LAT` | Required. Latitude of the antenna | |
-| `LONG` | Required. Longitude of the antenna | |
-| `ALT` | Required. Altitude in *metres* | |
-| `TZ`                 | Optional. Your local timezone | GMT     |
-| `STATS_INTERVAL_MINUTES` | Optional. How often to print statistics, in minutes. | `5` |
-| `VERBOSE_LOGGING` | Optional. Set to `true` for no filtering of `rbfeeder` logs. | `false` |
-| `DEBUG_LEVEL` | Optional. Set to any number between `0` and `8` to increase verbosity of `rbfeeder` logs. | `0` |
-| `ENABLE_MLAT` | Option. Set to `true` to enable MLAT inside of the container. See [MLAT note](#mlat) below | `true` |
+| Environment Variable     | Purpose                                                                                    | Default  |
+| ------------------------ | ------------------------------------------------------------------------------------------ | -------- |
+| `BEASTHOST`              | Required. IP/Hostname of a Mode-S/BEAST provider (dump1090/readsb)                         | `readsb` |
+| `BEASTPORT`              | Optional. TCP port number of Mode-S/BEAST provider (dump1090/readsb)                       | `30005`  |
+| `UAT_RECEIVER_HOST`      | Optional. IP/Hostname of an external UAT decoded JSON provider (eg: dump978-fa).           |          |
+| `UAT_RECEIVER_PORT`      | Optional. TCP port number of the external UAT decoded JSON provider.                       | `30979`  |
+| `SHARING_KEY`            | Required. Radarbox Sharing Key                                                             |          |
+| `LAT`                    | Required. Latitude of the antenna                                                          |          |
+| `LONG`                   | Required. Longitude of the antenna                                                         |          |
+| `ALT`                    | Required. Altitude in _metres_                                                             |          |
+| `TZ`                     | Optional. Your local timezone                                                              | GMT      |
+| `STATS_INTERVAL_MINUTES` | Optional. How often to print statistics, in minutes.                                       | `5`      |
+| `VERBOSE_LOGGING`        | Optional. Set to `true` for no filtering of `rbfeeder` logs.                               | `false`  |
+| `DEBUG_LEVEL`            | Optional. Set to any number between `0` and `8` to increase verbosity of `rbfeeder` logs.  | `0`      |
+| `ENABLE_MLAT`            | Option. Set to `true` to enable MLAT inside of the container. See [MLAT note](#mlat) below | `true`   |
 
 ## Ports
 
 The following TCP ports are used by this container:
 
-* `32088` - `rbfeeder` listens on this port, however I can't find the use for this port...
-* `30105` - `mlat-client` listens on this port to provide MLAT results.
+- `32088` - `rbfeeder` listens on this port, however I can't find the use for this port...
+- `30105` - `mlat-client` listens on this port to provide MLAT results.
 
 ## MLAT
 
@@ -250,7 +250,7 @@ To stop the feeder from spamming your logs you can set `ENABLE_MLAT=false` in yo
 
 ## Logging
 
-* All processes are logged to the container's stdout, and can be viewed with `docker logs [-f] container`.
+- All processes are logged to the container's stdout, and can be viewed with `docker logs [-f] container`.
 
 ## Getting Help
 

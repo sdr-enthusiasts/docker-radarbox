@@ -4,6 +4,7 @@ FROM ghcr.io/sdr-enthusiasts/docker-baseimage:base as downloader
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
+# hadolint ignore=DL3008,SC2086,SC2039,SC2068
 RUN set -x && \
     # install prereqs
     apt-get update && \
@@ -48,6 +49,7 @@ COPY --from=downloader /usr/share/doc/rbfeeder/changelog.gz /usr/share/doc/rbfee
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
+# hadolint ignore=DL3008,SC2086,SC2039,SC2068
 RUN set -x && \
     dpkg --add-architecture armhf && \
     # define required packages
