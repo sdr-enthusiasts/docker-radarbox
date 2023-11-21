@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 
-white="\e[0;97m"
-reset="\e[0m"
+#shellcheck shell=bash disable=SC1091
 
-echo -e "${white}"
-echo "Hardware information:"
-echo "Machine:   $(uname -m)"
-echo "Processor: $(uname -p)"
-echo "Platform:  $(uname -i)"
-echo -e "${reset}"
+source /scripts/common
+s6wrap=(s6wrap --quiet --timestamps --prepend="$(basename "$0")" --args)
+
+"${s6wrap[@]}" cat << EOM
+Hardware information:
+Machine:   $(uname -m)
+Processor: $(uname -p)
+Platform:  $(uname -i)
+EOM

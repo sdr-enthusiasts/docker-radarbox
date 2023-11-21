@@ -1,6 +1,8 @@
 #!/command/with-contenv bash
-#shellcheck shell=bash
-#shellcheck disable=SC2016
+#shellcheck shell=bash disable=SC2016,SC1091
+
+source /scripts/common
+s6wrap=(s6wrap --quiet --timestamps --prepend="$(basename "$0")" --args)
 
 # Prevent writing of coredumps
 #  - Reason for coredumps: https://github.com/mikenye/docker-radarbox/issues/9#issuecomment-633068833
@@ -9,13 +11,9 @@ ulimit -c 0
 
 # can be run natively
 if [ "$VERBOSE_LOGGING" == "true" ]; then
-    /usr/bin/rbfeeder 2>&1 | \
-        stdbuf -oL awk '{print "[rbfeeder] " $0}'
+    "${s6wrap[@]}" /usr/bin/rbfeeder 
+
 else
-    /usr/bin/rbfeeder 2>&1 | \
-        stdbuf -oL awk '! / Statistics updated every 60 seconds /' | \
-        stdbuf -oL awk '! /Packets sent in the last 60 seconds: /' | \
-        stdbuf -oL awk '! / Data sent: /' | \
-        stdbuf -oL awk '! / Data received: /' | \
-        stdbuf -oL awk '{print "[rbfeeder] " $0}'
+    "${s6wrap[@]}" /usr/bin/rbfeeder | \
+        stdbuf -oL grep -v "Statistics updated every 60 seconds|\Packets sent in the last 60 seconds:|\Data sent:|\Data received:"
 fi

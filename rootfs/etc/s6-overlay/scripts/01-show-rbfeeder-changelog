@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
+#shellcheck shell=bash disable=SC1091
 
-white="\e[0;97m"
-reset="\e[0m"
+source /scripts/common
+s6wrap=(s6wrap --quiet --timestamps --prepend="$(basename "$0")" --args)
 
 # Show latest changelog
-echo -e "${white}"
-zcat /usr/share/doc/rbfeeder/changelog.gz | grep -B9999 -m 1 " --  "
-echo -e "${reset}"
+"${s6wrap[@]}" zcat /usr/share/doc/rbfeeder/changelog.gz | grep -B9999 -m 1 " --  "
