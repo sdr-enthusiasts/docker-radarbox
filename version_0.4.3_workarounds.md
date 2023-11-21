@@ -14,11 +14,12 @@ For systems that don't have a CPU serial number in `/proc/cpuinfo`, we can "fudg
 
 ```bash
 # make a directory to hold our fake data
-mkdir -p /opt/adsb/data
+mkdir -p -m 777 /opt/adsb/data
 
 # generate a fake cpuinfo file
 # start by taking our current cpuinfo file
 cp /proc/cpuinfo /opt/adsb/data/fake_cpuinfo
+chmod u+w /opt/adsb/data/fake_cpuinfo
 
 # ... and add a fake serial number to the end
 echo -e "serial\t\t: $(hexdump -n 8 -e '4/4 "%08X" 1 "\n"' /dev/urandom | tr '[:upper:]' '[:lower:]')" >> /opt/adsb/data/fake_cpuinfo
