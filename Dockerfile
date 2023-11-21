@@ -44,7 +44,7 @@ ENV BEASTHOST=readsb \
 COPY rootfs/ /
 COPY --from=downloader /usr/bin/rbfeeder /usr/bin/rbfeeder_arm
 COPY --from=downloader /usr/bin/dump1090-rb /usr/bin/dump1090-rb
-COPY --from=downloader /usr/share/doc/rbfeeder/changelog.gz /usr/share/doc/rbfeeder/changelog.gz
+COPY --from=downloader /usr/share/doc/rbfeeder/ /usr/share/doc/rbfeeder/
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
