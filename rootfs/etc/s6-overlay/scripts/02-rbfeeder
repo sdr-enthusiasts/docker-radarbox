@@ -93,7 +93,7 @@ if [[ -n "$UAT_RECEIVER_HOST" ]]; then
   } >> /etc/rbfeeder.ini
 fi
 
-if ! grep -q "Serial\s*:" /proc/cpuinfo; then
+if ! grep -qi "Serial\s*:" /proc/cpuinfo; then
   # rbfeeder won't work without a serial number
   "${s6wrap[@]}" echo ""
   "${s6wrap[@]}" echo "[ERROR] Your machine doesn't have a serial number in /proc/cpuinfo"
