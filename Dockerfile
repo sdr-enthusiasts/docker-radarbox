@@ -41,6 +41,8 @@ ENV BEASTHOST=readsb \
     VERBOSE_LOGGING=false \
     ENABLE_MLAT=true
 
+ARG TARGETPLATFORM TARGETOS TARGETARCH
+
 COPY rootfs/ /
 COPY --from=downloader /usr/bin/rbfeeder /usr/bin/rbfeeder_arm
 COPY --from=downloader /usr/bin/dump1090-rb /usr/bin/dump1090-rb
@@ -64,12 +66,22 @@ RUN set -x && \
     TEMP_PACKAGES+=(libpython3-dev) && \
     KEPT_PACKAGES+=(python3-setuptools) && \
     # required to run rbfeeder
-    KEPT_PACKAGES+=(libc6:armhf) && \
-    KEPT_PACKAGES+=(libcurl4:armhf) && \
-    KEPT_PACKAGES+=(libglib2.0-0:armhf) && \
-    KEPT_PACKAGES+=(libjansson4:armhf) && \
-    KEPT_PACKAGES+=(libprotobuf-c1:armhf) && \
-    KEPT_PACKAGES+=(librtlsdr0:armhf) && \
+    if [ "${TARGETARCH:0:3}" != "arm" ]; then \
+        dpkg --add-architecture armhf; \
+        KEPT_PACKAGES+=(libc6:armhf) && \
+        KEPT_PACKAGES+=(libcurl4:armhf) && \
+        KEPT_PACKAGES+=(libglib2.0-0:armhf) && \
+        KEPT_PACKAGES+=(libjansson4:armhf) && \
+        KEPT_PACKAGES+=(libprotobuf-c1:armhf) && \
+        KEPT_PACKAGES+=(librtlsdr0:armhf); \
+    else \
+        KEPT_PACKAGES+=(libc6) && \
+        KEPT_PACKAGES+=(libcurl4) && \
+        KEPT_PACKAGES+=(libglib2.0-0) && \
+        KEPT_PACKAGES+=(libjansson4) && \
+        KEPT_PACKAGES+=(libprotobuf-c1) && \
+        KEPT_PACKAGES+=(librtlsdr0); \
+    fi && \
     KEPT_PACKAGES+=(netbase) && \
     # install packages
     apt-get update && \
