@@ -1,6 +1,7 @@
 FROM ghcr.io/sdr-enthusiasts/docker-baseimage:base as downloader
 
 # This downloader image has the rb24 apt repo added, and allows for downloading and extracting of rbfeeder binary deb package.
+ARG TARGETPLATFORM TARGETOS TARGETARCH
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -14,19 +15,17 @@ RUN set -x && \
     xz-utils \
     && \
     # add rb24 repo
-    dpkg --add-architecture armhf && \
+    if [ "${TARGETARCH:0:3}" != "arm" ]; then \
+        dpkg --add-architecture armhf; \
+        RB24_PACKAGES=(rbfeeder:armhf); \
+    else \
+        RB24_PACKAGES=(rbfeeder); \
+    fi && \
     apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 1D043681 && \
     bash -c "echo 'deb https://apt.rb24.com/ bullseye main' > /etc/apt/sources.list.d/rb24.list" && \
-    apt-get update && \
-    # download rbfeeder deb
-    pushd /tmp && \
-    apt-get download \
-    rbfeeder:armhf \
-    && \
-    # extract rbfeeder deb
-    ls -lah && \
-    ar xv ./rbfeeder_*armhf.deb && \
-    tar xvf ./data.tar.xz -C /
+    apt-get update -q && \
+    apt-get install -q -o Dpkg::Options::="--force-confnew" -y --no-install-recommends  --no-install-suggests \
+            "${RB24_PACKAGES[@]}"
 
 FROM ghcr.io/sdr-enthusiasts/docker-baseimage:qemu
 
@@ -42,16 +41,17 @@ ENV BEASTHOST=readsb \
     VERBOSE_LOGGING=false \
     ENABLE_MLAT=true
 
+ARG TARGETPLATFORM TARGETOS TARGETARCH
+
 COPY rootfs/ /
-COPY --from=downloader /usr/bin/rbfeeder /usr/bin/rbfeeder_armhf
+COPY --from=downloader /usr/bin/rbfeeder /usr/bin/rbfeeder_arm
 COPY --from=downloader /usr/bin/dump1090-rb /usr/bin/dump1090-rb
-COPY --from=downloader /usr/share/doc/rbfeeder/changelog.gz /usr/share/doc/rbfeeder/changelog.gz
+COPY --from=downloader /usr/share/doc/rbfeeder/ /usr/share/doc/rbfeeder/
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # hadolint ignore=DL3008,SC2086,SC2039,SC2068
 RUN set -x && \
-    dpkg --add-architecture armhf && \
     # define required packages
     TEMP_PACKAGES=() && \
     KEPT_PACKAGES=() && \
@@ -65,12 +65,22 @@ RUN set -x && \
     TEMP_PACKAGES+=(libpython3-dev) && \
     KEPT_PACKAGES+=(python3-setuptools) && \
     # required to run rbfeeder
-    KEPT_PACKAGES+=(libc6:armhf) && \
-    KEPT_PACKAGES+=(libcurl4:armhf) && \
-    KEPT_PACKAGES+=(libglib2.0-0:armhf) && \
-    KEPT_PACKAGES+=(libjansson4:armhf) && \
-    KEPT_PACKAGES+=(libprotobuf-c1:armhf) && \
-    KEPT_PACKAGES+=(librtlsdr0:armhf) && \
+    if [ "${TARGETARCH:0:3}" != "arm" ]; then \
+        dpkg --add-architecture armhf; \
+        KEPT_PACKAGES+=(libc6:armhf) && \
+        KEPT_PACKAGES+=(libcurl4:armhf) && \
+        KEPT_PACKAGES+=(libglib2.0-0:armhf) && \
+        KEPT_PACKAGES+=(libjansson4:armhf) && \
+        KEPT_PACKAGES+=(libprotobuf-c1:armhf) && \
+        KEPT_PACKAGES+=(librtlsdr0:armhf); \
+    else \
+        KEPT_PACKAGES+=(libc6) && \
+        KEPT_PACKAGES+=(libcurl4) && \
+        KEPT_PACKAGES+=(libglib2.0-0) && \
+        KEPT_PACKAGES+=(libjansson4) && \
+        KEPT_PACKAGES+=(libprotobuf-c1) && \
+        KEPT_PACKAGES+=(librtlsdr0); \
+    fi && \
     KEPT_PACKAGES+=(netbase) && \
     # install packages
     apt-get update && \

@@ -49,7 +49,7 @@ jobs:
     with:
       push_enabled: false
       platform_linux_arm32v6_enabled: false
-      platform_linux_i386_enabled: true
+      platform_linux_i386_enabled: false
       get_version_method: file_in_container:file=/CONTAINER_VERSION
 
   # test_build:
