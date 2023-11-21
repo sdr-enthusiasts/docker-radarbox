@@ -21,6 +21,9 @@ mkdir -p -m 777 /opt/adsb/data
 cp /proc/cpuinfo /opt/adsb/data/fake_cpuinfo
 chmod u+w /opt/adsb/data/fake_cpuinfo
 
+# ... make sure we have hexdump installed
+[[ ! which hexdump >/dev/null 2>&1 ]] && sudo apt install -y bsdmainutils
+
 # ... and add a fake serial number to the end
 echo -e "serial\t\t: $(hexdump -n 8 -e '4/4 "%08X" 1 "\n"' /dev/urandom | tr '[:upper:]' '[:lower:]')" >> /opt/adsb/data/fake_cpuinfo
 ```
