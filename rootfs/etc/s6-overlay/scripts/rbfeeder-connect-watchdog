@@ -18,6 +18,8 @@ while true; do
             echo > "$RBFEEDER_LOG_FILE"
         elif grep -q 'Connection with RadarBox24 server OK'  <<< "$L"; then
             "${s6wrap[@]}" echo "[INFO] rbfeeder connected to a good server! ($( netstat -tn | awk -F'[ :]*' '/33755/ && /ESTABLISHED/ {print $6}'))"
+            # now do nothing as long as rbfeeder_arm is running:
+            tail -f -s 5 --pid="$(ps -ef |awk '/rbfeeder_arm/ && !/awk/ {print $2}')" /dev/null
         fi
     done < "$RBFEEDER_LOG_FILE"
     sleep 5
