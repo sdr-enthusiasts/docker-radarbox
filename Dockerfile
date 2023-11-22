@@ -57,7 +57,7 @@ RUN set -x && \
     TEMP_PACKAGES=() && \
     KEPT_PACKAGES=() && \
     # required for adding rb24 repo
-    TEMP_PACKAGES+=(gnupg) && \
+    # TEMP_PACKAGES+=(gnupg) && \
     # mlat-client dependencies
     # TEMP_PACKAGES+=(build-essential) && \
     # TEMP_PACKAGES+=(git) && \
