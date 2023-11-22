@@ -1,4 +1,4 @@
-FROM ghcr.io/sdr-enthusiasts/docker-baseimage:base as downloader
+FROM ghcr.io/sdr-enthusiasts/docker-baseimage:mlatclient as downloader
 
 # This downloader image has the rb24 apt repo added, and allows for downloading and extracting of rbfeeder binary deb package.
 ARG TARGETPLATFORM TARGETOS TARGETARCH
@@ -47,6 +47,7 @@ COPY rootfs/ /
 COPY --from=downloader /usr/bin/rbfeeder /usr/bin/rbfeeder_arm
 COPY --from=downloader /usr/bin/dump1090-rb /usr/bin/dump1090-rb
 COPY --from=downloader /usr/share/doc/rbfeeder/ /usr/share/doc/rbfeeder/
+COPY --from=downloader /mlatclient.tgz /src/mlatclient.tgz
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -58,11 +59,11 @@ RUN set -x && \
     # required for adding rb24 repo
     TEMP_PACKAGES+=(gnupg) && \
     # mlat-client dependencies
-    TEMP_PACKAGES+=(build-essential) && \
-    TEMP_PACKAGES+=(git) && \
-    KEPT_PACKAGES+=(python3-minimal) && \
-    KEPT_PACKAGES+=(python3-distutils) && \
-    TEMP_PACKAGES+=(libpython3-dev) && \
+    # TEMP_PACKAGES+=(build-essential) && \
+    # TEMP_PACKAGES+=(git) && \
+    # KEPT_PACKAGES+=(python3-minimal) && \
+    # KEPT_PACKAGES+=(python3-distutils) && \
+    # TEMP_PACKAGES+=(libpython3-dev) && \
     KEPT_PACKAGES+=(python3-setuptools) && \
     # required to run rbfeeder
     if [ "${TARGETARCH:0:3}" != "arm" ]; then \
@@ -90,17 +91,18 @@ RUN set -x && \
     && \
     # get mlat-client
     # BRANCH_MLAT_CLIENT=$(git -c 'versionsort.suffix=-' ls-remote --tags --sort='v:refname' 'https://github.com/wiedehopf/mlat-client.git' | cut -d '/' -f 3 | grep '^v.*' | tail -1) && \
-    git clone \
-    # --branch "$BRANCH_MLAT_CLIENT" \
-    --depth 1 --single-branch \
-    'https://github.com/wiedehopf/mlat-client.git' \
-    /src/mlat-client \
-    && \
-    pushd /src/mlat-client && \
-    echo "mlat-client $(git log | head -1)" >> /VERSIONS && \
-    python3 /src/mlat-client/setup.py build && \
-    python3 /src/mlat-client/setup.py install && \
-    popd && \
+    # git clone \
+    # # --branch "$BRANCH_MLAT_CLIENT" \
+    # --depth 1 --single-branch \
+    # 'https://github.com/wiedehopf/mlat-client.git' \
+    # /src/mlat-client \
+    # && \
+    # pushd /src/mlat-client && \
+    # echo "mlat-client $(git log | head -1)" >> /VERSIONS && \
+    # python3 /src/mlat-client/setup.py build && \
+    # python3 /src/mlat-client/setup.py install && \
+    # popd && \
+    tar zxf /src/mlatclient.tgz -c / && \
     # create symlink for rbfeeder wrapper
     ln -s /usr/bin/rbfeeder_wrapper.sh /usr/bin/rbfeeder && \
     # clean up
