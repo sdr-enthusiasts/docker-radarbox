@@ -108,7 +108,13 @@ fi
 
 if [[ -n "$RBSERVER_IP" ]]; then
   if chk_enabled "$RBSERVER_IP"; then RBSERVER_IP="23.29.123.254"; fi
-  echo "rpiserver-ng.rb24.com ${RBSERVER_IP}" >> /etc/hosts
+  cat << EOM >>/etc/hosts
+rpiserver-ng.rb24.com ${RBSERVER_IP}
+109.149.21.46.static.swiftway.net ${RBSERVER_IP} ok
+110.149.21.46.static.swiftway.net ${RBSERVER_IP} ok
+23-29-123-240.static.hvvc.us ${RBSERVER_IP} ok
+90.49.133.79.static.swiftway.net  ${RBSERVER_IP}
+EOM
 fi
 
 # Create log dirs
