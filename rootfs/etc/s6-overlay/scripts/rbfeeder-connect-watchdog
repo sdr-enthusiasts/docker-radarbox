@@ -11,6 +11,8 @@ while true; do
             # this is cleaner than pkill because we don't know the exact command line (with or without qemu)
             kill "$(ps -ef |awk '/rbfeeder_arm/ && !/awk/ {print $2}')"
             echo > "$RBFEEDER_LOG_FILE"
+        elif grep -q 'Connection with RadarBox24 server OK'  <<< "$L"; then
+            "${s6wrap[@]}" echo "[WARNING] rbfeeder connected to a good server! ($( netstat -tn | awk -F'[ :]*' '/33755/ {print $6}'))"
         fi
     done < "$RBFEEDER_LOG_FILE"
     sleep 5

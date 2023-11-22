@@ -89,19 +89,7 @@ RUN set -x && \
     "${KEPT_PACKAGES[@]}" \
     "${TEMP_PACKAGES[@]}" \
     && \
-    # get mlat-client
-    # BRANCH_MLAT_CLIENT=$(git -c 'versionsort.suffix=-' ls-remote --tags --sort='v:refname' 'https://github.com/wiedehopf/mlat-client.git' | cut -d '/' -f 3 | grep '^v.*' | tail -1) && \
-    # git clone \
-    # # --branch "$BRANCH_MLAT_CLIENT" \
-    # --depth 1 --single-branch \
-    # 'https://github.com/wiedehopf/mlat-client.git' \
-    # /src/mlat-client \
-    # && \
-    # pushd /src/mlat-client && \
-    # echo "mlat-client $(git log | head -1)" >> /VERSIONS && \
-    # python3 /src/mlat-client/setup.py build && \
-    # python3 /src/mlat-client/setup.py install && \
-    # popd && \
+    # install mlat-client
     tar zxf /src/mlatclient.tgz -C / && \
     # create symlink for rbfeeder wrapper
     ln -s /usr/bin/rbfeeder_wrapper.sh /usr/bin/rbfeeder && \
