@@ -102,7 +102,7 @@ RUN set -x && \
     # python3 /src/mlat-client/setup.py build && \
     # python3 /src/mlat-client/setup.py install && \
     # popd && \
-    tar zxf /src/mlatclient.tgz -c / && \
+    tar zxf /src/mlatclient.tgz -C / && \
     # create symlink for rbfeeder wrapper
     ln -s /usr/bin/rbfeeder_wrapper.sh /usr/bin/rbfeeder && \
     # clean up
