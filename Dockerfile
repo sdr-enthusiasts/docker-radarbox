@@ -43,12 +43,6 @@ ENV BEASTHOST=readsb \
 
 ARG TARGETPLATFORM TARGETOS TARGETARCH
 
-COPY rootfs/ /
-COPY --from=downloader /usr/bin/rbfeeder /usr/bin/rbfeeder_arm
-COPY --from=downloader /usr/bin/dump1090-rb /usr/bin/dump1090-rb
-COPY --from=downloader /usr/share/doc/rbfeeder/ /usr/share/doc/rbfeeder/
-COPY --from=downloader /mlatclient.tgz /src/mlatclient.tgz
-
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # hadolint ignore=DL3008,SC2086,SC2039,SC2068
@@ -89,14 +83,25 @@ RUN set -x && \
     "${KEPT_PACKAGES[@]}" \
     "${TEMP_PACKAGES[@]}" \
     && \
-    # install mlat-client
-    tar zxf /src/mlatclient.tgz -C / && \
-    # create symlink for rbfeeder wrapper
-    ln -s /usr/bin/rbfeeder_wrapper.sh /usr/bin/rbfeeder && \
     # clean up
     apt-get remove -y "${TEMP_PACKAGES[@]}" && \
     apt-get autoremove -y && \
-    rm -rf /src/* /tmp/* /var/lib/apt/lists/* && \
+    rm -rf /src/* /tmp/* /var/lib/apt/lists/*
+
+# Add everything else to the container
+COPY --from=downloader /usr/bin/rbfeeder /usr/bin/rbfeeder_arm
+COPY --from=downloader /usr/bin/dump1090-rb /usr/bin/dump1090-rb
+COPY --from=downloader /usr/share/doc/rbfeeder/ /usr/share/doc/rbfeeder/
+COPY --from=downloader /mlatclient.tgz /src/mlatclient.tgz
+COPY rootfs/ /
+
+# Last few things that need to get done after COPYing the software:
+RUN set -x && \
+    # install mlat-client
+    tar zxf /src/mlatclient.tgz -C / && \
+    rm -f /src/mlatclient.tgz && \
+    # symlink for rbfeeder wrapper
+    ln -s /usr/bin/rbfeeder_wrapper.sh /usr/bin/rbfeeder && \
     # test mlat-client
     mlat-client --help > /dev/null && \
     # test rbfeeder & get version
