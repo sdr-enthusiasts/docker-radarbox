@@ -11,7 +11,7 @@ while true; do
     while read -r L; do
         if grep -q 'Could not start connection. Timeout.' <<< "$L"; then
             readarray -t current_bad <<< "$(netstat -tn | awk -F'[ :]*' '/33755/ {print $6}')"
-            readarray -t current_bad_server_names <<< "$(netstat -t | awk -F'[ :]*' '/33755/ {print $6}')"
+            readarray -t current_bad_server_names <<< "$(netstat -tW | awk -F'[ :]*' '/33755/ {print $6}')"
             bad_servers+=(${current_bad[@]})
             bad_server_names+=(${current_bad_server_names[@]})
             readarray -t bad_servers <<< "$(printf "%s\n" "${bad_servers[@]}" | sort -u)"
@@ -26,7 +26,7 @@ while true; do
         elif grep -q 'Connection with RadarBox24 server OK'  <<< "$L"; then
             "${s6wrap[@]}" echo "[INFO] rbfeeder connected to a good server!"
             "${s6wrap[@]}" echo "       $( netstat -tn | awk -F'[ :]*' '/33755/ && /ESTABLISHED/ {print $6}')"
-            "${s6wrap[@]}" echo "       $( netstat -t | awk -F'[ :]*' '/33755/ && /ESTABLISHED/ {print $6}')"
+            "${s6wrap[@]}" echo "       $( netstat -tW | awk -F'[ :]*' '/33755/ && /ESTABLISHED/ {print $6}')"
             # now do nothing as long as rbfeeder_arm is running:
             tail -f -s 5 --pid="$(ps -ef |awk '/rbfeeder_arm/ && !/awk/ {print $2}')" /dev/null
         fi
