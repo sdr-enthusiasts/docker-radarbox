@@ -46,7 +46,7 @@ You should obviously replace `YOURBEASTHOST`, `YOURLATITUDE`, `YOURLONGITUDE` an
 
 Shortly after the container launches, you should be presented with:
 
-```
+```text
 [2020-04-02 11:36:31]  Empty sharing key. We will try to create a new one for you!
 [2020-04-02 11:36:32]  Your new key is g45643ab345af3c5d5g923a99ffc0de9. Please save this key for future use. You will have to know this key to link this receiver to your account in RadarBox24.com. This key is also saved in configuration file (/etc/rbfeeder.ini)
 ```
@@ -142,9 +142,9 @@ Here is some example output with RBFeeder Version 1.0.10 (build 20231120150000) 
 [2023-11-22 21:59:06.966][rbfeeder] [2023-11-22 21:59:06]  Starting RBFeeder Version 1.0.10 (build 20231120150000)
 [2023-11-22 21:59:06.966][rbfeeder] [2023-11-22 21:59:06]  Using configuration file: /etc/rbfeeder.ini
 [2023-11-22 21:59:06.966][rbfeeder] [2023-11-22 21:59:06]  Network-mode enabled.
-[2023-11-22 21:59:06.966][rbfeeder] [2023-11-22 21:59:06]  		Remote host to fetch data: 172.20.0.11
-[2023-11-22 21:59:06.966][rbfeeder] [2023-11-22 21:59:06]  		Remote port: 30005
-[2023-11-22 21:59:06.966][rbfeeder] [2023-11-22 21:59:06]  		Remote protocol: BEAST
+[2023-11-22 21:59:06.966][rbfeeder] [2023-11-22 21:59:06]     Remote host to fetch data: 172.20.0.11
+[2023-11-22 21:59:06.966][rbfeeder] [2023-11-22 21:59:06]     Remote port: 30005
+[2023-11-22 21:59:06.966][rbfeeder] [2023-11-22 21:59:06]     Remote protocol: BEAST
 [2023-11-22 21:59:06.966][rbfeeder] [2023-11-22 21:59:06]  Using GNSS (when available)
 [2023-11-22 21:59:06.966][rbfeeder] [2023-11-22 21:59:06]  Start date/time: 2023-11-22 21:59:06
 [2023-11-22 21:59:06.972][rbfeeder] [2023-11-22 21:59:06]  Socket for ANRB created. Waiting for connections on port 32088
