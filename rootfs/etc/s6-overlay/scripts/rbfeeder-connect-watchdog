@@ -4,6 +4,10 @@
 source /scripts/common
 s6wrap=(s6wrap --quiet --timestamps --prepend="$(basename "$0")" --args)
 
+if ! chk_enabled "$WATCHDOG"; then
+    exec sleep infinity & wait $!
+fi 
+
 bad_servers=()
 bad_server_names=()
 
