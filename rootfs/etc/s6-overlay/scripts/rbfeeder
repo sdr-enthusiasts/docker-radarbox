@@ -10,9 +10,11 @@ s6wrap=(s6wrap --quiet --timestamps --prepend="$(basename "$0")" --args)
 ulimit -c 0
 
 # can be run natively
-if [ "$VERBOSE_LOGGING" == "true" ]; then
+if chk_enabled "$VERBOSE_LOGGING"; then
     "${s6wrap[@]}" /usr/bin/rbfeeder 
 
+elif chk_enabled "$QUIET_LOGS"; then
+    "${s6wrap[@]}" /usr/bin/rbfeeder 2>/dev/stdout 1>/dev/null
 else
     "${s6wrap[@]}" /usr/bin/rbfeeder | \
         stdbuf -oL grep -v "Statistics updated every 60 seconds|\Packets sent in the last 60 seconds:|\Data sent:|\Data received:"

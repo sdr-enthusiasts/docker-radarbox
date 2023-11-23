@@ -20,7 +20,7 @@ For more information on what `rbfeeder` is, see here: [sharing-data](https://www
 Currently, this image should pull and run on the following architectures:
 
 - `amd64`: Linux x86-64
-- `arm32v7`, `armv7l`: ARMv7 32-bit (Odroid HC1/HC2/XU4, RPi 2/3)
+- `arm32v7`, `armv7l`: ARMv7 32-bit (Odroid HC1/HC2/XU4, RPi 2B/3B)
 - `arm64`, `aarch64`: ARMv8 64-bit (RPi 4 64-bit OSes)
 
 ## Obtaining a RadarBox Sharing Key
@@ -46,7 +46,7 @@ You should obviously replace `YOURBEASTHOST`, `YOURLATITUDE`, `YOURLONGITUDE` an
 
 Shortly after the container launches, you should be presented with:
 
-```
+```text
 [2020-04-02 11:36:31]  Empty sharing key. We will try to create a new one for you!
 [2020-04-02 11:36:32]  Your new key is g45643ab345af3c5d5g923a99ffc0de9. Please save this key for future use. You will have to know this key to link this receiver to your account in RadarBox24.com. This key is also saved in configuration file (/etc/rbfeeder.ini)
 ```
@@ -114,51 +114,6 @@ services:
       - SHARING_KEY=g45643ab345af3c5d5g923a99ffc0de9
 ```
 
-## Up-and-Running with Docker Compose, including readsb
-
-```shell
-version: '2.0'
-
-services:
-
-  readsb:
-    image: ghcr.io/sdr-enthusiasts/docker-readsb-protobuf:latest
-    tty: true
-    container_name: readsb
-    restart: always
-    devices:
-      - /dev/bus/usb/001/007:/dev/bus/usb/001/007
-    command:
-      - --dcfilter
-      - --device-type=rtlsdr
-      - --fix
-      - --forward-mlat
-      - --json-location-accuracy=2
-      - --lat=-33.33333
-      - --lon=111.11111
-      - --metric
-      - --mlat
-      - --modeac
-      - --ppm=0
-      - --net
-      - --stats-every=3600
-      - --quiet
-      - --write-json=/var/run/readsb
-
-  rbfeeder:
-    image: ghcr.io/sdr-enthusiasts/docker-radarbox:latest
-    tty: true
-    container_name: rbfeeder
-    restart: always
-    environment:
-      - TZ=Australia/Perth
-      - BEASTHOST=readsb
-      - LAT=-33.33333
-      - LONG=111.11111
-      - ALT=90
-      - SHARING_KEY=g45643ab345af3c5d5g923a99ffc0de9
-```
-
 ## Claiming Your Receiver
 
 Once your container is up and running, you should claim your receiver.
@@ -169,44 +124,40 @@ Once your container is up and running, you should claim your receiver.
 
 ## Connection Errors
 
-Before raising an issue regarding connection errors, please wait at least 10 minutes. The `rbfeeder` binary is configured to attempt to connect to a collection of servers in a round-robin method. It appears normal for some servers to reject the connection, so it may take several minutes to find an available server and connect.
+Before raising an issue regarding connection errors, please wait at least 10 minutes. The `rbfeeder` binary is configured to attempt to connect to a collection of servers in a round-robin method. It appears normal for some servers to reject the connection, so it may take several minutes to find an available server and connect. In the example below, it took approximately 6 minutes from container start to connection established.
+
+You can try to solve this by setting this parameter:
+
+```yaml
+- RB_SERVER=true
+```
+
+This will enforce the use of a hardcoded IP address that is known to work (as of 22-Nov-2023). It will connect you to a European server if you are located in the Eastern Hemisphere (incl Asia/Oceania), or to a US based server if you are in the Americas.
 
 You may also receive a spurious error `Error authenticating Sharing-Key: Invalid sharing-key`. Provided you have entered your sharing key correctly, just ignore this for several minutes.
 
-Here is some example output with RBFeeder Version 1.0.8 (build 20220708190411) showing the aforementioned behaviour:
+Here is some example output with RBFeeder Version 1.0.10 (build 20231120150000) showing the aforementioned behaviour:
 
-```
-[rbfeeder] [2022-12-15 11:29:22]  Starting RBFeeder Version 1.0.8 (build 20220708190411)
-[rbfeeder] [2022-12-15 11:29:22]  Using configuration file: /etc/rbfeeder.ini
-[rbfeeder] [2022-12-15 11:29:22]  Network-mode enabled.
-[rbfeeder] [2022-12-15 11:29:22]                Remote host to fetch data: readsb
-[rbfeeder] [2022-12-15 11:29:22]                Remote port: 30005
-[rbfeeder] [2022-12-15 11:29:22]                Remote protocol: BEAST
-[rbfeeder] [2022-12-15 11:29:22]  Using GNSS (when available)
-[rbfeeder] [2022-12-15 11:29:22]  Start date/time: 2022-12-15 11:29:22
-[rbfeeder] [2022-12-15 11:29:22]  Socket for ANRB created. Waiting for connections on port 32088
-[rbfeeder] [2022-12-15 11:29:28]  Can't connect to AirNav Server. Retry in 60 seconds.
-[rbfeeder] [2022-12-15 11:30:33]  Can't connect to AirNav Server. Retry in 60 seconds.
-[rbfeeder] [2022-12-15 11:31:34]  Connection established.
-[rbfeeder] [2022-12-15 11:31:34]  CPU Serial empty. Use MAC address instead.
-[rbfeeder] [2022-12-15 11:31:35]  Error authenticating Sharing-Key: Invalid sharing-key
-[rbfeeder] [2022-12-15 11:31:45]  Could not start connection. Timeout.
-[rbfeeder] [2022-12-15 11:32:46]  Connection established.
-[rbfeeder] [2022-12-15 11:32:46]  CPU Serial empty. Use MAC address instead.
-[rbfeeder] [2022-12-15 11:32:47]  Error authenticating Sharing-Key: Invalid sharing-key
-[rbfeeder] [2022-12-15 11:32:56]  Could not start connection. Timeout.
-[rbfeeder] [2022-12-15 11:33:57]  Connection established.
-[rbfeeder] [2022-12-15 11:33:57]  CPU Serial empty. Use MAC address instead.
-[rbfeeder] [2022-12-15 11:33:58]  Error authenticating Sharing-Key: Invalid sharing-key
-[rbfeeder] [2022-12-15 11:34:08]  Could not start connection. Timeout.
-[rbfeeder] [2022-12-15 11:35:09]  Connection established.
-[rbfeeder] [2022-12-15 11:35:09]  CPU Serial empty. Use MAC address instead.
-[rbfeeder] [2022-12-15 11:35:10]  Client type: Raspberry Pi
-[rbfeeder] [2022-12-15 11:35:10]  Connection with RadarBox24 server OK! Key accepted by server.
-[rbfeeder] [2022-12-15 11:35:10]  This is your station serial number: <REDACTED>
-```
+```text
+[2023-11-22 21:59:06.966][rbfeeder] [2023-11-22 21:59:06]  Starting RBFeeder Version 1.0.10 (build 20231120150000)
+[2023-11-22 21:59:06.966][rbfeeder] [2023-11-22 21:59:06]  Using configuration file: /etc/rbfeeder.ini
+[2023-11-22 21:59:06.966][rbfeeder] [2023-11-22 21:59:06]  Network-mode enabled.
+[2023-11-22 21:59:06.966][rbfeeder] [2023-11-22 21:59:06]     Remote host to fetch data: 172.20.0.11
+[2023-11-22 21:59:06.966][rbfeeder] [2023-11-22 21:59:06]     Remote port: 30005
+[2023-11-22 21:59:06.966][rbfeeder] [2023-11-22 21:59:06]     Remote protocol: BEAST
+[2023-11-22 21:59:06.966][rbfeeder] [2023-11-22 21:59:06]  Using GNSS (when available)
+[2023-11-22 21:59:06.966][rbfeeder] [2023-11-22 21:59:06]  Start date/time: 2023-11-22 21:59:06
+[2023-11-22 21:59:06.972][rbfeeder] [2023-11-22 21:59:06]  Socket for ANRB created. Waiting for connections on port 32088
+[2023-11-22 21:59:08.039][rbfeeder] [2023-11-22 21:59:08]  Connection established.
+[2023-11-22 21:59:18.154][rbfeeder] [2023-11-22 21:59:18]  Could not start connection. Timeout.
 
-In the above instance, it took approximately 6 minutes from container start to connection established.
+...
+
+[2023-11-22 22:05:29.223][rbfeeder] [2023-11-22 22:05:29]  Connection established.
+[2023-11-22 22:05:29.456][rbfeeder] [2023-11-22 22:05:29]  Client type: Raspberry Pi
+[2023-11-22 22:05:29:29.524][rbfeeder] [2023-11-22 22:05:29]  Connection with RadarBox24 server OK! Key accepted by server.
+[2023-11-22 22:05:29.524][rbfeeder] [2023-11-22 22:05:29]  This is your station serial number: EXTRPIxxxxxx
+```
 
 ## Runtime Environment Variables
 
@@ -227,6 +178,7 @@ There are a series of available environment variables:
 | `VERBOSE_LOGGING`        | Optional. Set to `true` for no filtering of `rbfeeder` logs.                               | `false`  |
 | `DEBUG_LEVEL`            | Optional. Set to any number between `0` and `8` to increase verbosity of `rbfeeder` logs.  | `0`      |
 | `ENABLE_MLAT`            | Option. Set to `true` to enable MLAT inside of the container. See [MLAT note](#mlat) below | `true`   |
+| `RB_SERVER`              | Optional. If set to `true`, the container will attempt to connect to one of two Radarbox Servers that are known to work as of 22-Nov-2023. You can also explicitly set it to a hostname or IP address. If unset, the default settings of RadarBox will be used. | Unset |
 
 ## Ports
 
