@@ -14,11 +14,14 @@ while true; do
             readarray -t current_bad_server_names <<< "$(netstat -tW | awk -F'[ :]*' '/33755/ {print $6}')"
             bad_servers+=(${current_bad[@]})
             bad_server_names+=(${current_bad_server_names[@]})
+            readarray -t current_bad <<< "$(printf "%s\n" "${current_bad[@]}" | sort -u)"
             readarray -t bad_servers <<< "$(printf "%s\n" "${bad_servers[@]}" | sort -u)"
             readarray -t bad_server_names <<< "$(printf "%s\n" "${bad_server_names[@]}" | sort -u)"
             "${s6wrap[@]}" echo "[WARNING] rbfeeder connected to a bad server"
-            "${s6wrap[@]}" echo "          current: ${current_bad[*]}; total bad list: ${bad_servers[*]}"
-            "${s6wrap[@]}" echo "          current: ${current_bad_server_names[*]}; total bad list: ${bad_server_names[*]}"
+            "${s6wrap[@]}" echo "          current (IP): ${current_bad[*]}"
+            "${s6wrap[@]}" echo "          current (DNS): ${current_bad_server_names[*]}"
+            "${s6wrap[@]}" echo "          total bad list (IP): ${bad_servers[*]}"
+            "${s6wrap[@]}" echo "          total bad list (DNS): ${bad_server_names[*]}"
             "${s6wrap[@]}" echo "          restarting rbfeeder process"
             # this is cleaner than pkill or pidof because we don't know the exact command line (with or without qemu)
             kill "$(ps -ef |awk '/rbfeeder_arm/ && !/awk/ {print $2}')"
