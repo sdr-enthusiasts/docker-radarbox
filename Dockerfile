@@ -1,4 +1,8 @@
+### INTENTIALLY BROKEN TO PREVENT REBUILDS WHILE THE KEY FOR THE RB24 REPO IS BROKEN
 FROM ghcr.io/sdr-enthusiasts/docker-baseimage:mlatclient as downloader
+
+### REMOVE THIS LINE TO MAKE THINGS WORK AGAIN:
+RUN exit 1
 
 # This downloader image has the rb24 apt repo added, and allows for downloading and extracting of rbfeeder binary deb package.
 ARG TARGETPLATFORM TARGETOS TARGETARCH
