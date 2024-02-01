@@ -1,8 +1,4 @@
-### INTENTIALLY BROKEN TO PREVENT REBUILDS WHILE THE KEY FOR THE RB24 REPO IS BROKEN
 FROM ghcr.io/sdr-enthusiasts/docker-baseimage:mlatclient as downloader
-
-### REMOVE THIS LINE TO MAKE THINGS WORK AGAIN:
-RUN exit 1
 
 # This downloader image has the rb24 apt repo added, and allows for downloading and extracting of rbfeeder binary deb package.
 ARG TARGETPLATFORM TARGETOS TARGETARCH
@@ -27,8 +23,8 @@ RUN set -x && \
     fi && \
     apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 1D043681 && \
     bash -c "echo 'deb https://apt.rb24.com/ bullseye main' > /etc/apt/sources.list.d/rb24.list" && \
-    apt-get update -q && \
-    apt-get install -q -o Dpkg::Options::="--force-confnew" -y --no-install-recommends  --no-install-suggests \
+    apt-get update -q -allow-insecure-repositories && \
+    apt-get install -q -o Dpkg::Options::="--force-confnew" -y --no-install-recommends  --no-install-suggests --allow-unauthenticated \
             "${RB24_PACKAGES[@]}"
 
 FROM ghcr.io/sdr-enthusiasts/docker-baseimage:qemu
