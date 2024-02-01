@@ -23,8 +23,14 @@ RUN set -x && \
     fi && \
     apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 1D043681 && \
     bash -c "echo 'deb https://apt.rb24.com/ bullseye main' > /etc/apt/sources.list.d/rb24.list" && \
-    apt-get update -q --allow-insecure-repositories && \
-    apt-get install -q -o Dpkg::Options::="--force-confnew" -y --no-install-recommends  --no-install-suggests --allow-unauthenticated \
+    #
+    # The lines below would allow the apt.rb24.com repo to be access insecurely. We were using this because their key had expired
+    # However, as of 1-feb-2024, the repo was updated to contain again a valid key so this is no longer needed. Leaving it in as an archifact for future reference.
+    # apt-get update -q --allow-insecure-repositories && \
+    # apt-get install -q -o Dpkg::Options::="--force-confnew" -y --no-install-recommends  --no-install-suggests --allow-unauthenticated \
+    #         "${RB24_PACKAGES[@]}"; \
+    apt-get update -q && \
+    apt-get install -q -o Dpkg::Options::="--force-confnew" -y --no-install-recommends  --no-install-suggests \
             "${RB24_PACKAGES[@]}"
 
 FROM ghcr.io/sdr-enthusiasts/docker-baseimage:qemu
