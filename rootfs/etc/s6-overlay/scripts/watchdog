@@ -33,6 +33,6 @@ else
 fi
 
 if [[ "$HEALTHY" == false ]]; then
-    s6-svc -r /run/service/rbfeeder/
+    pkill -f rbfeeder_arm
 fi
 
