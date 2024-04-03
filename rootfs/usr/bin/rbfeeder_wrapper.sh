@@ -4,17 +4,17 @@
 # This wrapper file will determine how to run rbfeeder, either natively or via qemu-arm-static.
 # All command line arguments passed to this script will be passed directly to rbfeeder_armhf.
 
+trap 'pkill -P $$' SIGTERM SIGINT SIGHUP SIGQUIT
 source /scripts/common
-s6wrap=(s6wrap --quiet --timestamps --prepend="$(basename "$0")" --args)
 
 # attempt to run natively
 if /usr/bin/rbfeeder_arm --no-start --version >/dev/null 2>&1; then
-    /usr/bin/rbfeeder_arm "$@"
+    /usr/bin/rbfeeder_arm "$@" & wait || true
 
 elif qemu-arm-static /usr/bin/rbfeeder_arm --no-start --version >/dev/null 2>&1; then
-    qemu-arm-static /usr/bin/rbfeeder_arm "$@"
+    qemu-arm-static /usr/bin/rbfeeder_arm "$@" & wait || true
 
 else
-    "${s6wrap[@]}" echo "[ERROR] Could not run rbfeeder natively or via qemu"
+    echo "[ERROR] Could not run rbfeeder natively or via qemu"
     sleep infinity & wait $!
 fi

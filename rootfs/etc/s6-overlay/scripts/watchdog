@@ -7,19 +7,32 @@ set -e
 WATCHDOG_TIMER="${WATCHDOG_TIMER:-300}"
 if (( WATCHDOG_TIMER < 60 )); then WATCHDOG_TIMER=60; fi
 
-while :; do
-    sleep "$WATCHDOG_TIMER" 
-    HEALTHY=true
-    TIMESTAMP_NOW="$(date +%s)"
-    LASTLOG_PACKETS_SENT="$(grep "Packets sent in the last 60 seconds" "$RBFEEDER_LOG_FILE" | tail -1 | sed -r "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g")"
-    LASTLOG_TIMESTAMP="$(date --date="$(echo "$LASTLOG_PACKETS_SENT" | cut -d '[' -f 2 | cut -d ']' -f 1)" +%s)"
-    LASTLOG_NUM_PACKETS_SENT="$(echo "$LASTLOG_PACKETS_SENT" | cut -d ']' -f 2 | cut -d ':' -f 2 | cut -d ',' -f 1 | tr -d ' ')"
-    
-    # check to make sure we've sent packets recently
-    if (( (TIMESTAMP_NOW - LASTLOG_TIMESTAMP) > WATCHDOG_TIMER" )) || (( LASTLOG_NUM_PACKETS_SENT < 1 )); then
-        "${s6wrap[@]}" echo "[WARNING] No packets sent in past $CHECK_PERIOD_SECONDS seconds. Restarting rbfeeder binary"
-        HEALTHY=false
-    else
-        if chk_enabled "$VERBOSE_LOGGING"; then "${s6wrap[@]}" echo "[INFO] $LASTLOG_NUM_PACKETS_SENT packets sent in past 30 seconds. HEALTHY"; fi 
-    fi
-done
+sleep "$WATCHDOG_TIMER" 
+
+HEALTHY=true
+TIMESTAMP_NOW="$(date +%s)"
+LASTLOG_PACKETS_SENT="$(grep "Packets sent in the last 60 seconds" "$RBFEEDER_LOG_FILE" | tail -1 | sed -r "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g")"
+LASTLOG_TIMESTAMP="$(date --date="$(echo "$LASTLOG_PACKETS_SENT" | cut -d '[' -f 2 | cut -d ']' -f 1)" +%s)"
+LASTLOG_NUM_PACKETS_SENT="$(echo "$LASTLOG_PACKETS_SENT" | cut -d ']' -f 2 | cut -d ':' -f 2 | cut -d ',' -f 1 | tr -d ' ')"
+
+# check to make sure we've sent packets recently
+if (( (TIMESTAMP_NOW - LASTLOG_TIMESTAMP) > WATCHDOG_TIMER" )) || (( LASTLOG_NUM_PACKETS_SENT < 1 )); then
+    "${s6wrap[@]}" echo "[WARNING] No packets sent in past $CHECK_PERIOD_SECONDS seconds. Restarting rbfeeder binary"
+    HEALTHY=false
+else
+    if chk_enabled "$VERBOSE_LOGGING"; then "${s6wrap[@]}" echo "[INFO] $LASTLOG_NUM_PACKETS_SENT packets sent in past 30 seconds. HEALTHY"; fi 
+fi
+
+# monitor if there is incoming traffic from $BEASTHOST:
+PACKETS_RECEIVED="$(grep captured <<< "$(timeout --preserve-status 3 tcpdump -p src "${BEASTHOST}" and port "${BEASTPORT}" 2>/dev/stdout 1>/dev/null)" | awk '{print $1}')"
+if (( PACKETS_RECEIVED == 0 )); then
+    "${s6wrap[@]}" echo "[WARNING] No packets received from $BEASTHOST:$BEASTPORT. Restarting rbfeeder binary"
+    HEALTHY=false
+else
+    if chk_enabled "$VERBOSE_LOGGING"; then "${s6wrap[@]}" echo "[INFO] $PACKETS_RECEIVED packets received from $BEASTHOST:$BEASTPORT over the last 3 seconds. HEALTHY"; fi 
+fi
+
+if [[ "$HEALTHY" == false ]]; then
+    s6-svc -r /run/service/rbfeeder/
+fi
+
