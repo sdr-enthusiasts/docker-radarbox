@@ -9,11 +9,11 @@ source /scripts/common
 
 # attempt to run natively
 if /usr/bin/rbfeeder_arm --no-start --version >/dev/null 2>&1; then
-    /usr/bin/rbfeeder_arm "$@" & wait || true
+    exec /usr/bin/rbfeeder_arm "$@"
 
 elif qemu-arm-static /usr/bin/rbfeeder_arm --no-start --version >/dev/null 2>&1; then
-    qemu-arm-static /usr/bin/rbfeeder_arm "$@" & wait || true
-
+    exec qemu-arm-static /usr/bin/rbfeeder_arm "$@"
+    
 else
     echo "[ERROR] Could not run rbfeeder natively or via qemu"
     sleep infinity & wait $!

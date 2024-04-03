@@ -1,5 +1,5 @@
 #!/command/with-contenv bash
-#shellcheck shell=bash disable=SC2016,SC1091
+#shellcheck shell=bash disable=SC2016,SC1091,SC2154
 
 source /scripts/common
 set -e
@@ -16,7 +16,7 @@ LASTLOG_TIMESTAMP="$(date --date="$(echo "$LASTLOG_PACKETS_SENT" | cut -d '[' -f
 LASTLOG_NUM_PACKETS_SENT="$(echo "$LASTLOG_PACKETS_SENT" | cut -d ']' -f 2 | cut -d ':' -f 2 | cut -d ',' -f 1 | tr -d ' ')"
 
 # check to make sure we've sent packets recently
-if (( (TIMESTAMP_NOW - LASTLOG_TIMESTAMP) > WATCHDOG_TIMER" )) || (( LASTLOG_NUM_PACKETS_SENT < 1 )); then
+if (( (TIMESTAMP_NOW - LASTLOG_TIMESTAMP) > WATCHDOG_TIMER )) || (( LASTLOG_NUM_PACKETS_SENT < 1 )); then
     "${s6wrap[@]}" echo "[WARNING] No packets sent in past $CHECK_PERIOD_SECONDS seconds. Restarting rbfeeder binary"
     HEALTHY=false
 else
