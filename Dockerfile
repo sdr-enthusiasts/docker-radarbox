@@ -83,6 +83,7 @@ RUN set -x && \
         KEPT_PACKAGES+=(librtlsdr0); \
     fi && \
     KEPT_PACKAGES+=(netbase) && \
+    KEPT_PACKAGES+=(tcpdump) && \
     # install packages
     apt-get update && \
     apt-get install -y --no-install-recommends \
