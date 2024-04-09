@@ -5,7 +5,7 @@ source /scripts/common
 set -e
 
 WATCHDOG_TIMER="${WATCHDOG_TIMER:-300}"
-if (( WATCHDOG_TIMER < 60 )); then WATCHDOG_TIMER=60; fi
+if (( WATCHDOG_TIMER < 70 )); then WATCHDOG_TIMER=70; fi
 
 sleep "$WATCHDOG_TIMER" 
 
@@ -17,7 +17,7 @@ LASTLOG_NUM_PACKETS_SENT="$(echo "$LASTLOG_PACKETS_SENT" | cut -d ']' -f 2 | cut
 
 # check to make sure we've sent packets recently
 if (( (TIMESTAMP_NOW - LASTLOG_TIMESTAMP) > WATCHDOG_TIMER )) || (( LASTLOG_NUM_PACKETS_SENT <= 1 )); then
-    "${s6wrap[@]}" echo "[WARNING] No packets sent in past $CHECK_PERIOD_SECONDS seconds. Restarting rbfeeder binary"
+    "${s6wrap[@]}" echo "[WARNING] No packets sent in past $WATCHDOG_TIMER seconds. Restarting rbfeeder binary"
     HEALTHY=false
 else
     if chk_enabled "$VERBOSE_LOGGING"; then "${s6wrap[@]}" echo "[INFO] $LASTLOG_NUM_PACKETS_SENT packets sent in past 30 seconds. HEALTHY"; fi 
