@@ -56,7 +56,7 @@ echo 24000 > /opt/adsb/data/radarbox_segfault_fix/thermal_zone0/temp
 
 You can now map this file into your container.
 
-If using `docker run`, simply add `-v /opt/adsb/data/fake_cpuinfo:/proc/cpuinfo` to your command.
+If using `docker run`, simply add `-v /opt/adsb/data/radarbox_segfault_fix:/sys/class/thermal:ro` to your command.
 
 If using `docker-compose`:
 
