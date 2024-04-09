@@ -49,5 +49,7 @@ fi
 # Now restart rbfeeder if HEALTHY=false:
 if [[ "$HEALTHY" == false ]]; then
     pkill -f rbfeeder_arm
+else
+    "${s6wrap[@]}" echo "[INFO] Watchdog ran and all watched items are OK"
 fi
 
