@@ -9,13 +9,17 @@ s6wrap=(s6wrap --quiet --timestamps --prepend="$(basename "$0")" --args)
 #  - Changes to docker-compose.yml: https://github.com/mikenye/docker-radarbox/issues/10#issuecomment-634027861
 ulimit -c 0
 
+trap 'pkill -P $$' SIGTERM SIGINT SIGHUP SIGQUIT
+
 # can be run natively
 if chk_enabled "$VERBOSE_LOGGING"; then
-    "${s6wrap[@]}" /usr/bin/rbfeeder 
+    "${s6wrap[@]}" /usr/bin/rbfeeder &
 
 elif chk_enabled "$QUIET_LOGS"; then
-    "${s6wrap[@]}" /usr/bin/rbfeeder 2>/dev/stdout 1>/dev/null
+    "${s6wrap[@]}" /usr/bin/rbfeeder 2>/dev/stdout 1>/dev/null &
 else
     "${s6wrap[@]}" /usr/bin/rbfeeder | \
-        stdbuf -oL grep -v "Statistics updated every 60 seconds|\Packets sent in the last 60 seconds:|\Data sent:|\Data received:"
+        stdbuf -oL grep -v -e "Statistics updated every 60 seconds" -e "Packets sent in the last 60 seconds:" -e "Data sent:" -e "Data received:" &
 fi
+
+wait || wait || true
