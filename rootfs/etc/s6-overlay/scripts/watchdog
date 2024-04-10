@@ -1,0 +1,55 @@
+#!/command/with-contenv bash
+#shellcheck shell=bash disable=SC2016,SC1091,SC2154
+
+source /scripts/common
+set -e
+
+WATCHDOG_TIMER="${WATCHDOG_TIMER:-300}"
+if (( WATCHDOG_TIMER < 70 )); then WATCHDOG_TIMER=70; fi
+
+sleep "$WATCHDOG_TIMER" 
+
+HEALTHY=true
+TIMESTAMP_NOW="$(date +%s)"
+LASTLOG_PACKETS_SENT="$(grep "Packets sent in the last 60 seconds" "$RBFEEDER_LOG_FILE" | tail -1 | sed -r "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g")"
+LASTLOG_TIMESTAMP="$(date --date="$(echo "$LASTLOG_PACKETS_SENT" | cut -d '[' -f 2 | cut -d ']' -f 1)" +%s)"
+LASTLOG_NUM_PACKETS_SENT="$(echo "$LASTLOG_PACKETS_SENT" | cut -d ']' -f 2 | cut -d ':' -f 2 | cut -d ',' -f 1 | tr -d ' ')"
+
+# check to make sure we've sent packets recently
+if (( (TIMESTAMP_NOW - LASTLOG_TIMESTAMP) > WATCHDOG_TIMER )) || (( LASTLOG_NUM_PACKETS_SENT <= 1 )); then
+    "${s6wrap[@]}" echo "[WARNING] No packets sent in past $WATCHDOG_TIMER seconds. Restarting rbfeeder binary"
+    HEALTHY=false
+else
+    if chk_enabled "$VERBOSE_LOGGING"; then "${s6wrap[@]}" echo "[INFO] $LASTLOG_NUM_PACKETS_SENT packets sent in past 30 seconds. HEALTHY"; fi 
+fi
+
+# monitor if there is incoming traffic from $BEASTHOST:
+PACKETS_RECEIVED="$(grep captured <<< "$(timeout --preserve-status 3 tcpdump -p src "${BEASTHOST}" and port "${BEASTPORT}" 2>/dev/stdout 1>/dev/null)" | awk '{print $1}')"
+if (( PACKETS_RECEIVED == 0 )); then
+    "${s6wrap[@]}" echo "[WARNING] No packets received from $BEASTHOST:$BEASTPORT. Restarting rbfeeder binary"
+    HEALTHY=false
+else
+    if chk_enabled "$VERBOSE_LOGGING"; then "${s6wrap[@]}" echo "[INFO] $PACKETS_RECEIVED packets received from $BEASTHOST:$BEASTPORT over the last 3 seconds. HEALTHY"; fi 
+fi
+
+# check that BEASTHOST's IP hasn't changed
+CUR_BEASTIP="$(sed -n 's/external_host=\(.*\)/\1/p' /etc/rbfeeder.ini)"
+NEW_BEASTIP="$(s6-dnsip4 "$BEASTHOST" 2>/dev/null | head -1)" || true
+if [[ -z "$NEW_BEASTIP" ]]; then 
+    # if s6-dnsip4 didn't return an IP address, it was probably because it BEASTHOST was already an IP address
+    # or because the hostname couldn't be resolved. In either case - we don't bother watchdogging it
+    NEW_BEASTIP="$CUR_BEASTIP"
+fi
+if [[ "$CUR_BEASTIP" != "$NEW_BEASTIP" ]]; then
+    "${s6wrap[@]}" echo "[WARNING] $BEASTHOST changed IP address from $CUR_BEASTIP to $NEW_BEASTIP. Restarting rbfeeder binary"
+    sed -i 's/\(external_host=\).*/\1'"$NEW_BEASTIP"'/p' /etc/rbfeeder.ini
+    HEALTHY=false
+fi
+
+# Now restart rbfeeder if HEALTHY=false:
+if [[ "$HEALTHY" == false ]]; then
+    s6-svc -r /run/service/rbfeeder
+else
+    "${s6wrap[@]}" echo "[INFO] Watchdog ran and all watched items are OK"
+fi
+
