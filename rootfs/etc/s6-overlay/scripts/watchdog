@@ -42,7 +42,7 @@ if [[ -z "$NEW_BEASTIP" ]]; then
 fi
 if [[ "$CUR_BEASTIP" != "$NEW_BEASTIP" ]]; then
     "${s6wrap[@]}" echo "[WARNING] $BEASTHOST changed IP address from $CUR_BEASTIP to $NEW_BEASTIP. Restarting rbfeeder binary"
-    sed -i 's/\(external_host=\).*/\1'"$NEW_BEASTIP"'/p' /etc/rbfeeder.ini
+    sed -i 's/\(external_host=\).*/\1'"$NEW_BEASTIP"'/g' /etc/rbfeeder.ini
     HEALTHY=false
 fi
 
