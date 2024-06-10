@@ -200,6 +200,26 @@ This is likely, but not always, not caused by anything you are doing, but is ins
 
 To stop the feeder from spamming your logs you can set `ENABLE_MLAT=false` in your environment configuration for Radarbox and it will stop the MLAT service, and the log messages. Please note that if you do this, and you use [MLAT Hub](https://github.com/sdr-enthusiasts/docker-readsb-protobuf#advanced-usage-creating-an-mlat-hub) please remove Radarbox from your `READSB_NET_CONNECTOR` under `MLAT Hub`.
 
+## Using the container on a Raspberry Pi 5
+
+The container internally uses a binary called `rbfeeder` to send data to the RadarBox service. This binary is provided as closed-source by AirNav (the company that operates RadarBox) and is only available in armhf (32-bit) format using 4kb kernel pages. This will work well on Raspberry Pi 3B+, 4B, and other ARM-based systems that use either 32-bits or 64-bits Debian Linux with a 4kb kernel page size. It also works well on x86 Linux where we use the `qemu` ARM emulator to run the binary.
+
+Debian Linux for Raspberry Pi 5 uses by default a kernel with 16kb page sizes, and this is not compatible with the `rbfeeder` binary. You will see failures in your container logs.
+
+You can check your kernel page size with this command: getconf PAGE_SIZE . If the value returned is 4096, then all is good. If it is something else (for example 16384 for 16kb page size), you will need to implement the following work-around:
+
+Add the following to /boot/firmware/config.txt (Debian 12 Bookworm or later) or /boot/config.txt (Debian 11 Bullseye or earlier) to use a kernel with page size of 4kb. This will make CPU use across your Raspberry Pi 5 slightly less efficient, but it will solve the issue for [many software packages that have the same issue](https://github.com/raspberrypi/bookworm-feedback/issues/107). After changing this, you must reboot your system for it to take effect:
+
+```text
+kernel=kernel8.img
+```
+
+(a one-time command to add this would be:)
+
+```bash
+echo "kernel=kernel8.img" | sudo tee -a /boot/firmware/config.txt >/dev/null
+```
+
 ## Logging
 
 - All processes are logged to the container's stdout, and can be viewed with `docker logs [-f] container`.
