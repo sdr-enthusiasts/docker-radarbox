@@ -49,10 +49,12 @@ ENV BEASTHOST=readsb \
 
 ARG TARGETPLATFORM TARGETOS TARGETARCH
 
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+SHELL ["/bin/bash", "-x", "-o", "pipefail", "-c"]
 
 # hadolint ignore=DL3008,SC2086,SC2039,SC2068
-RUN --mount=type=bind,from=downloader,source=/,target=/downloader set -x && \
+RUN \
+    --mount=type=bind,from=downloader,source=/,target=/downloader \
+    --mount=type=bind,source=./,target=/app/ \
     # define required packages
     TEMP_PACKAGES=() && \
     KEPT_PACKAGES=() && \
@@ -95,6 +97,7 @@ RUN --mount=type=bind,from=downloader,source=/,target=/downloader set -x && \
     cp -f /downloader/usr/bin/rbfeeder /usr/bin/rbfeeder_arm && \
     cp -f /downloader/usr/bin/dump1090-rb /usr/bin/dump1090-rb && \
     cp -f /downloader/usr/share/doc/rbfeeder/* /usr/share/doc/rbfeeder/ && \
+    cp -f /app/rootfs/usr/bin/rbfeeder_wrapper.sh /usr/bin/rbfeeder_wrapper.sh && \
     # install mlat-client
     tar zxf /downloader/mlatclient.tgz -C / && \
     # symlink for rbfeeder wrapper
