@@ -33,7 +33,7 @@ RUN set -x && \
     apt-get install -q -o Dpkg::Options::="--force-confnew" -y --no-install-recommends  --no-install-suggests \
             "${RB24_PACKAGES[@]}"
 
-FROM ghcr.io/sdr-enthusiasts/docker-baseimage:qemu
+FROM ghcr.io/sdr-enthusiasts/docker-baseimage:base
 
 # This is the final image
 
@@ -49,10 +49,12 @@ ENV BEASTHOST=readsb \
 
 ARG TARGETPLATFORM TARGETOS TARGETARCH
 
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+SHELL ["/bin/bash", "-x", "-o", "pipefail", "-c"]
 
 # hadolint ignore=DL3008,SC2086,SC2039,SC2068
-RUN set -x && \
+RUN \
+    --mount=type=bind,from=downloader,source=/,target=/downloader \
+    --mount=type=bind,source=./,target=/app/ \
     # define required packages
     TEMP_PACKAGES=() && \
     KEPT_PACKAGES=() && \
@@ -64,7 +66,7 @@ RUN set -x && \
     # KEPT_PACKAGES+=(python3-minimal) && \
     # KEPT_PACKAGES+=(python3-distutils) && \
     # TEMP_PACKAGES+=(libpython3-dev) && \
-    KEPT_PACKAGES+=(python3-setuptools) && \
+    KEPT_PACKAGES+=(python3-pkg-resources) && \
     # required to run rbfeeder
     if [ "${TARGETARCH:0:3}" != "arm" ]; then \
         dpkg --add-architecture armhf; \
@@ -73,7 +75,8 @@ RUN set -x && \
         KEPT_PACKAGES+=(libglib2.0-0:armhf) && \
         KEPT_PACKAGES+=(libjansson4:armhf) && \
         KEPT_PACKAGES+=(libprotobuf-c1:armhf) && \
-        KEPT_PACKAGES+=(librtlsdr0:armhf); \
+        KEPT_PACKAGES+=(librtlsdr0:armhf) && \
+        KEPT_PACKAGES+=(qemu-user-static); \
     else \
         KEPT_PACKAGES+=(libc6) && \
         KEPT_PACKAGES+=(libcurl4) && \
@@ -90,23 +93,14 @@ RUN set -x && \
     "${KEPT_PACKAGES[@]}" \
     "${TEMP_PACKAGES[@]}" \
     && \
-    # clean up
-    apt-get remove -y "${TEMP_PACKAGES[@]}" && \
-    apt-get autoremove -y && \
-    rm -rf /src/* /tmp/* /var/lib/apt/lists/*
-
-# Add everything else to the container
-COPY --from=downloader /usr/bin/rbfeeder /usr/bin/rbfeeder_arm
-COPY --from=downloader /usr/bin/dump1090-rb /usr/bin/dump1090-rb
-COPY --from=downloader /usr/share/doc/rbfeeder/ /usr/share/doc/rbfeeder/
-COPY --from=downloader /mlatclient.tgz /src/mlatclient.tgz
-COPY rootfs/ /
-
-# Last few things that need to get done after COPYing the software:
-RUN set -x && \
+    # download files from the downloader image that is now mounted at /downloader
+    mkdir -p /usr/share/doc/rbfeeder && \
+    cp -f /downloader/usr/bin/rbfeeder /usr/bin/rbfeeder_arm && \
+    cp -f /downloader/usr/bin/dump1090-rb /usr/bin/dump1090-rb && \
+    cp -f /downloader/usr/share/doc/rbfeeder/* /usr/share/doc/rbfeeder/ && \
+    cp -f /app/rootfs/usr/bin/rbfeeder_wrapper.sh /usr/bin/rbfeeder_wrapper.sh && \
     # install mlat-client
-    tar zxf /src/mlatclient.tgz -C / && \
-    rm -f /src/mlatclient.tgz && \
+    tar zxf /downloader/mlatclient.tgz -C / && \
     # symlink for rbfeeder wrapper
     ln -s /usr/bin/rbfeeder_wrapper.sh /usr/bin/rbfeeder && \
     # test mlat-client
@@ -114,7 +108,14 @@ RUN set -x && \
     # test rbfeeder & get version
     /usr/bin/rbfeeder --version && \
     RBFEEDER_VERSION=$(/usr/bin/rbfeeder --no-start --version | cut -d " " -f 2,4 | tr -d ")" | tr " " "-") && \
-    echo "$RBFEEDER_VERSION" > /CONTAINER_VERSION
+    echo "$RBFEEDER_VERSION" > /CONTAINER_VERSION && \
+    # clean up
+    apt-get remove -y "${TEMP_PACKAGES[@]}" && \
+    apt-get autoremove -y && \
+    rm -rf /src/* /tmp/* /var/lib/apt/lists/*
+
+# Add everything else to the container
+COPY rootfs/ /
 
 # Expose ports
 EXPOSE 32088/tcp 30105/tcp
