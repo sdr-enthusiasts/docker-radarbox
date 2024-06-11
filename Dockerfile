@@ -75,8 +75,8 @@ RUN \
         KEPT_PACKAGES+=(libglib2.0-0:armhf) && \
         KEPT_PACKAGES+=(libjansson4:armhf) && \
         KEPT_PACKAGES+=(libprotobuf-c1:armhf) && \
-        KEPT_PACKAGES+=(librtlsdr0:armhf); \
-        KEPT_PACKAGES+=(qemu-user-static) && \
+        KEPT_PACKAGES+=(librtlsdr0:armhf) && \
+        KEPT_PACKAGES+=(qemu-user-static); \
     else \
         KEPT_PACKAGES+=(libc6) && \
         KEPT_PACKAGES+=(libcurl4) && \
