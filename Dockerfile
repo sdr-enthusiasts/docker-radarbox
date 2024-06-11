@@ -33,7 +33,7 @@ RUN set -x && \
     apt-get install -q -o Dpkg::Options::="--force-confnew" -y --no-install-recommends  --no-install-suggests \
             "${RB24_PACKAGES[@]}"
 
-FROM ghcr.io/sdr-enthusiasts/docker-baseimage:qemu
+FROM ghcr.io/sdr-enthusiasts/docker-baseimage:base
 
 # This is the final image
 
@@ -76,6 +76,7 @@ RUN \
         KEPT_PACKAGES+=(libjansson4:armhf) && \
         KEPT_PACKAGES+=(libprotobuf-c1:armhf) && \
         KEPT_PACKAGES+=(librtlsdr0:armhf); \
+        KEPT_PACKAGES+=(qemu-user-static) && \
     else \
         KEPT_PACKAGES+=(libc6) && \
         KEPT_PACKAGES+=(libcurl4) && \
