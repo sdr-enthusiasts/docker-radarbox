@@ -52,7 +52,7 @@ ARG TARGETPLATFORM TARGETOS TARGETARCH
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # hadolint ignore=DL3008,SC2086,SC2039,SC2068
-RUN set -x && \
+RUN --mount=type=bind,from=downloader,source=/,target=/downloads set -x && \
     # define required packages
     TEMP_PACKAGES=() && \
     KEPT_PACKAGES=() && \
@@ -90,23 +90,12 @@ RUN set -x && \
     "${KEPT_PACKAGES[@]}" \
     "${TEMP_PACKAGES[@]}" \
     && \
-    # clean up
-    apt-get remove -y "${TEMP_PACKAGES[@]}" && \
-    apt-get autoremove -y && \
-    rm -rf /src/* /tmp/* /var/lib/apt/lists/*
-
-# Add everything else to the container
-COPY --from=downloader /usr/bin/rbfeeder /usr/bin/rbfeeder_arm
-COPY --from=downloader /usr/bin/dump1090-rb /usr/bin/dump1090-rb
-COPY --from=downloader /usr/share/doc/rbfeeder/ /usr/share/doc/rbfeeder/
-COPY --from=downloader /mlatclient.tgz /src/mlatclient.tgz
-COPY rootfs/ /
-
-# Last few things that need to get done after COPYing the software:
-RUN set -x && \
+    # download files from the downloader image that is now mounted at /downloader
+    cp -f /downloader/usr/bin/rbfeeder /usr/bin/rbfeeder_arm && \
+    cp -f /downloader/usr/bin/dump1090-rb /usr/bin/dump1090-rb && \
+    cp -f /downloader/usr/share/doc/rbfeeder/* /usr/share/doc/rbfeeder/ && \
     # install mlat-client
-    tar zxf /src/mlatclient.tgz -C / && \
-    rm -f /src/mlatclient.tgz && \
+    tar zxf /downloader/mlatclient.tgz -C / && \
     # symlink for rbfeeder wrapper
     ln -s /usr/bin/rbfeeder_wrapper.sh /usr/bin/rbfeeder && \
     # test mlat-client
@@ -114,7 +103,14 @@ RUN set -x && \
     # test rbfeeder & get version
     /usr/bin/rbfeeder --version && \
     RBFEEDER_VERSION=$(/usr/bin/rbfeeder --no-start --version | cut -d " " -f 2,4 | tr -d ")" | tr " " "-") && \
-    echo "$RBFEEDER_VERSION" > /CONTAINER_VERSION
+    echo "$RBFEEDER_VERSION" > /CONTAINER_VERSION && \
+    # clean up
+    apt-get remove -y "${TEMP_PACKAGES[@]}" && \
+    apt-get autoremove -y && \
+    rm -rf /src/* /tmp/* /var/lib/apt/lists/*
+
+# Add everything else to the container
+COPY rootfs/ /
 
 # Expose ports
 EXPOSE 32088/tcp 30105/tcp
