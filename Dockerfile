@@ -66,7 +66,7 @@ RUN \
     # KEPT_PACKAGES+=(python3-minimal) && \
     # KEPT_PACKAGES+=(python3-distutils) && \
     # TEMP_PACKAGES+=(libpython3-dev) && \
-    KEPT_PACKAGES+=(python3-setuptools) && \
+    KEPT_PACKAGES+=(python3-pkg-resources) && \
     # required to run rbfeeder
     if [ "${TARGETARCH:0:3}" != "arm" ]; then \
         dpkg --add-architecture armhf; \
