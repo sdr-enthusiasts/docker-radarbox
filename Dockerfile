@@ -91,9 +91,9 @@ RUN --mount=type=bind,from=downloader,source=/,target=/downloads set -x && \
     "${TEMP_PACKAGES[@]}" \
     && \
     # download files from the downloader image that is now mounted at /downloader
-    cp -f /downloader/usr/bin/rbfeeder /usr/bin/rbfeeder_arm && \
-    cp -f /downloader/usr/bin/dump1090-rb /usr/bin/dump1090-rb && \
-    cp -f /downloader/usr/share/doc/rbfeeder/* /usr/share/doc/rbfeeder/ && \
+    cp -f /downloads/usr/bin/rbfeeder /usr/bin/rbfeeder_arm && \
+    cp -f /downloads/usr/bin/dump1090-rb /usr/bin/dump1090-rb && \
+    cp -f /downloads/usr/share/doc/rbfeeder/* /usr/share/doc/rbfeeder/ && \
     # install mlat-client
     tar zxf /downloader/mlatclient.tgz -C / && \
     # symlink for rbfeeder wrapper
