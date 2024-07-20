@@ -178,6 +178,8 @@ There are a series of available environment variables:
 | `VERBOSE_LOGGING`        | Optional. Set to `true` for no filtering of `rbfeeder` logs.                               | `false`  |
 | `DEBUG_LEVEL`            | Optional. Set to any number between `0` and `8` to increase verbosity of `rbfeeder` logs.  | `0`      |
 | `ENABLE_MLAT`            | Option. Set to `true` to enable MLAT inside of the container. See [MLAT note](#mlat) below | `true`   |
+| `MLAT_RESULTS_BEASTHOST` | a hostname or IP, specify an external host where MLAT results should be sent.              |          |
+| `MLAT_RESULTS_BEASTPORT` | a port number, specify the TCP port number where MLAT results should be sent.              | `30104`  |
 | `RB_SERVER`              | Optional. If set to `true`, the container will attempt to connect to one of two Radarbox Servers that are known to work as of 22-Nov-2023. You can also explicitly set it to a hostname or IP address. If unset, the default settings of RadarBox will be used. | Unset |
 
 ## Ports
