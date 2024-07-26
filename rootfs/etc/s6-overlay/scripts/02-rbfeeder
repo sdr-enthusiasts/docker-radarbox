@@ -78,15 +78,14 @@ else
   echo "external_host=$BEASTHOST" >> /etc/rbfeeder.ini
 fi
 
-MLAT_RESULTS_EXTRA=""
-if [[ -n "$MLAT_RESULTS_BEASTHOST" ]]; then
-    MLAT_RESULTS_EXTRA="--results beast,connect,${MLAT_RESULTS_BEASTHOST}:${MLAT_RESULTS_BEASTPORT:-30104}"
-fi
-
 {
   echo "[mlat]"
   if chk_enabled "$ENABLE_MLAT"; then
-    echo "mlat_cmd=/usr/bin/python3 /usr/local/bin/mlat-client --results beast,listen,30105 $MLAT_RESULTS_EXTRA"
+    if [[ -n "$MLAT_RESULTS_BEASTHOST" ]]; then
+      echo "mlat_cmd=/usr/bin/python3 /usr/local/bin/mlat-client --results beast,connect,${MLAT_RESULTS_BEASTHOST}:${MLAT_RESULTS_BEASTPORT:-30104}"
+    else
+      echo "mlat_cmd=/usr/bin/python3 /usr/local/bin/mlat-client --results beast,listen,30105 $MLAT_RESULTS_EXTRA"
+    fi
     echo "autostart_mlat=true"
   else
     echo "autostart_mlat=false"

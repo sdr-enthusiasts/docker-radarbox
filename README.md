@@ -187,7 +187,7 @@ There are a series of available environment variables:
 The following TCP ports are used by this container:
 
 - `32088` - `rbfeeder` listens on this port, however I can't find the use for this port...
-- `30105` - `mlat-client` listens on this port to provide MLAT results.
+- `30105` - `mlat-client` listens on this port to provide MLAT results. (mlat results listen port disabled when `MLAT_RESULTS_BEASTHOST` is set to work around rbfeeder bug)
 
 ## MLAT
 
