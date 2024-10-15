@@ -51,7 +51,7 @@ ARG TARGETPLATFORM TARGETOS TARGETARCH
 
 SHELL ["/bin/bash", "-x", "-o", "pipefail", "-c"]
 
-# hadolint ignore=DL3008,SC2086,SC2039,SC2068
+# hadolint ignore=DL3008,SC2086,SC2039,SC2068,SC2010
 RUN \
     --mount=type=bind,from=downloader,source=/,target=/downloader \
     --mount=type=bind,source=./,target=/app/ \
@@ -109,7 +109,7 @@ RUN \
     RBFEEDER_VERSION=$(/usr/bin/rbfeeder --no-start --version | cut -d " " -f 2,4 | tr -d ")" | tr " " "-") && \
     echo "$RBFEEDER_VERSION" > /CONTAINER_VERSION && \
     # delete unnecessary qemu binaries to save lots of space
-    rm -f $(ls /usr/bin/qemu-*-static | grep -v qemu-arm-static) && \
+    find /usr/bin -regex '/usr/bin/qemu-.*-static'  | grep -v qemu-arm-static | xargs rm -vf {} && \
     # clean up
     apt-get remove -y "${TEMP_PACKAGES[@]}" && \
     apt-get autoremove -y && \
