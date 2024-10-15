@@ -86,7 +86,6 @@ RUN \
         KEPT_PACKAGES+=(librtlsdr0); \
     fi && \
     KEPT_PACKAGES+=(netbase) && \
-    KEPT_PACKAGES+=(tcpdump) && \
     # install packages
     apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -109,6 +108,8 @@ RUN \
     /usr/bin/rbfeeder --version && \
     RBFEEDER_VERSION=$(/usr/bin/rbfeeder --no-start --version | cut -d " " -f 2,4 | tr -d ")" | tr " " "-") && \
     echo "$RBFEEDER_VERSION" > /CONTAINER_VERSION && \
+    # delete unnecessary qemu binaries to save lots of space
+    rm -f $(ls /usr/bin/qemu-*-static | grep -v qemu-arm-static) && \
     # clean up
     apt-get remove -y "${TEMP_PACKAGES[@]}" && \
     apt-get autoremove -y && \
