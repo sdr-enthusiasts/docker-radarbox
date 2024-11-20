@@ -6,7 +6,7 @@ s6wrap=(s6wrap --quiet --timestamps --prepend="$(basename "$0")" --args)
 
 if chk_enabled "$QUIET_LOGS"; then
     # stats won't work if QUIET_LOGS is enabled
-    exec sleep infinity & wait $!
+    stop_service
 fi
 
 sleep $((STATS_INTERVAL_MINUTES * 60))
