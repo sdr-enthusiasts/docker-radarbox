@@ -7,7 +7,10 @@ set -e
 WATCHDOG_TIMER="${WATCHDOG_TIMER:-300}"
 if (( WATCHDOG_TIMER < 70 )); then WATCHDOG_TIMER=70; fi
 
-sleep "$WATCHDOG_TIMER" 
+if [[ $(s6-svdt /run/service/watchdog | wc -l) == 0 ]]; then
+    # don't do anything on first run
+    exec sleep "$WATCHDOG_TIMER"
+fi
 
 HEALTHY=true
 TIMESTAMP_NOW="$(date +%s)"
@@ -49,7 +52,8 @@ fi
 # Now restart rbfeeder if HEALTHY=false:
 if [[ "$HEALTHY" == false ]]; then
     s6-svc -r /run/service/rbfeeder
-else
+elif chk_enabled "$VERBOSE_LOGGING"; then
     "${s6wrap[@]}" echo "[INFO] Watchdog ran and all watched items are OK"
 fi
 
+exec sleep "$WATCHDOG_TIMER"
