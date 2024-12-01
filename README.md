@@ -102,7 +102,6 @@ version: '2.0'
 services:
   rbfeeder:
     image: ghcr.io/sdr-enthusiasts/docker-radarbox:latest
-    tty: true
     container_name: rbfeeder
     restart: always
     environment:
