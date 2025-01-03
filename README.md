@@ -96,17 +96,15 @@ Please note, the altitude figure is given in metres and no units should be speci
 
 ## Up-and-Running with Docker Compose
 
-```shell
-version: '2.0'
-
+```yaml
 services:
-  rbfeeder:
+  airnavradar:
     image: ghcr.io/sdr-enthusiasts/docker-airnavradar:latest
-    container_name: rbfeeder
+    container_name: airnavradar
     restart: always
     environment:
       - TZ=Australia/Perth
-      - BEASTHOST=readsb
+      - BEASTHOST=ultrafeeder
       - LAT=-33.33333
       - LONG=111.11111
       - ALT=90
