@@ -106,7 +106,7 @@ if ! grep -qi "Serial\s*:" /proc/cpuinfo; then
   "${s6wrap[@]}" echo ""
   "${s6wrap[@]}" echo "[ERROR] Your machine doesn't have a serial number in /proc/cpuinfo"
   "${s6wrap[@]}" echo "        You must resolve this for the container to run. Instruction to fix it can be found here:"
-  "${s6wrap[@]}" echo "        https://github.com/sdr-enthusiasts/docker-radarbox/blob/main/version_0.4.3_workarounds.md#workaround-for-cpu-serial"
+  "${s6wrap[@]}" echo "        https://github.com/sdr-enthusiasts/docker-airnavradar/blob/main/version_0.4.3_workarounds.md#workaround-for-cpu-serial"
   sleep infinity & wait $!
 fi
 
