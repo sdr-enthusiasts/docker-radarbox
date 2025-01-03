@@ -1,13 +1,13 @@
-# sdr-enthusiasts/docker-radarbox
+# sdr-enthusiasts/docker-airnavradar
 
 [![Docker Image Size (tag)](https://img.shields.io/docker/image-size/mikenye/radarbox/latest)](https://hub.docker.com/r/mikenye/radarbox)
 [![Discord](https://img.shields.io/discord/734090820684349521)](https://discord.gg/sTf9uYF)
 
-Docker container running [AirNav RadarBox](https://www.radarbox.com)'s `rbfeeder`. Designed to work in tandem with [sdr-enthusiasts/readsb-protobuf](https://github.com/sdr-enthusiasts/docker-readsb-protobuf). Builds and runs on `x86_64`, `arm64` and `arm32v7`.
+Docker container running [AirNav Radar](https://www.airnavradar.com)'s `rbfeeder`. Designed to work in tandem with [sdr-enthusiasts/adsb-ultrafeeder](https://github.com/sdr-enthusiasts/docker-adsb-ultrafeeder). Builds and runs on `x86_64`, `arm64` and `arm32v7`.
 
-`rbfeeder` pulls ModeS/BEAST information from a host or container providing ModeS/BEAST data, and sends data to RadarBox.
+`rbfeeder` pulls ModeS/BEAST information from a host or container providing ModeS/BEAST data, and sends data to Airnav Radar.
 
-For more information on what `rbfeeder` is, see here: [sharing-data](https://www.radarbox.com/sharing-data).
+For more information on what `rbfeeder` is, see here: [sharing-data](https://www.airnavradar.com/sharing-data).
 
 ## Supported tags and respective Dockerfiles
 
@@ -23,11 +23,11 @@ Currently, this image should pull and run on the following architectures:
 - `arm32v7`, `armv7l`: ARMv7 32-bit (Odroid HC1/HC2/XU4, RPi 2B/3B)
 - `arm64`, `aarch64`: ARMv8 64-bit (RPi 4 64-bit OSes)
 
-## Obtaining a RadarBox Sharing Key
+## Obtaining a Airnav Radar Sharing Key
 
-First-time users should obtain a RadarBox sharing key.
+First-time users should obtain a Airnav Radar sharing key.
 
-In order to obtain a RadarBox sharing key, on the first run of the container, `rbfeeder` will generate a sharing key and print this to the container log.
+In order to obtain a Airnav Radar sharing key, on the first run of the container, `rbfeeder` will generate a sharing key and print this to the container log.
 
 ```shell
 timeout 300s docker run \
@@ -37,7 +37,7 @@ timeout 300s docker run \
     -e LAT=YOURLATITUDE \
     -e LONG=YOURLONGITUDE \
     -e ALT=YOURALTITUDE \
-    ghcr.io/sdr-enthusiasts/docker-radarbox:latest
+    ghcr.io/sdr-enthusiasts/docker-airnavradar:latest
 ```
 
 This will run the container for five minutes, allowing a sharing key to be generated.
@@ -48,7 +48,7 @@ Shortly after the container launches, you should be presented with:
 
 ```text
 [2020-04-02 11:36:31]  Empty sharing key. We will try to create a new one for you!
-[2020-04-02 11:36:32]  Your new key is g45643ab345af3c5d5g923a99ffc0de9. Please save this key for future use. You will have to know this key to link this receiver to your account in RadarBox24.com. This key is also saved in configuration file (/etc/rbfeeder.ini)
+[2020-04-02 11:36:32]  Your new key is g45643ab345af3c5d5g923a99ffc0de9. Please save this key for future use. You will have to know this key to link this receiver to your account in airnavradar.com. This key is also saved in configuration file (/etc/rbfeeder.ini)
 ```
 
 Take a note of the sharing key, as you'll need it when launching the container.
@@ -71,7 +71,7 @@ docker run \
  -e LONG=YOURLONGITUDE \
  -e ALT=YOURALTITUDE \
  -e SHARING_KEY=YOURSHARINGKEY \
- ghcr.io/sdr-enthusiasts/docker-radarbox:latest
+ ghcr.io/sdr-enthusiasts/docker-airnavradar:latest
 ```
 
 You should obviously replace `YOURBEASTHOST`, `YOURLATITUDE`, `YOURLONGITUDE`, `YOURALTITUDE` and `YOURSHARINGKEY` with appropriate values.
@@ -89,7 +89,7 @@ docker run \
  -e LONG=111.11111 \
  -e ALT=90 \
  -e SHARING_KEY=g45643ab345af3c5d5g923a99ffc0de9 \
- ghcr.io/sdr-enthusiasts/docker-radarbox:latest
+ ghcr.io/sdr-enthusiasts/docker-airnavradar:latest
 ```
 
 Please note, the altitude figure is given in metres and no units should be specified.
@@ -101,7 +101,7 @@ version: '2.0'
 
 services:
   rbfeeder:
-    image: ghcr.io/sdr-enthusiasts/docker-radarbox:latest
+    image: ghcr.io/sdr-enthusiasts/docker-airnavradar:latest
     container_name: rbfeeder
     restart: always
     environment:
@@ -117,9 +117,9 @@ services:
 
 Once your container is up and running, you should claim your receiver.
 
-1. Go to <https://www.radarbox.com/>
+1. Go to <https://www.airnavradar.com/>
 1. Create an account or sign in
-1. Claim your receiver by visiting <https://www.radarbox.com/raspberry-pi/claim> and following the instructions
+1. Claim your receiver by visiting <https://www.airnavradar.com/raspberry-pi/claim> and following the instructions
 
 ## Connection Errors
 
@@ -168,7 +168,7 @@ There are a series of available environment variables:
 | `BEASTPORT`              | Optional. TCP port number of Mode-S/BEAST provider (dump1090/readsb)                       | `30005`  |
 | `UAT_RECEIVER_HOST`      | Optional. IP/Hostname of an external UAT decoded JSON provider (eg: dump978-fa).           |          |
 | `UAT_RECEIVER_PORT`      | Optional. TCP port number of the external UAT decoded JSON provider.                       | `30979`  |
-| `SHARING_KEY`            | Required. Radarbox Sharing Key                                                             |          |
+| `SHARING_KEY`            | Required. Airnav Radar Sharing Key                                                             |          |
 | `LAT`                    | Required. Latitude of the antenna                                                          |          |
 | `LONG`                   | Required. Longitude of the antenna                                                         |          |
 | `ALT`                    | Required. Altitude in _metres_                                                             |          |
@@ -179,7 +179,7 @@ There are a series of available environment variables:
 | `ENABLE_MLAT`            | Option. Set to `true` to enable MLAT inside of the container. See [MLAT note](#mlat) below | `true`   |
 | `MLAT_RESULTS_BEASTHOST` | a hostname or IP, where MLAT results should be sent. (disables 30105 results listen port)  |          |
 | `MLAT_RESULTS_BEASTPORT` | a port number, specify the TCP port number where MLAT results should be sent.              | `30104`  |
-| `RB_SERVER`              | Optional. If set to `true`, the container will attempt to connect to one of two Radarbox Servers that are known to work as of 22-Nov-2023. You can also explicitly set it to a hostname or IP address. If unset, the default settings of RadarBox will be used. | Unset |
+| `RB_SERVER`              | Optional. If set to `true`, the container will attempt to connect to one of two Airnav Radar Servers that are known to work as of 22-Nov-2023. You can also explicitly set it to a hostname or IP address. If unset, the default settings of Airnav Radar will be used. | Unset |
 
 ## Ports
 
@@ -197,13 +197,13 @@ You may find that MLAT in your container will often times spit out errors in you
 [rbfeeder] Connected to multilateration server at mlat1.rb24.com:40900, handshaking
 ```
 
-This is likely, but not always, not caused by anything you are doing, but is instead caused by the Radarbox server itself and as such there isn't anything you can do to fix it. You will see in your Radarbox stats very little, if any, MLAT targets from your feeder while it is doing this.
+This is likely, but not always, not caused by anything you are doing, but is instead caused by the Airnav Radar server itself and as such there isn't anything you can do to fix it. You will see in your Airnav Radar stats very little, if any, MLAT targets from your feeder while it is doing this.
 
-To stop the feeder from spamming your logs you can set `ENABLE_MLAT=false` in your environment configuration for Radarbox and it will stop the MLAT service, and the log messages. Please note that if you do this, and you use [MLAT Hub](https://github.com/sdr-enthusiasts/docker-readsb-protobuf#advanced-usage-creating-an-mlat-hub) please remove Radarbox from your `READSB_NET_CONNECTOR` under `MLAT Hub`.
+To stop the feeder from spamming your logs you can set `ENABLE_MLAT=false` in your environment configuration for Airnav Radar and it will stop the MLAT service, and the log messages. Please note that if you do this, and you use [MLAT Hub](https://github.com/sdr-enthusiasts/docker-adsb-ultrafeeder?tab=readme-ov-file#configuring-the-built-in-mlat-hub) please remove Airnav Radar from your `ULTRAFEEDER_CONFIG` parameter.
 
 ## Using the container on a Raspberry Pi 5
 
-The container internally uses a binary called `rbfeeder` to send data to the RadarBox service. This binary is provided as closed-source by AirNav (the company that operates RadarBox) and is only available in armhf (32-bit) format using 4kb kernel pages. This will work well on Raspberry Pi 3B+, 4B, and other ARM-based systems that use either 32-bits or 64-bits Debian Linux with a 4kb kernel page size. It also works well on x86 Linux where we use the `qemu` ARM emulator to run the binary.
+The container internally uses a binary called `rbfeeder` to send data to the Airnav Radar service. This binary is provided as closed-source by AirNav (the company that operates Airnav Radar) and is only available in armhf (32-bit) format using 4kb kernel pages. This will work well on Raspberry Pi 3B+, 4B, and other ARM-based systems that use either 32-bits or 64-bits Debian Linux with a 4kb kernel page size. It also works well on x86 Linux where we use the `qemu` ARM emulator to run the binary.
 
 Debian Linux for Raspberry Pi 5 uses by default a kernel with 16kb page sizes, and this is not compatible with the `rbfeeder` binary. You will see failures in your container logs.
 
@@ -227,8 +227,8 @@ echo "kernel=kernel8.img" | sudo tee -a /boot/firmware/config.txt >/dev/null
 
 ## Getting Help
 
-You can [log an issue](https://github.com/sdr-enthusiasts/docker-radarbox/issues) on the project's GitHub.
+You can [log an issue](https://github.com/sdr-enthusiasts/docker-airnavradar/issues) on the project's GitHub.
 
 I also have a [Discord channel](https://discord.gg/sTf9uYF), feel free to [join](https://discord.gg/sTf9uYF) and converse.
 
-If you're getting continual segmentation faults inside this container, see: <https://github.com/sdr-enthusiasts/docker-radarbox/issues/16#issuecomment-699627387>
+If you're getting continual segmentation faults inside this container, see: <https://github.com/sdr-enthusiasts/docker-airnavradar/issues/16#issuecomment-699627387>
