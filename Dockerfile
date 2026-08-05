@@ -139,4 +139,4 @@ COPY rootfs/ /
 EXPOSE 32088/tcp 30105/tcp
 
 # Add healthcheck
-HEALTHCHECK --start-period=3600s --interval=600s  CMD /healthcheck.sh
+HEALTHCHECK --start-period=3600s --interval=600s  CMD ["/healthcheck.sh"]
