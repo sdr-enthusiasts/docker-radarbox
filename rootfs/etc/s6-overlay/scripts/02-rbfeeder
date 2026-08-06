@@ -27,7 +27,7 @@ else
     ALT="${ALT%%.*}"
 fi
 if [ $EXITCODE -ne 0 ]; then
-    exit 1
+    exit 78
 fi
 
 # Set up timezone
